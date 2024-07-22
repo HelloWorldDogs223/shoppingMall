@@ -1,6 +1,15 @@
+'use client';
+import { Button } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
+  const onClickHandler = () => {
+    router.push('/signin');
+  };
+
   return (
     <div className="flex justify-between px-10 py-3 border-b border-gray-200 border-solid items-center bg-gray-100">
       <div className="text-neutral-900 text-lg font-bold ">
@@ -31,13 +40,17 @@ export default function Home() {
             />
           </svg>
         </div>
-        <div className="w-[84px] h-10 px-4 bg-blue-500 rounded-xl justify-center items-center inline-flex cursor-pointer mr-[32px]">
+        <Button
+          onClick={onClickHandler}
+          variant="contained"
+          className="w-[94px] h-10 px-4 bg-blue-500 rounded-xl justify-center items-center inline-flex cursor-pointer mr-[32px]"
+        >
           <div className="flex-col justify-start items-center inline-flex">
             <div className="text-center text-white text-sm font-bold font-['Work Sans'] leading-[21px]">
               Sign in
             </div>
           </div>
-        </div>
+        </Button>
         <div className="w-[84px] h-10 px-4 bg-gray-200 rounded-xl justify-center items-center inline-flex cursor-pointer mr-[32px]">
           <div className="flex-col justify-start items-center inline-flex">
             <div className="text-center text-neutral-900 text-sm font-bold font-['Work Sans'] leading-[21px]">
