@@ -28,7 +28,6 @@ const names = ['tv', '3구 콘센트', '케이블', '스위치 케이스', '플�
 
 export default function Page() {
   const [age, setAge] = useState('선택');
-
   const [personName, setPersonName] = useState<string[]>([]);
 
   const handleChangeMultiple = (
@@ -80,7 +79,7 @@ export default function Page() {
 
         <div className="w-full mt-[120px]">
           <FormControl sx={{ m: 1, width: 500 }}>
-            <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+            <InputLabel id="demo-multiple-checkbox-label">기타</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
