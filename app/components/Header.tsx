@@ -62,7 +62,10 @@ export default function Home() {
             </div>
           </label>
           <div className="flex gap-2">
-            <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#e8edf3] text-[#0e141b] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+            <button
+              onClick={() => router.push('/wishlist')}
+              className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#e8edf3] text-[#0e141b] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+            >
               <div
                 className="text-[#0e141b]"
                 data-icon="Heart"
@@ -103,7 +106,8 @@ export default function Home() {
             </button>
           </div>
           <div
-            className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+            onClick={() => router.push('/user/info')}
+            className="cursor-pointer bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
             style={{
               backgroundImage:
                 'url("https://cdn.usegalileo.ai/stability/8a31f216-93c7-4e43-a376-51163e59cedc.png");',
