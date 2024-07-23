@@ -1,5 +1,4 @@
-import Image from 'next/image';
-
+import Card from '@/app/components/Card';
 export default function Page() {
   return (
     <div
@@ -78,157 +77,14 @@ export default function Page() {
               </div>
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Silk Blouse
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $120
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  {' '}
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Cotton T-Shirt
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $30
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  {' '}
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Pleated Midi Dress
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $150
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  {' '}
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    High-Waisted Jeans
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $80
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  {' '}
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Lightweight Cardigan
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $60
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  {' '}
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Sleeveless Jumpsuit
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $100
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  {' '}
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Knit Crop Top
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $45
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl">
-                  {' '}
-                  <Image
-                    src="/exampleCloth.png"
-                    width={176}
-                    height={176}
-                    alt="product page"
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Flowy Maxi Skirt
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    $90
-                  </p>
-                </div>
-              </div>
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
             </div>
           </div>
         </div>
