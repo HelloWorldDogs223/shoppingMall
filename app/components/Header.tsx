@@ -105,6 +105,11 @@ export default function Home() {
               </div>
             </button>
           </div>
+          <div>
+            <Button onClick={() => router.push('/signin')} variant="contained">
+              Signin
+            </Button>
+          </div>
           <div
             onClick={() => router.push('/user/info')}
             className="cursor-pointer bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
