@@ -12,11 +12,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const defaultTheme = createTheme();
 
 export default function Page() {
   const router = useRouter();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -24,6 +26,13 @@ export default function Page() {
       email: data.get('email'),
       password: data.get('password'),
     });
+  };
+
+  const handleGoogleLogin = async () => {
+    const res = axios.get(
+      'https://api.group-group.com/oauth2/authorization/google',
+    );
+    console.log(res);
   };
 
   return (
@@ -93,7 +102,7 @@ export default function Page() {
       </div>
       <div className="w-full flex justify-center mt-[100px] mb-[100px]">
         <img
-          onClick={() => router.push('/user/info')}
+          onClick={handleGoogleLogin}
           src="/naver.svg"
           className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
         />
