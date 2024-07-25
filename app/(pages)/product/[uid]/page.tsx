@@ -71,11 +71,85 @@ export default function Page() {
                       Women's Mini Dress
                     </h2>
                   </div>
-                  <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#348de5] text-[#f8fafb] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]">
-                    <span className="truncate">$240</span>
-                  </button>
                 </div>
               </div>
+            </div>
+            <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+              Product Details
+            </h2>
+            <div className="flex flex-col p-4 gap-3">
+              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
+                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
+                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
+                    Product Information
+                  </p>
+                  <div
+                    className="text-[#0e141b] group-open:rotate-180"
+                    data-icon="CaretDown"
+                    data-size="20px"
+                    data-weight="regular"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                    >
+                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+                    </svg>
+                  </div>
+                </summary>
+                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
+              </details>
+              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
+                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
+                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
+                    Material
+                  </p>
+                  <div
+                    className="text-[#0e141b] group-open:rotate-180"
+                    data-icon="CaretDown"
+                    data-size="20px"
+                    data-weight="regular"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                    >
+                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+                    </svg>
+                  </div>
+                </summary>
+                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
+              </details>
+              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
+                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
+                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
+                    Shipping Information
+                  </p>
+                  <div
+                    className="text-[#0e141b] group-open:rotate-180"
+                    data-icon="CaretDown"
+                    data-size="20px"
+                    data-weight="regular"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                    >
+                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+                    </svg>
+                  </div>
+                </summary>
+                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
+              </details>
             </div>
             <div className="flex flex-wrap gap-x-8 gap-y-6 p-4 mt-[100px]">
               <div className="flex flex-col gap-2">
@@ -716,83 +790,6 @@ export default function Page() {
                   }}
                 ></div>
               </div>
-            </div>
-            <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-              Product Details
-            </h2>
-            <div className="flex flex-col p-4 gap-3">
-              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
-                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
-                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
-                    Product Information
-                  </p>
-                  <div
-                    className="text-[#0e141b] group-open:rotate-180"
-                    data-icon="CaretDown"
-                    data-size="20px"
-                    data-weight="regular"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20px"
-                      height="20px"
-                      fill="currentColor"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-                    </svg>
-                  </div>
-                </summary>
-                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
-              </details>
-              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
-                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
-                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
-                    Material
-                  </p>
-                  <div
-                    className="text-[#0e141b] group-open:rotate-180"
-                    data-icon="CaretDown"
-                    data-size="20px"
-                    data-weight="regular"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20px"
-                      height="20px"
-                      fill="currentColor"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-                    </svg>
-                  </div>
-                </summary>
-                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
-              </details>
-              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
-                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
-                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
-                    Shipping Information
-                  </p>
-                  <div
-                    className="text-[#0e141b] group-open:rotate-180"
-                    data-icon="CaretDown"
-                    data-size="20px"
-                    data-weight="regular"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20px"
-                      height="20px"
-                      fill="currentColor"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-                    </svg>
-                  </div>
-                </summary>
-                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
-              </details>
             </div>
           </div>
         </div>

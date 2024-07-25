@@ -34,7 +34,7 @@ export default function Page() {
     );
     console.log(res);
   };
-  const handleKakaoeLogin = async () => {
+  const handleKakaoLogin = async () => {
     const res = await axios.get(
       'https://api.group-group.com/oauth2/authorization/kakao',
     );
@@ -114,17 +114,17 @@ export default function Page() {
       </div>
       <div className="w-full flex justify-center mt-[100px] mb-[100px]">
         <img
-          onClick={handleGoogleLogin}
+          onClick={handleNaverLogin}
           src="/naver.svg"
           className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
         />
         <img
-          onClick={handleNaverLogin}
+          onClick={handleGoogleLogin}
           src="/google.svg"
           className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
         />
         <img
-          onClick={handleKakaoeLogin}
+          onClick={handleKakaoLogin}
           src="/kakao.svg"
           className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
         />
