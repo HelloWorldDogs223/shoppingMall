@@ -29,22 +29,13 @@ export default function Page() {
   };
 
   const handleGoogleLogin = async () => {
-    const res = await axios.get(
-      'https://api.group-group.com/oauth2/authorization/google',
-    );
-    console.log(res);
+    location.href = 'https://api.group-group.com/oauth2/authorization/google';
   };
   const handleKakaoLogin = async () => {
-    const res = await axios.get(
-      'https://api.group-group.com/oauth2/authorization/kakao',
-    );
-    console.log(res);
+    location.href = 'https://api.group-group.com/oauth2/authorization/kakao';
   };
   const handleNaverLogin = async () => {
-    const res = await axios.get(
-      'https://api.group-group.com/oauth2/authorization/naver',
-    );
-    console.log(res);
+    location.href = 'https://api.group-group.com/oauth2/authorization/naver';
   };
 
   return (
