@@ -29,8 +29,20 @@ export default function Page() {
   };
 
   const handleGoogleLogin = async () => {
-    const res = axios.get(
+    const res = await axios.get(
       'https://api.group-group.com/oauth2/authorization/google',
+    );
+    console.log(res);
+  };
+  const handleKakaoeLogin = async () => {
+    const res = await axios.get(
+      'https://api.group-group.com/oauth2/authorization/kakao',
+    );
+    console.log(res);
+  };
+  const handleNaverLogin = async () => {
+    const res = await axios.get(
+      'https://api.group-group.com/oauth2/authorization/naver',
     );
     console.log(res);
   };
@@ -107,10 +119,12 @@ export default function Page() {
           className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
         />
         <img
+          onClick={handleNaverLogin}
           src="/google.svg"
           className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
         />
         <img
+          onClick={handleKakaoeLogin}
           src="/kakao.svg"
           className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
         />
