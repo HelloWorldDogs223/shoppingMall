@@ -11,7 +11,7 @@ export default function Home() {
   };
 
   return (
-    <div className="pt-[100px]">
+    <div className="pt-[65px]">
       <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e8edf3] px-10 py-3 fixed left-0 top-0 w-full z-[101] bg-white">
         <div className="flex items-center gap-4 text-[#0e141b]">
           <div className="size-4">

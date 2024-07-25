@@ -91,7 +91,7 @@ export default function Page() {
       <div className="w-full flex justify-center mt-[32px] font-[20px]">
         SNS 로그인하기
       </div>
-      <div className="w-full flex justify-center mt-[100px]">
+      <div className="w-full flex justify-center mt-[100px] mb-[100px]">
         <img
           onClick={() => router.push('/user/info')}
           src="/naver.svg"
