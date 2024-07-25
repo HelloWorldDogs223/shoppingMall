@@ -2,12 +2,33 @@
 
 import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+function getCookie(name: string) {
+  let cookieArr = document.cookie.split(';');
+
+  for (let i = 0; i < cookieArr.length; i++) {
+    let cookiePair = cookieArr[i].split('=');
+
+    /* 이름의 앞뒤 공백을 제거하고 쿠키 이름과 비교 */
+    if (name == cookiePair[0].trim()) {
+      /* 쿠키의 값을 반환 */
+      return decodeURIComponent(cookiePair[1]);
+    }
+  }
+  /* 이름에 해당하는 쿠키가 없으면 null 반환 */
+  return null;
+}
 
 export default function Home() {
   const router = useRouter();
 
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    console.log('asdadasd' + getCookie('refresh'));
+    if (getCookie('refresh')) alert('hegehehe');
+  }, []);
 
   return (
     <div
@@ -51,7 +72,9 @@ export default function Home() {
                         placeholder="Search for stores"
                         className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe6] bg-[#f8fafb] focus:border-[#d0dbe6] h-full placeholder:text-[#4f7396] px-[15px] rounded-r-none border-r-0 pr-2 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
                         value={search}
-                        onChange={() => {}}
+                        onChange={(e) => {
+                          setSearch(e.target.value);
+                        }}
                       />
                       <div className="flex items-center justify-center rounded-r-xl border-l-0 border border-[#d0dbe6] bg-[#f8fafb] pr-[7px]">
                         <Button

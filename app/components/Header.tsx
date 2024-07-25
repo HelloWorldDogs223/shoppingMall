@@ -57,7 +57,6 @@ export default function Home() {
               <input
                 placeholder="Search"
                 className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border-none bg-[#e8edf3] focus:border-none h-full placeholder:text-[#4f7396] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-                value=""
               />
             </div>
           </label>
