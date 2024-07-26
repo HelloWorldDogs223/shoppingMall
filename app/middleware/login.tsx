@@ -1,17 +1,15 @@
-// middleware.ts
-// 미들웨어에사 ㅇ청
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import axios from 'axios';
 
 export async function middleware(req: NextRequest) {
-  const res: any = await axios.get('https://api.group-group.com/auth/reissue');
-  document.cookie = `access=${res.data.accessToken}`;
+  const token = req.cookies.get('accessToken')?.value;
 
-  console.log('MIDDLEWARES');
+  if (!token) {
+    // 토큰이 없으면 로그인 페이지로 리다이렉트
+    return NextResponse.redirect(new URL('/signin', req.url));
+  }
 }
 
-// 특정 경로에만 미들웨어를 적용하고 싶다면
+// 모든 경로에 대해 미들웨어 적용
 export const config = {
-  matcher: ['/protected/:path*'],
+  matcher: ['/((?!login|_next/static|favicon.ico).*)'],
 };

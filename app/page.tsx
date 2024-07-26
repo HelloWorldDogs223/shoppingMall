@@ -36,8 +36,7 @@ export default function Home() {
         'https://api.group-group.com/auth/reissue',
         { withCredentials: true },
       );
-      document.cookie = `access=${res.data.accessToken}`;
-      console.log(res.data);
+      document.cookie = `accessToken=${res.data.accessToken}`;
     };
     axiosFriend();
   }, []);
