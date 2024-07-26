@@ -5,6 +5,7 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const token = request.cookies.get('accessToken');
+  const refreshToken = request.cookies.get('refresh');
 
   // 로그인 페이지와 API 경로는 인증을 확인하지 않음
   if (
@@ -15,7 +16,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 토큰이 없는 경우 로그인 페이지로 리디렉션
-  if (!token) {
+  if (!token && !refreshToken) {
     url.pathname = '/signin';
     return NextResponse.redirect(url);
   }
