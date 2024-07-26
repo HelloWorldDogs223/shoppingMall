@@ -34,6 +34,7 @@ export default function Home() {
     const axiosFriend = async () => {
       const res: any = await axios.get(
         'https://api.group-group.com/auth/reissue',
+        { withCredentials: true },
       );
       document.cookie = `access=${res.data.accessToken}`;
       console.log(res.data);
