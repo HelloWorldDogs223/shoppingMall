@@ -1,12 +1,16 @@
 'use client';
 
 import { Button } from '@mui/material';
+
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import login from './store/login';
+import useAuthStore from './store/login';
+
 function getCookie(name: string) {
   let cookieArr = document.cookie.split(';');
-  console.log(cookieArr);
 
   for (let i = 0; i < cookieArr.length; i++) {
     let cookiePair = cookieArr[i].split('=');
@@ -23,11 +27,21 @@ function getCookie(name: string) {
 
 export default function Home() {
   const router = useRouter();
+  const login = useAuthStore((state) => state.login);
 
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    if (getCookie('refresh')) alert('hegehehe');
+    const getToken = async () => {
+      const res: any = await axios.get(
+        'https://api.group-group.com/auth/reissue',
+      );
+      document.cookie = `access=${res.data}`;
+      login({ name: 'username' });
+    };
+    if (getCookie('refresh')) {
+      getToken();
+    }
   }, []);
 
   return (
