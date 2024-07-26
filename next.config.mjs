@@ -1,6 +1,10 @@
-/** @type {import('next').NextConfig} */
-export default {
-  experimental: {
-    middleware: true,
-  },
+// @ts-check
+
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
+  /* config options here */
 };
+
+export default nextConfig;
