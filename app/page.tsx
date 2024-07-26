@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 function getCookie(name: string) {
   let cookieArr = document.cookie.split(';');
+  console.log(cookieArr);
 
   for (let i = 0; i < cookieArr.length; i++) {
     let cookiePair = cookieArr[i].split('=');
@@ -26,7 +27,6 @@ export default function Home() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    console.log('asdadasd' + getCookie('refresh'));
     if (getCookie('refresh')) alert('hegehehe');
   }, []);
 
