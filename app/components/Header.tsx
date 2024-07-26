@@ -34,7 +34,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (getCookie('access')) {
+    if (getCookie('accessToken')) {
       setCookie(true);
     }
   }, []);
@@ -135,7 +135,7 @@ export default function Home() {
           </div>
           <div>
             {cookie !== false ? (
-              <Button onClick={() => logout('access')} variant="contained">
+              <Button onClick={() => logout('accessToken')} variant="contained">
                 SignOut
               </Button>
             ) : (
