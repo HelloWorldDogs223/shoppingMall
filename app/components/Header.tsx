@@ -2,8 +2,10 @@
 import { Button } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+  const [cookie, setCookie] = useState(false);
   const router = useRouter();
 
   const onClickHandler = () => {
@@ -30,6 +32,12 @@ export default function Home() {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     router.push('/');
   }
+
+  useEffect(() => {
+    if (getCookie('access')) {
+      setCookie(true);
+    }
+  }, []);
 
   return (
     <div className="pt-[65px]">
@@ -126,7 +134,7 @@ export default function Home() {
             </button>
           </div>
           <div>
-            {getCookie('accessToken') !== null ? (
+            {cookie !== false ? (
               <Button onClick={() => logout('access')} variant="contained">
                 SignOut
               </Button>

@@ -5,7 +5,6 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
 import login from './store/login';
 import useAuthStore from './store/login';
 
@@ -39,7 +38,11 @@ export default function Home() {
       document.cookie = `access=${res.data}`;
       login({ name: 'username' });
     };
+
+    console.log(document.cookie);
+
     if (getCookie('refresh')) {
+      console.log('HEWHEHEH');
       getToken();
     }
   }, []);
