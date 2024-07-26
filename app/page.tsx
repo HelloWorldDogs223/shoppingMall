@@ -5,40 +5,20 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import login from './store/login';
-import useAuthStore from './store/login';
-
-function getCookie(name: string) {
-  let cookieArr = document.cookie.split(';');
-
-  for (let i = 0; i < cookieArr.length; i++) {
-    let cookiePair = cookieArr[i].split('=');
-
-    /* 이름의 앞뒤 공백을 제거하고 쿠키 이름과 비교 */
-    if (name == cookiePair[0].trim()) {
-      /* 쿠키의 값을 반환 */
-      return decodeURIComponent(cookiePair[1]);
-    }
-  }
-  /* 이름에 해당하는 쿠키가 없으면 null 반환 */
-  return null;
-}
 
 export default function Home() {
   const router = useRouter();
-  const login = useAuthStore((state) => state.login);
-
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const axiosFriend = async () => {
+    const tokenFetch = async () => {
       const res: any = await axios.get(
         'https://api.group-group.com/auth/reissue',
         { withCredentials: true },
       );
       document.cookie = `accessToken=${res.data.accessToken}`;
     };
-    axiosFriend();
+    tokenFetch();
   }, []);
 
   return (
