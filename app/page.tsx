@@ -30,17 +30,7 @@ export default function Home() {
 
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    const getToken = async () => {
-      const res: any = await axios.get(
-        'https://api.group-group.com/auth/reissue',
-      );
-      console.log(res.data);
-      document.cookie = `access=${res.data}`;
-      login({ name: 'username' });
-    };
-    getToken();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div

@@ -1,26 +1,14 @@
 // middleware.ts
+// 미들웨어에사 ㅇ청
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
 export async function middleware(req: NextRequest) {
-  const refreshToken = req.cookies.get('refresh')?.value;
+  const res: any = await axios.get('https://api.group-group.com/auth/reissue');
+  document.cookie = `access=${res.data.accessToken}`;
 
-  if (!refreshToken) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
-
-  try {
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET as string,
-    );
-
-    // 인증된 사용자라면 다음으로 진행
-    return NextResponse.next();
-  } catch (error) {
-    // 토큰이 유효하지 않다면 로그인 페이지로 리다이렉트
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
+  console.log('MIDDLEWARES');
 }
 
 // 특정 경로에만 미들웨어를 적용하고 싶다면
