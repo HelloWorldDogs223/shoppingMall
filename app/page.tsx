@@ -31,14 +31,19 @@ export default function Home() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const axiosFriend = async () => {
+    const tokenFetch = async () => {
       const res: any = await axios.get(
         'https://api.group-group.com/auth/reissue',
         { withCredentials: true },
       );
       document.cookie = `accessToken=${res.data.accessToken}`;
     };
-    axiosFriend();
+    tokenFetch();
+
+    const loginCheck = async () => {
+      await axios.get('/api/login');
+    };
+    loginCheck();
   }, []);
 
   return (
