@@ -1,15 +1,19 @@
+// middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
 export async function middleware(req: NextRequest) {
-  const refreshToken = req.cookies.get('refresh');
+  const refreshToken = req.cookies.get('refresh')?.value;
 
   if (!refreshToken) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
   try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as string,
+    );
 
     // 인증된 사용자라면 다음으로 진행
     return NextResponse.next();
