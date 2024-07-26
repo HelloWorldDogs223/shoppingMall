@@ -35,16 +35,11 @@ export default function Home() {
       const res: any = await axios.get(
         'https://api.group-group.com/auth/reissue',
       );
+      console.log(res.data);
       document.cookie = `access=${res.data}`;
       login({ name: 'username' });
     };
-
-    console.log(document.cookie);
-
-    if (getCookie('refresh')) {
-      console.log('HEWHEHEH');
-      getToken();
-    }
+    getToken();
   }, []);
 
   return (
