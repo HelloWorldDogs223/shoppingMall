@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import useAuthStore from './app/store/login';
 
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const token = request.cookies.get('accessToken');
   const refreshToken = request.cookies.get('refresh');
+  const { login } = useAuthStore();
 
   // 로그인 페이지와 홈 경로는 인증을 확인하지 않음
   if (url.pathname.startsWith('/signin') || url.pathname === '/') {
@@ -23,13 +25,8 @@ export async function middleware(request: NextRequest) {
             headers: { Cookie: `refresh=${refreshToken.value}` },
           },
         );
-
+        login(res.data.accessToken);
         const response = NextResponse.next();
-
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('accessToken', res.data.accessToken);
-        }
-
         return response;
       } catch (e) {
         console.error('Error refreshing token:', e);

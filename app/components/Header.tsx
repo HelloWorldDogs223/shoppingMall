@@ -1,14 +1,14 @@
 'use client';
 import { Button } from '@mui/material';
+
 import axios from 'axios';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [cookie, setCookie] = useState(false);
-
   const router = useRouter();
+
+  const [localStore, setLocalStore] = useState(false);
 
   const onClickHandler = () => {
     router.push('/');
@@ -24,17 +24,12 @@ export default function Home() {
         },
       },
     );
+    localStorage.clear();
   }
 
-  const reFunction = async () => {
-    const res: any = await axios.get(
-      'https://api.group-group.com/auth/reissue',
-      {
-        withCredentials: true,
-      },
-    );
-    console.log(res);
-  };
+  useEffect(() => {
+    if (localStorage.getItem('accessToken')) setLocalStore(true);
+  }, []);
 
   return (
     <div className="pt-[65px]">
@@ -131,17 +126,18 @@ export default function Home() {
             </button>
           </div>
           <div>
-            <Button onClick={() => reFunction()} variant="contained">
-              재발급
-            </Button>
-            (
-            <Button onClick={() => logout('refresh')} variant="contained">
-              SignOut
-            </Button>
-            <Button onClick={() => router.push('/signin')} variant="contained">
-              Signin
-            </Button>
-            )
+            {localStore ? (
+              <Button onClick={() => logout('refresh')} variant="contained">
+                SignOut
+              </Button>
+            ) : (
+              <Button
+                onClick={() => router.push('/signin')}
+                variant="contained"
+              >
+                Signin
+              </Button>
+            )}
           </div>
           <div
             onClick={() => router.push('/user/info')}

@@ -12,7 +12,6 @@ export default function Home() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const refreshToken = Cookies.get('refreshToken');
     const myFunc = async () => {
       const res: any = await axios.get(
         'https://api.group-group.com/auth/reissue',
