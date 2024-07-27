@@ -20,7 +20,7 @@ export default function Home() {
       {
         withCredentials: true,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('acessToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       },
     );
@@ -134,18 +134,14 @@ export default function Home() {
             <Button onClick={() => reFunction()} variant="contained">
               재발급
             </Button>
-            {cookie !== false ? (
-              <Button onClick={() => logout('refresh')} variant="contained">
-                SignOut
-              </Button>
-            ) : (
-              <Button
-                onClick={() => router.push('/signin')}
-                variant="contained"
-              >
-                Signin
-              </Button>
-            )}
+            (
+            <Button onClick={() => logout('refresh')} variant="contained">
+              SignOut
+            </Button>
+            <Button onClick={() => router.push('/signin')} variant="contained">
+              Signin
+            </Button>
+            )
           </div>
           <div
             onClick={() => router.push('/user/info')}
