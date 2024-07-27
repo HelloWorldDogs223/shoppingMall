@@ -1,9 +1,18 @@
 'use client';
 
 import { useFetch } from '@/app/hooks/useFetch';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-  useFetch();
+  const router = useRouter();
+
+  const { error } = useFetch();
+  useEffect(() => {
+    if (error) {
+      router.push('/signin');
+    }
+  }, [error, router]);
 
   return (
     <div className="flex flex-col justify-center px-[196px]">

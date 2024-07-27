@@ -1,9 +1,17 @@
 'use client';
 import { useFetch } from '@/app/hooks/useFetch';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function Page() {
-  useFetch();
+  const router = useRouter();
+
+  const { error } = useFetch();
+  useEffect(() => {
+    if (error) {
+      router.push('/signin');
+    }
+  }, [error, router]);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden">

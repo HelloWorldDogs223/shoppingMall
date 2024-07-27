@@ -3,11 +3,18 @@
 import { useFetch } from '@/app/hooks/useFetch';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const [edit, setEdit] = useState(false);
+  const router = useRouter();
 
-  useFetch();
+  const { error } = useFetch();
+  useEffect(() => {
+    if (error) {
+      router.push('/signin');
+    }
+  }, [error, router]);
 
   return (
     <div
