@@ -12,8 +12,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  console.log(token, refreshToken?.value);
-
   // accessToken이 없는 경우 refresh로 요청
   if (!token) {
     if (refreshToken) {
@@ -27,10 +25,8 @@ export async function middleware(request: NextRequest) {
         );
 
         const response = NextResponse.next();
-        // response.cookies.set('accessToken', res.data.accessToken, {
-        //   path: '/',
-        // });
         localStorage.setItem('accessToken', res.data.accessToken);
+
         return response;
       } catch (e) {
         console.error('Error refreshing token:', e);

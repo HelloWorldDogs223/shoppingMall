@@ -9,42 +9,22 @@ export default function Home() {
   const [cookie, setCookie] = useState(false);
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const onClickHandler = () => {
     router.push('/');
   };
 
-  function getCookie(name: string) {
-    let cookieArr = document.cookie.split(';');
-
-    for (let i = 0; i < cookieArr.length; i++) {
-      let cookiePair = cookieArr[i].split('=');
-
-      /* 이름의 앞뒤 공백을 제거하고 쿠키 이름과 비교 */
-      if (name == cookiePair[0].trim()) {
-        /* 쿠키의 값을 반환 */
-        return decodeURIComponent(cookiePair[1]);
-      }
-    }
-    /* 이름에 해당하는 쿠키가 없으면 null 반환 */
-    return null;
+  async function logout(name: string) {
+    const res: any = await axios.get(
+      'https://api.group-group.com/auth/logout',
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('acessToken')}`,
+        },
+      },
+    );
   }
-
-  function logout(name: string) {
-    localStorage.clear();
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    router.push('/');
-    location.reload();
-  }
-
-  useEffect(() => {
-    if (getCookie('accessToken')) {
-      setCookie(true);
-    } else {
-      setCookie(false);
-    }
-  }, [pathname]);
 
   const reFunction = async () => {
     const res: any = await axios.get(
