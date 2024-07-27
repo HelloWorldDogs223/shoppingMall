@@ -1,12 +1,14 @@
 'use client';
 import { Button } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [cookie, setCookie] = useState(false);
+
   const router = useRouter();
+  const pathname = usePathname();
 
   const onClickHandler = () => {
     router.push('/');
@@ -37,8 +39,10 @@ export default function Home() {
   useEffect(() => {
     if (getCookie('accessToken')) {
       setCookie(true);
+    } else {
+      setCookie(false);
     }
-  }, [getCookie('accessToken')]);
+  }, [pathname]);
 
   return (
     <div className="pt-[65px]">
