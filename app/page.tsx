@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@mui/material';
+import Cookies from 'js-cookie';
 
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -9,6 +10,22 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const router = useRouter();
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const refreshToken = Cookies.get('refreshToken');
+    const myFunc = async () => {
+      const res: any = await axios.get(
+        'https://api.group-group.com/auth/reissue',
+        {
+          withCredentials: true,
+          headers: { Cookie: `refresh=${refreshToken}` },
+        },
+      );
+      localStorage.setItem('accessToken', res.data.accessToken);
+    };
+
+    myFunc();
+  }, []);
 
   return (
     <div
