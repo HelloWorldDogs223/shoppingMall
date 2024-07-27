@@ -1,23 +1,36 @@
 // middleware.ts
+import axios from 'axios';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const token = request.cookies.get('accessToken');
   const refreshToken = request.cookies.get('refresh');
 
-  // 로그인 페이지와 API 경로는 인증을 확인하지 않음
-  if (
-    url.pathname.startsWith('/signin') ||
-    url.pathname.startsWith('/api/public')
-  ) {
+  // 로그인 페이지와 홈 경로는 인증을 확인하지 않음
+  if (url.pathname.startsWith('/signin') || url.pathname.startsWith('/')) {
     return NextResponse.next();
   }
 
-  // 토큰이 없는 경우 로그인 페이지로 리디렉션
-  if (!token && !refreshToken) {
-    url.pathname = '/signin';
+  // accessToken이 없는 경우 refresh로 요청
+  if (!token) {
+    if (refreshToken) {
+      try {
+        const res: any = await axios.get(
+          'https://api.group-group.com/auth/reissue',
+          { withCredentials: true },
+        );
+        document.cookie = `accessToken=${res.data.accessToken}`;
+      } catch (e) {
+        // refresh 토큰이 만료거나 올바르지 않은 경우
+        url.pathname = '/signin';
+        console.log(e);
+      }
+    } else {
+      // refresh 토큰이 아예 없는 경우
+      url.pathname = '/signin';
+    }
     return NextResponse.redirect(url);
   }
 

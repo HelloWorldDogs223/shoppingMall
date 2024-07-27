@@ -10,17 +10,6 @@ export default function Home() {
   const router = useRouter();
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    const tokenFetch = async () => {
-      const res: any = await axios.get(
-        'https://api.group-group.com/auth/reissue',
-        { withCredentials: true },
-      );
-      document.cookie = `accessToken=${res.data.accessToken}`;
-    };
-    tokenFetch();
-  }, []);
-
   return (
     <div
       className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden"
