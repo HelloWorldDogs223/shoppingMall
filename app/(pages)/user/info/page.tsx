@@ -7,9 +7,7 @@ import { useEffect, useState } from 'react';
 export default function Page() {
   const [edit, setEdit] = useState(false);
 
-  useEffect(() => {
-    useFetch();
-  }, []);
+  useFetch();
 
   return (
     <div

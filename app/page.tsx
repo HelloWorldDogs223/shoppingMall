@@ -14,9 +14,8 @@ export default function Home() {
   const [search, setSearch] = useState('');
 
   // functions
-  useEffect(() => {
-    useFetch();
-  }, []);
+
+  useFetch();
 
   return (
     <div

@@ -3,9 +3,7 @@ import { useFetch } from '@/app/hooks/useFetch';
 import { useEffect } from 'react';
 
 export default function Page() {
-  useEffect(() => {
-    useFetch();
-  }, []);
+  useFetch();
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden">

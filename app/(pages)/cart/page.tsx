@@ -1,12 +1,9 @@
 'use client';
 
 import { useFetch } from '@/app/hooks/useFetch';
-import { useEffect } from 'react';
 
 export default function Page() {
-  useEffect(() => {
-    useFetch();
-  }, []);
+  useFetch();
 
   return (
     <div className="flex flex-col justify-center px-[196px]">
