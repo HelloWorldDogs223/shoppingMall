@@ -33,6 +33,7 @@ export default function Home() {
 
   function logout(name: string) {
     localStorage.clear();
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     router.push('/');
     location.reload();
   }
@@ -154,7 +155,7 @@ export default function Home() {
               재발급
             </Button>
             {cookie !== false ? (
-              <Button onClick={() => logout('accessToken')} variant="contained">
+              <Button onClick={() => logout('refresh')} variant="contained">
                 SignOut
               </Button>
             ) : (
