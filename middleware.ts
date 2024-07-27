@@ -24,10 +24,11 @@ export async function middleware(request: NextRequest) {
           },
         );
 
-        console.log(res);
-
         const response = NextResponse.next();
-        localStorage.setItem('accessToken', res.data.accessToken);
+
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('accessToken', res.data.accessToken);
+        }
 
         return response;
       } catch (e) {
