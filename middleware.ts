@@ -27,9 +27,10 @@ export async function middleware(request: NextRequest) {
         );
 
         const response = NextResponse.next();
-        response.cookies.set('accessToken', res.data.accessToken, {
-          path: '/',
-        });
+        // response.cookies.set('accessToken', res.data.accessToken, {
+        //   path: '/',
+        // });
+        localStorage.setItem('accessToken', res.data.accessToken);
         return response;
       } catch (e) {
         console.error('Error refreshing token:', e);
