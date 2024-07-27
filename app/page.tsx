@@ -18,7 +18,6 @@ export default function Home() {
         'https://api.group-group.com/auth/reissue',
         {
           withCredentials: true,
-          headers: { Cookie: `refresh=${refreshToken}` },
         },
       );
       localStorage.setItem('accessToken', res.data.accessToken);
