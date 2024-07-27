@@ -12,6 +12,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  console.log('HEHEHEHEH');
+
   // accessToken이 없는 경우 refresh로 요청
   if (!token) {
     if (refreshToken) {
