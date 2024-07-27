@@ -5,6 +5,7 @@
  */
 const nextConfig = {
   /* config options here */
+  pageExtensions: ['ts', 'tsx'],
 };
 
 export default nextConfig;
