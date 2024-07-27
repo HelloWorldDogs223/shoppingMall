@@ -24,6 +24,8 @@ export async function middleware(request: NextRequest) {
           },
         );
 
+        console.log(res);
+
         const response = NextResponse.next();
         localStorage.setItem('accessToken', res.data.accessToken);
 
