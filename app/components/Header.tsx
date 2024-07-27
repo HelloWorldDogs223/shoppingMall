@@ -1,5 +1,6 @@
 'use client';
 import { Button } from '@mui/material';
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -43,6 +44,16 @@ export default function Home() {
       setCookie(false);
     }
   }, [pathname]);
+
+  const reFunction = async () => {
+    const res: any = await axios.get(
+      'https://api.group-group.com/auth/reissue',
+      {
+        withCredentials: true,
+      },
+    );
+    console.log(res);
+  };
 
   return (
     <div className="pt-[65px]">
@@ -139,6 +150,9 @@ export default function Home() {
             </button>
           </div>
           <div>
+            <Button onClick={() => reFunction()} variant="contained">
+              재발급
+            </Button>
             {cookie !== false ? (
               <Button onClick={() => logout('accessToken')} variant="contained">
                 SignOut
