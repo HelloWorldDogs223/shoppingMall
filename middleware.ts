@@ -1,4 +1,3 @@
-// middleware.ts
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -9,7 +8,7 @@ export async function middleware(request: NextRequest) {
   const refreshToken = request.cookies.get('refresh');
 
   // 로그인 페이지와 홈 경로는 인증을 확인하지 않음
-  if (url.pathname.startsWith('/signin') || url.pathname.startsWith('/')) {
+  if (url.pathname.startsWith('/signin') || url.pathname === '/') {
     return NextResponse.next();
   }
 
@@ -19,19 +18,28 @@ export async function middleware(request: NextRequest) {
       try {
         const res: any = await axios.get(
           'https://api.group-group.com/auth/reissue',
-          { withCredentials: true },
+          {
+            withCredentials: true,
+            headers: { Cookie: `refresh=${refreshToken}` },
+          },
         );
-        document.cookie = `accessToken=${res.data.accessToken}`;
+
+        const response = NextResponse.next();
+        response.cookies.set('accessToken', res.data.accessToken, {
+          path: '/',
+        });
+        return response;
       } catch (e) {
         // refresh 토큰이 만료거나 올바르지 않은 경우
-        url.pathname = '/signin';
         console.log(e);
+        url.pathname = '/signin';
+        return NextResponse.redirect(url);
       }
     } else {
       // refresh 토큰이 아예 없는 경우
       url.pathname = '/signin';
+      return NextResponse.redirect(url);
     }
-    return NextResponse.redirect(url);
   }
 
   // 인증된 경우 요청을 계속 처리
