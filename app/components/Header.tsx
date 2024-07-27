@@ -2,34 +2,32 @@
 import { Button } from '@mui/material';
 
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import useAuthStore from '../store/login';
 
 export default function Home() {
   const router = useRouter();
-
+  const pathname = usePathname();
+  const { accessToken, clearAccessToken } = useAuthStore();
   const [localStore, setLocalStore] = useState(false);
 
   const onClickHandler = () => {
     router.push('/');
   };
 
-  async function logout(name: string) {
+  async function logout() {
     const res: any = await axios.get(
       'https://api.group-group.com/auth/logout',
       {
         withCredentials: true,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
-    localStorage.clear();
+    clearAccessToken();
   }
-
-  useEffect(() => {
-    if (localStorage.getItem('accessToken')) setLocalStore(true);
-  }, []);
 
   return (
     <div className="pt-[65px]">
@@ -126,8 +124,8 @@ export default function Home() {
             </button>
           </div>
           <div>
-            {localStore ? (
-              <Button onClick={() => logout('refresh')} variant="contained">
+            {accessToken !== null ? (
+              <Button onClick={() => logout()} variant="contained">
                 SignOut
               </Button>
             ) : (

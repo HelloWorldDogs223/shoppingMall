@@ -1,10 +1,15 @@
 'use client';
 
+import { useFetch } from '@/app/hooks/useFetch';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
   const [edit, setEdit] = useState(false);
+
+  useEffect(() => {
+    useFetch();
+  }, []);
 
   return (
     <div

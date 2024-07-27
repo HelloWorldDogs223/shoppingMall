@@ -1,28 +1,21 @@
 'use client';
 
 import { Button } from '@mui/material';
-import Cookies from 'js-cookie';
 
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useFetch } from './hooks/useFetch';
 
 export default function Home() {
+  // router
   const router = useRouter();
+
+  // state
   const [search, setSearch] = useState('');
 
+  // functions
   useEffect(() => {
-    const myFunc = async () => {
-      const res: any = await axios.get(
-        'https://api.group-group.com/auth/reissue',
-        {
-          withCredentials: true,
-        },
-      );
-      localStorage.setItem('accessToken', res.data.accessToken);
-    };
-
-    myFunc();
+    useFetch();
   }, []);
 
   return (

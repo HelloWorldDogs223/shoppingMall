@@ -1,4 +1,11 @@
+import { useFetch } from '@/app/hooks/useFetch';
+import { useEffect } from 'react';
+
 export default function Page() {
+  useEffect(() => {
+    useFetch();
+  }, []);
+
   return (
     <div className="flex flex-col justify-center px-[196px]">
       <div className="flex justify-center mb-[24px] mt-[40px]">

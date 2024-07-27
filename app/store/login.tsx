@@ -1,21 +1,25 @@
 // stores/authStore.ts
 import { create } from 'zustand';
+import { persist, PersistOptions } from 'zustand/middleware';
 
 interface AuthState {
-  isLoggedIn: boolean;
-  user: { name: string } | null;
-  login: (token: string) => void;
-  logout: () => void;
+  accessToken: string | null;
+  setAccessToken: (token: string) => void;
+  clearAccessToken: () => void;
 }
 
-const useAuthStore = create<AuthState>((set) => ({
-  isLoggedIn: false,
-  user: null,
-  login: (accessToken: string) => {
-    localStorage.setItem('accessToken', accessToken);
-    set({ isLoggedIn: true });
-  },
-  logout: () => set({ isLoggedIn: false, user: null }),
-}));
+// Create a zustand store with persist middleware
+const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      accessToken: null,
+      setAccessToken: (token) => set({ accessToken: token }),
+      clearAccessToken: () => set({ accessToken: null }),
+    }),
+    {
+      name: 'auth-storage', // 로컬 스토리지에 저장될 키 이름
+    },
+  ),
+);
 
 export default useAuthStore;
