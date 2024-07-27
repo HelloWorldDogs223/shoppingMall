@@ -32,7 +32,7 @@ export default function Home() {
   }
 
   function logout(name: string) {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    localStorage.clear();
     router.push('/');
     location.reload();
   }
