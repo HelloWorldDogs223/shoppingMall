@@ -7,6 +7,8 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('accessToken');
   const refreshToken = request.cookies.get('refresh');
 
+  console.log(refreshToken);
+
   // 로그인 페이지와 홈 경로는 인증을 확인하지 않음
   if (url.pathname.startsWith('/signin') || url.pathname === '/') {
     return NextResponse.next();
