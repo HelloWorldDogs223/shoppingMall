@@ -35,6 +35,9 @@ export default function Page() {
       alert('시간이 아직 남아있습니다.');
       return;
     }
+
+    console.log('asfssf' + process.env.NEXT_PUBLIC_SERVER_DOMAIN);
+
     const res: any = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/email/registration/request`,
       { email },
