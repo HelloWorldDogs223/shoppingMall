@@ -2,15 +2,12 @@
 import { Button } from '@mui/material';
 
 import axios from 'axios';
-import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import useAuthStore from '../store/login';
 
 export default function Home() {
   const router = useRouter();
-  const pathname = usePathname();
   const { accessToken, clearAccessToken } = useAuthStore();
-  const [localStore, setLocalStore] = useState(false);
 
   const onClickHandler = () => {
     router.push('/');

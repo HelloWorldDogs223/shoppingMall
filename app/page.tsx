@@ -3,7 +3,7 @@
 import { Button } from '@mui/material';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useFetch } from './hooks/useFetch';
 
 export default function Home() {
@@ -12,8 +12,6 @@ export default function Home() {
 
   // state
   const [search, setSearch] = useState('');
-
-  // functions
 
   useFetch();
 
