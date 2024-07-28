@@ -36,8 +36,8 @@ export default function Page() {
       return;
     }
     const res: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/email/registration/request');`,
-      { body: email },
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/email/registration/request`,
+      { email },
       {
         withCredentials: true,
         headers: {
