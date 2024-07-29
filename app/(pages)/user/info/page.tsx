@@ -13,6 +13,7 @@ export default function Page() {
   const [nickname, setNickname] = useState('');
   const [editNickname, setEditNickname] = useState('');
   const [email, setEmail] = useState<string>('');
+  const [editEmail, setEditEmail] = useState('');
   const [count, setCount] = useState(false);
   const [countdown, setCountdown] = useState(180); // 3 minutes countdown in seconds
   const [modal, setModal] = useState(false);
@@ -71,7 +72,7 @@ export default function Page() {
     }
     const res: any = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/email/registration/request`,
-      { email },
+      { email: editEmail },
       {
         withCredentials: true,
         headers: {
@@ -106,7 +107,7 @@ export default function Page() {
   };
 
   const onEmailChangeHandler = (e: any) => {
-    setEmail(e.target.value);
+    setEditEmail(e.target.value);
     setEmailError(false);
   };
 
@@ -127,6 +128,8 @@ export default function Page() {
       setModal(false); // 성공 시 모달을 닫습니다.
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      useFetch();
     }
   };
 
@@ -192,7 +195,7 @@ export default function Page() {
                     <input
                       disabled={count ? true : false}
                       onChange={onEmailChangeHandler}
-                      value={email}
+                      value={editEmail}
                       className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
                     />
                   </label>
