@@ -44,7 +44,7 @@ export default function Page() {
 
     setImg(imgConversion);
     setEmail(userInfoRes.data.email);
-    setNickname(userInfoRes.data.nickname);
+    setNickname(userInfoRes.data.nickName);
 
     if (userInfoRes.data.isBan) {
       alert('밴이 된 유저입니다.');
@@ -110,14 +110,10 @@ export default function Page() {
   };
 
   const onSubmitHandler = async () => {
-    const formData = new FormData();
-    formData.append('file', imgFile as File);
-    formData.append('nickName', nickname);
-
     try {
       const res: any = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/info`,
-        formData,
+        { nickName: nickname, profileImg: imgFile },
         {
           withCredentials: true,
           headers: {
