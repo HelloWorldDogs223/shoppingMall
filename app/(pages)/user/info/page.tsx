@@ -43,8 +43,6 @@ export default function Page() {
         'http://3.35.119.158',
       ) || '';
 
-    console.log(userInfoRes);
-
     setImg(imgConversion);
     setEmail(userInfoRes.data.email);
     setNickname(userInfoRes.data.nickName);
