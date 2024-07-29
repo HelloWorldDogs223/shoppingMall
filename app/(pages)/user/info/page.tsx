@@ -37,14 +37,7 @@ export default function Page() {
         },
       },
     );
-
-    const imgConversion: string =
-      userInfoRes.data?.profileImageDownLoadUrl?.replace(
-        'http://localhost',
-        '//3.35.119.158',
-      ) || '';
-
-    setImg(imgConversion);
+    setImg(userInfoRes.data?.profileImageDownLoadUrl);
     setEmail(userInfoRes.data.email);
     setNickname(userInfoRes.data.nickName);
 
