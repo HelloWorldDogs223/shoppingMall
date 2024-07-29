@@ -25,7 +25,7 @@ export default function Page() {
 
   const fetchUser = async () => {
     const userInfoRes: any = await axios.get(
-      `${process.env.SERVER_DOMAIN}/member`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
       {
         withCredentials: true,
         headers: {
@@ -154,10 +154,7 @@ export default function Page() {
                   />
                   <div className="flex flex-col justify-center">
                     <p className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em]">
-                      Jane Doe
-                    </p>
-                    <p className="text-[#4e7397] text-base font-normal leading-normal">
-                      @jane_doe
+                      {nickname}
                     </p>
                   </div>
                 </div>
