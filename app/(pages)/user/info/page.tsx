@@ -24,6 +24,8 @@ export default function Page() {
   const { error, accessToken } = useFetch();
 
   const fetchUser = async () => {
+    if (!accessToken) return;
+
     const userInfoRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
       {
@@ -152,10 +154,10 @@ export default function Page() {
                   />
                   <div className="flex flex-col justify-center">
                     <p className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em]">
-                      {nickname}
+                      닉네임 : {nickname}
                     </p>
                     <p className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em]">
-                      {email}
+                      이메일 : {email}
                     </p>
                   </div>
                 </div>
