@@ -11,6 +11,7 @@ export default function Page() {
   const [postEmail, setPostEmail] = useState<boolean>(false);
   const [edit, setEdit] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [editNickname, setEditNickname] = useState('');
   const [email, setEmail] = useState<string>('');
   const [count, setCount] = useState(false);
   const [countdown, setCountdown] = useState(180); // 3 minutes countdown in seconds
@@ -103,7 +104,7 @@ export default function Page() {
   };
 
   const onNicknameChangeHandler = (e: any) => {
-    setNickname(e.target.value);
+    setEditNickname(e.target.value);
   };
 
   const onEmailChangeHandler = (e: any) => {
@@ -115,7 +116,7 @@ export default function Page() {
     try {
       const res: any = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/info`,
-        { nickName: nickname, profileImg: imgFile },
+        { nickName: editNickname, profileImg: imgFile },
         {
           withCredentials: true,
           headers: {
@@ -233,7 +234,7 @@ export default function Page() {
                     </p>
                     <input
                       onChange={onNicknameChangeHandler}
-                      value={nickname}
+                      value={editNickname}
                       className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
                     />
                   </label>
