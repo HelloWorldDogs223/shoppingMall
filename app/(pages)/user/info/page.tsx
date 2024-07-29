@@ -57,7 +57,7 @@ export default function Page() {
     //   router.push('/signin');
     // }
     fetchUser();
-  }, [error, router]);
+  }, [error, router, accessToken]);
 
   const emailCheckHandler = async () => {
     if (email === '') {
