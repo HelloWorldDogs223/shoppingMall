@@ -23,6 +23,8 @@ export default function Page() {
 
   const { error, accessToken } = useFetch();
 
+  console.log('ASDASD' + accessToken);
+
   const fetchUser = async () => {
     const userInfoRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
