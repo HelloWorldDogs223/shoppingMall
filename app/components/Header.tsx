@@ -14,16 +14,21 @@ export default function Home() {
   };
 
   async function logout() {
-    const res: any = await axios.get(
-      'https://api.group-group.com/auth/logout',
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+    try {
+      const res: any = await axios.get(
+        'https://api.group-group.com/auth/logout',
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         },
-      },
-    );
-    clearAccessToken();
+      );
+    } catch (e) {
+      console.log(e);
+    } finally {
+      clearAccessToken();
+    }
   }
 
   return (

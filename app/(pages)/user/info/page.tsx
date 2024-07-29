@@ -40,6 +40,8 @@ export default function Page() {
         'https://api.group-group.com',
       );
 
+    console.log(userInfoRes);
+
     setImg(imgConversion);
     setEmail(userInfoRes.data.email);
     setNickname(userInfoRes.data.nickname);
@@ -156,6 +158,9 @@ export default function Page() {
                     <p className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em]">
                       {nickname}
                     </p>
+                    <p className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em]">
+                      {email}
+                    </p>
                   </div>
                 </div>
                 {!edit ? (
@@ -226,7 +231,7 @@ export default function Page() {
                 <div className="flex min-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
                   <label className="flex flex-col min-w-40 flex-1">
                     <p className="text-[#0e141b] text-base font-medium leading-normal pb-2">
-                      Nickname
+                      Nickname 변경하기
                     </p>
                     <input
                       onChange={onNicknameChangeHandler}
