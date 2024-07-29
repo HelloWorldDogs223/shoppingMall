@@ -8,6 +8,7 @@ import axios from 'axios';
 import ProfileModal from '@/app/components/ProfileModal';
 
 export default function Page() {
+  const [postEmail, setPostEmail] = useState<boolean>(false);
   const [edit, setEdit] = useState(false);
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState<string>('');
@@ -15,16 +16,46 @@ export default function Page() {
   const [countdown, setCountdown] = useState(180); // 3 minutes countdown in seconds
   const [modal, setModal] = useState(false);
   const [img, setImg] = useState('');
+  const [imgFile, setImgFile] = useState<File | null>(null);
   const [emailError, setEmailError] = useState(false);
 
   const router = useRouter();
 
   const { error, accessToken } = useFetch();
-  // useEffect(() => {
-  //   if (error) {
-  //     router.push('/signin');
-  //   }
-  // }, [error, router]);
+
+  const fetchUser = async () => {
+    const userInfoRes: any = await axios.get(
+      `${process.env.SERVER_DOMAIN}/member`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    const imgConversion: string =
+      userInfoRes.data.profileImageDownLoadUrl.replace(
+        'http://localhost',
+        'https://api.group-group.com',
+      );
+
+    setImg(imgConversion);
+    setEmail(userInfoRes.data.email);
+    setNickname(userInfoRes.data.nickname);
+
+    if (userInfoRes.data.isBan) {
+      alert('밴이 된 유저입니다.');
+      router.push('/');
+    }
+  };
+
+  useEffect(() => {
+    // if (error) {
+    //   router.push('/signin');
+    // }
+    fetchUser();
+  }, [error, router]);
 
   const emailCheckHandler = async () => {
     if (email === '') {
@@ -76,6 +107,30 @@ export default function Page() {
     setEmailError(false);
   };
 
+  const onSubmitHandler = async () => {
+    const formData = new FormData();
+    formData.append('file', imgFile as File);
+    formData.append('nickName', nickname);
+
+    try {
+      const res: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/info`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      console.log(res);
+      setModal(false); // 성공 시 모달을 닫습니다.
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div
       className="relative flex  min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden mx-auto"
@@ -88,6 +143,7 @@ export default function Page() {
               <div className="flex w-full flex-col gap-4 items-start">
                 <div className="flex gap-4 flex-col items-start">
                   <img
+                    alt="avatar"
                     onClick={() => setModal(true)}
                     className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32"
                     src={
@@ -115,23 +171,20 @@ export default function Page() {
                 ) : (
                   <></>
                 )}
+                {postEmail === false && edit === false && (
+                  <Button
+                    className="w-[480px]"
+                    variant="contained"
+                    onClick={() => setPostEmail(true)}
+                  >
+                    이메일 등록
+                  </Button>
+                )}
               </div>
             </div>
 
-            {edit ? (
-              <>
-                <div className="flex min-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                  <label className="flex flex-col min-w-40 flex-1">
-                    <p className="text-[#0e141b] text-base font-medium leading-normal pb-2">
-                      Nickname
-                    </p>
-                    <input
-                      onChange={onNicknameChangeHandler}
-                      value={nickname}
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
-                    />
-                  </label>
-                </div>
+            {postEmail && (
+              <div>
                 <div className="flex min-w-[480px] flex-wrap items-end gap-4 px-4 py-3 relative">
                   <label className="flex flex-col min-w-40 flex-1">
                     <p className="text-[#0e141b] text-base font-medium leading-normal pb-2">
@@ -151,25 +204,48 @@ export default function Page() {
                     인증하기
                   </p>
                 </div>
-                {count && countdown > 0 && (
-                  <p className="text-red-500">
-                    남은 시간: {formatTime(countdown)}
-                  </p>
-                )}
-                {!count && countdown === 0 ? (
-                  <p className="text-red-500">
-                    이메일이 만료되었습니다. 다시 인증해주세요!
-                  </p>
-                ) : (
-                  <></>
-                )}
-                {emailError && (
-                  <p className="text-red-500">이메일을 입력해주세요!</p>
-                )}
+                <Button variant="contained" onClick={() => setPostEmail(false)}>
+                  저장하고 나가기
+                </Button>
+              </div>
+            )}
+
+            {count && countdown > 0 && (
+              <p className="text-red-500">남은 시간: {formatTime(countdown)}</p>
+            )}
+
+            {!count && countdown === 0 && (
+              <p className="text-red-500">
+                이메일이 만료되었습니다. 다시 인증해주세요!
+              </p>
+            )}
+
+            {emailError && (
+              <p className="text-red-500">이메일을 입력해주세요!</p>
+            )}
+
+            {edit ? (
+              <>
+                <div className="flex min-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                  <label className="flex flex-col min-w-40 flex-1">
+                    <p className="text-[#0e141b] text-base font-medium leading-normal pb-2">
+                      Nickname
+                    </p>
+                    <input
+                      onChange={onNicknameChangeHandler}
+                      value={nickname}
+                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
+                    />
+                  </label>
+                </div>
+
                 <div className="flex px-4 py-3">
                   <Button
                     variant="contained"
-                    onClick={() => setEdit(false)}
+                    onClick={() => {
+                      setEdit(false);
+                      onSubmitHandler();
+                    }}
                     disabled={count}
                     className={`flex w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 flex-1 ${!count ? 'bg-[#1980e6] text-slate-50' : 'bg-gray-300 text-white'} text-base font-bold leading-normal tracking-[0.015em]`}
                   >
@@ -183,7 +259,15 @@ export default function Page() {
           </div>
         </div>
       </div>
-      {modal && <ProfileModal setModal={setModal} setImg={setImg} />}
+      {modal && (
+        <ProfileModal
+          setModal={setModal}
+          setImg={setImg}
+          nickname={nickname}
+          imgFile={imgFile}
+          setImgFile={setImgFile}
+        />
+      )}
     </div>
   );
 }
