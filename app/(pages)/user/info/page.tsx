@@ -23,8 +23,6 @@ export default function Page() {
 
   const { error, accessToken } = useFetch();
 
-  console.log('ASDASD' + accessToken);
-
   const fetchUser = async () => {
     const userInfoRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
@@ -36,11 +34,11 @@ export default function Page() {
       },
     );
 
-    const imgConversion: string =
-      userInfoRes.data.profileImageDownLoadUrl.replace(
-        'http://localhost',
-        'https://api.group-group.com',
-      );
+    const imgConversion: string = userInfoRes.data.profileImageDownLoadUrl;
+    // replace(
+    //   'http://localhost',
+    //   'https://api.group-group.com',
+    // );
 
     console.log(userInfoRes);
 
@@ -55,9 +53,9 @@ export default function Page() {
   };
 
   useEffect(() => {
-    // if (error) {
-    //   router.push('/signin');
-    // }
+    if (error) {
+      router.push('/signin');
+    }
     fetchUser();
   }, [error, router, accessToken]);
 
