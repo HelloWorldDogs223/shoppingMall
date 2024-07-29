@@ -34,11 +34,11 @@ export default function Page() {
       },
     );
 
-    const imgConversion: string = userInfoRes.data.profileImageDownLoadUrl;
-    // replace(
-    //   'http://localhost',
-    //   'https://api.group-group.com',
-    // );
+    const imgConversion: string =
+      userInfoRes.data?.profileImageDownLoadUrl?.replace(
+        'http://localhost',
+        'https://api.group-group.com',
+      ) || '';
 
     console.log(userInfoRes);
 
