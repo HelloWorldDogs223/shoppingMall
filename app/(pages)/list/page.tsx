@@ -10,7 +10,7 @@ export default function Page() {
     const productListRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
-    setProductList(productListRes.data);
+    setProductList(productListRes.data.productTypeList);
   };
 
   useEffect(() => {
