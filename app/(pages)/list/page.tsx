@@ -48,7 +48,7 @@ export default function Page() {
 
             {prodcutList.map((el: any) => {
               return (
-                <>
+                <div className="flex flex-wrap">
                   <div className="flex gap-3 p-3 overflow-x-hidden">
                     <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#e8edf3] pl-4 pr-4">
                       <p className="text-[#0e141b] text-sm font-medium leading-normal">
@@ -56,7 +56,7 @@ export default function Page() {
                       </p>
                     </div>
                   </div>
-                </>
+                </div>
               );
             })}
 
