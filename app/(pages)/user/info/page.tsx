@@ -117,7 +117,7 @@ export default function Page() {
           },
         },
       );
-      console.log(res);
+      setNickname(editNickname);
       setModal(false); // 성공 시 모달을 닫습니다.
     } catch (error) {
       console.error('Error:', error);

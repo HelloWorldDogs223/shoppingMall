@@ -8,7 +8,7 @@ export default function Page() {
 
   const fetchData = async () => {
     const productListRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
     setProductList(productListRes.data);
   };
