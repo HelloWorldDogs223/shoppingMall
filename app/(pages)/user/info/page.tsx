@@ -48,9 +48,9 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (error) {
-      router.push('/signin');
-    }
+    // if (error) {
+    //   router.push('/signin');
+    // }
     fetchUser();
   }, [error, router, accessToken]);
 
@@ -123,6 +123,18 @@ export default function Page() {
       console.error('Error:', error);
     } finally {
       useFetch();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImg(reader.result as string); // 파일 내용을 상태로 설정합니다.
+      };
+      reader.readAsDataURL(file); // 파일 내용을 Data URL로 읽습니다.
     }
   };
 
@@ -232,6 +244,16 @@ export default function Page() {
                       className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
                     />
                   </label>
+                  <label className="flex flex-col min-w-40 flex-1">
+                    <p className="text-[#0e141b] text-base font-medium leading-normal pb-2">
+                      프로필 이미지 변경하기
+                    </p>
+                    <input
+                      type="file"
+                      onChange={handleFileChange}
+                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
+                    />
+                  </label>
                 </div>
 
                 <div className="flex px-4 py-3">
@@ -254,15 +276,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-      {modal && (
-        <ProfileModal
-          setModal={setModal}
-          setImg={setImg}
-          nickname={nickname}
-          imgFile={imgFile}
-          setImgFile={setImgFile}
-        />
-      )}
     </div>
   );
 }

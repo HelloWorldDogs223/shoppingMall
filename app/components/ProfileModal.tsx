@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { useFetch } from '../hooks/useFetch';
 
 interface Props {
   setModal: (value: boolean) => void;
@@ -20,7 +19,6 @@ export default function ProfileModal({
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const { error, accessToken } = useFetch();
 
   const modalClickHandler = (e: any) => {
     e.stopPropagation();
