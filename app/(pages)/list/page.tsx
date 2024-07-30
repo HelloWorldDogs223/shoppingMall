@@ -46,20 +46,21 @@ export default function Page() {
               </span>
             </div>
 
-            {prodcutList.map((el: any) => {
-              return (
-                <div className="flex flex-wrap">
-                  <div className="flex gap-3 p-3 overflow-x-hidden">
-                    <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#e8edf3] pl-4 pr-4">
-                      <p className="text-[#0e141b] text-sm font-medium leading-normal">
-                        {el.typeName}
-                      </p>
+            <div className="flex flex-wrap">
+              {prodcutList.map((el: any) => {
+                return (
+                  <div>
+                    <div className="flex gap-3 p-3 overflow-x-hidden">
+                      <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#e8edf3] pl-4 pr-4">
+                        <p className="text-[#0e141b] text-sm font-medium leading-normal">
+                          {el.typeName}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-
+                );
+              })}
+            </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
               <Card />
               <Card />
