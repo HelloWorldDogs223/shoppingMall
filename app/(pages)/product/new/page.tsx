@@ -78,15 +78,6 @@ export default function Page() {
       formData.append('blockImages', file);
     });
 
-    for (let key of formData.keys()) {
-      console.log(key);
-    }
-
-    // FormData의 value 확인
-    for (let value of formData.values()) {
-      console.log(value);
-    }
-
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
       formData,
