@@ -19,7 +19,7 @@ export default function Page() {
   const [price, setPrice] = useState(0);
   const [discountRate, setDiscountRate] = useState(0.0);
 
-  const [imageFiles, setImageFiles] = useState([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [blockFiles, setBlockFiles] = useState<File[]>([]);
   const [blockText, setBlockText] = useState<string[]>([]);
 
@@ -73,20 +73,23 @@ export default function Page() {
     });
 
     formData.append('productData', productDataJson);
-    formData.append('productImages', imageFiles);
-    formData.append('blockImages', blockFiles);
+    imageFiles.forEach((file) => formData.append('productImages', file));
+    blockFiles.forEach((file) => formData.append('blockImages', file));
 
     console.log(Array.from(formData));
-    // const res = await axios.post(
-    //   `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
-    //   { productData },
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`,
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   },
-    // );
+
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
+      { productData },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    console.log(res);
   };
 
   return (
@@ -339,7 +342,7 @@ export default function Page() {
                         setBlockFiles(
                           blockFiles.map((el: any, idx: number) => {
                             if (idx === index) {
-                              return e.target.value;
+                              return e.target.files[0];
                             } else {
                               return el;
                             }
