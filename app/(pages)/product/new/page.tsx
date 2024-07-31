@@ -78,7 +78,14 @@ export default function Page() {
       formData.append('blockImages', file);
     });
 
-    console.log(formData);
+    for (let key of formData.keys()) {
+      console.log(key);
+    }
+
+    // FormData의 value 확인
+    for (let value of formData.values()) {
+      console.log(value);
+    }
 
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
@@ -86,7 +93,6 @@ export default function Page() {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data',
         },
       },
     );
