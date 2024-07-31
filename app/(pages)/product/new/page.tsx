@@ -73,10 +73,10 @@ export default function Page() {
     });
 
     formData.append('productData', productDataJson);
-    imageFiles.map((file) => {
+    Array.from(imageFiles).map((file) => {
       formData.append('productImages', file);
     });
-    blockFiles.map((file) => {
+    Array.from(blockFiles).map((file) => {
       formData.append('blockImages', file);
     });
 
@@ -358,11 +358,8 @@ export default function Page() {
                 </div>
               ))}
 
-              <div
-                className="flex px-4 py-3 justify-end"
-                onClick={onSubmitHandler}
-              >
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2884e6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
+              <div className="flex px-4 py-3 mx-auto" onClick={onSubmitHandler}>
+                <button className="flex min-w-[960px] max-w-[960px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2884e6] text-white text-sm font-bold leading-normal tracking-[0.015em]">
                   <span className="truncate">Submit</span>
                 </button>
               </div>
