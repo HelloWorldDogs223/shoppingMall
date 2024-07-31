@@ -73,8 +73,12 @@ export default function Page() {
     });
 
     formData.append('productData', productDataJson);
-    imageFiles.forEach((file) => formData.append('productImages', file));
-    blockFiles.forEach((file) => formData.append('blockImages', file));
+    imageFiles.map((file) => {
+      formData.append('productImages', file);
+    });
+    blockFiles.map((file) => {
+      formData.append('blockImages', file);
+    });
 
     console.log(Array.from(formData));
 
