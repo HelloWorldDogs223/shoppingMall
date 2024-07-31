@@ -80,11 +80,9 @@ export default function Page() {
       formData.append('blockImages', file);
     });
 
-    console.log(Array.from(formData));
-
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
-      { productData },
+      { formData },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
