@@ -64,8 +64,6 @@ export default function Page() {
       discountRate: discountRate,
     };
 
-    console.log(productData);
-
     const formData = new FormData();
 
     const productDataJson = new Blob([JSON.stringify(productData)], {
@@ -80,9 +78,11 @@ export default function Page() {
       formData.append('blockImages', file);
     });
 
+    console.log(formData);
+
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
-      { formData },
+      formData,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
