@@ -1,5 +1,37 @@
 'use client';
 
+interface ProductType {
+  productId: number; // 제품 Id
+  sellerId: number; // 판매자 Id
+  productTypeId: number; // 제품타입 Id
+  productImageDownloadUrlList: [];
+  blockDataList: {
+    // 블록 데이터 리스트
+    index: number; // 블록 순서
+    blockType: string;
+    contentInTextBlock: string; // 텍스트 블록을 위한
+    imgDownloadUrlInImageBlock: String;
+  };
+  singleOptions: // 단일옵션 리스트
+  {
+    optionName: string; // 옵션명
+    priceChangeAmount: number; // 옵션에 의한 가격변동값
+  };
+
+  multipleOptions: // 다중옵션 리스트
+  {
+    optionName: string; // 옵션명
+    priceChangeAmount: number; // 옵션에 의한 가격변동값
+  };
+
+  name: string; // 제품 이름
+  price: number; // 제품 가격
+  discountAmount: number; // 할인 양
+  discountRate: number; // 할인 퍼센테이지
+  isBan: Boolean; // 벤 여부
+  scoreAvg: number; // 제품 평점
+}
+
 import {
   Checkbox,
   FormControl,
@@ -11,7 +43,10 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useFetch } from '@/app/hooks/useFetch';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -29,6 +64,23 @@ const names = ['tv', '3구 콘센트', '케이블', '스위치 케이스', '플�
 export default function Page() {
   const [age, setAge] = useState('선택');
   const [personName, setPersonName] = useState<string[]>([]);
+  const searchParams = useSearchParams();
+
+  const { accessToken } = useFetch();
+
+  const [productInfo, setProductInfo] = useState<ProductType>();
+
+  const getProductById = async () => {
+    const productRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${searchParams.get('uid')}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    setProductInfo(productRes.data);
+  };
 
   const handleChangeMultiple = (
     event: SelectChangeEvent<typeof personName>,
@@ -45,6 +97,10 @@ export default function Page() {
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
+
+  useEffect(() => {
+    getProductById();
+  }, []);
 
   return (
     <div
@@ -65,15 +121,14 @@ export default function Page() {
                 >
                   <div className="flex flex-col gap-2 text-left">
                     <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
-                      The Grove
+                      {productInfo?.name}
                     </h1>
-                    <h2 className="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
-                      Women's Mini Dress
-                    </h2>
                   </div>
                 </div>
               </div>
             </div>
+            <h2>가격</h2>
+            <h3>{productInfo?.price}</h3>
             <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
               Product Details
             </h2>

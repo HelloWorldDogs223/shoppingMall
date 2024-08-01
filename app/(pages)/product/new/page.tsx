@@ -203,7 +203,10 @@ export default function Page() {
               </div>
 
               {Array.from({ length: numberOfSingle }).map((_, index) => (
-                <div className="flex gap-[1rem] max-w-[960px]" key={index}>
+                <div
+                  className="flex gap-[1rem] max-w-[960px] px-4 py-3"
+                  key={index}
+                >
                   <label className="flex min-w-40 flex-1">
                     <label className="mr-[1rem]">
                       <p>단일 선택 옵션 상품명</p>
@@ -261,7 +264,10 @@ export default function Page() {
               </div>
 
               {Array.from({ length: numberOfOptions }).map((_, index) => (
-                <div className="flex gap-[1rem] max-w-[960px]" key={index}>
+                <div
+                  className="flex gap-[1rem] max-w-[960px] px-4 py-3"
+                  key={index}
+                >
                   <label className="flex min-w-40 flex-1">
                     <label className="mr-[1rem]">
                       <p>다중상품명</p>
@@ -319,7 +325,7 @@ export default function Page() {
 
               {Array.from({ length: numberOfBlocks }).map((_, index) => (
                 <div key={index + 'a'}>
-                  <div className="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3">
+                  <div className="flex max-w-[960px] flex-wrap items-end gap-4  px-4 py-3">
                     <label className="flex flex-col min-w-40 flex-1">
                       <p className="text-[#111418] text-base font-medium leading-normal pb-2">
                         Categories
