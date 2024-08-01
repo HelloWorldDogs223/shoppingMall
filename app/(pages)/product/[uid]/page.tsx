@@ -45,7 +45,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useFetch } from '@/app/hooks/useFetch';
 
 const ITEM_HEIGHT = 48;
@@ -61,10 +61,10 @@ const MenuProps = {
 
 const names = ['tv', '3구 콘센트', '케이블', '스위치 케이스', '플러그'];
 
-export default function Page({ params }: any) {
+export default function Page() {
   const [age, setAge] = useState('선택');
   const [personName, setPersonName] = useState<string[]>([]);
-  const searchParams = useSearchParams();
+  const params = useParams();
 
   const { accessToken } = useFetch();
 
@@ -72,7 +72,7 @@ export default function Page({ params }: any) {
 
   const getProductById = async () => {
     const productRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${params}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${params.uid}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
