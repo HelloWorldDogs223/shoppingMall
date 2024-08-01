@@ -86,10 +86,6 @@ export default function Page() {
       formData.append('blockImages', file);
     });
 
-    console.log(productData);
-    console.log(imageFiles);
-    console.log(blockFiles);
-
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
       formData,

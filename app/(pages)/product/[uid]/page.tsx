@@ -59,11 +59,12 @@ const MenuProps = {
   },
 };
 
-const names = ['tv', '3구 콘센트', '케이블', '스위치 케이스', '플러그'];
-
 export default function Page() {
   const [age, setAge] = useState('선택');
-  const [personName, setPersonName] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const [single, setSingle] = useState([]);
+  const [multi, setMulti] = useState([]);
   const params = useParams();
 
   const { accessToken } = useFetch();
@@ -80,21 +81,18 @@ export default function Page() {
       },
     );
     setProductInfo(productRes.data);
+    setSingle(productRes.data.singleOptions);
+    setMulti(productRes.data.multipleOptions);
   };
 
-  const handleChangeMultiple = (
-    event: SelectChangeEvent<typeof personName>,
-  ) => {
+  const handleChange = (event: SelectChangeEvent<typeof selectedOptions>) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setSelectedOptions(typeof value === 'string' ? value.split(',') : value);
   };
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChangeSingle = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
 
@@ -121,50 +119,62 @@ export default function Page() {
                 >
                   <div className="flex flex-col gap-2 text-left">
                     <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
-                      {productInfo?.name}
+                      제품명 : {productInfo?.name}
                     </h1>
                   </div>
                 </div>
               </div>
             </div>
-            <h2>가격</h2>
-            <h3>{productInfo?.price}</h3>
+            <div className="flex gap-4 mt-4">
+              <h2 className="text-2xl">가격</h2>
+              <h3 className="text-2xl">{productInfo?.price}원</h3>
+            </div>
             <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
               Product Details
             </h2>
-            <div className="flex">
+            <div className="flex items-center">
               <FormControl sx={{ m: 1, width: 300 }}>
                 <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
                 <Select
                   labelId="demo-multiple-checkbox-label"
                   id="demo-multiple-checkbox"
                   multiple
-                  value={personName}
-                  onChange={handleChangeMultiple}
+                  value={selectedOptions}
+                  onChange={handleChange}
                   input={<OutlinedInput label="Tag" />}
                   renderValue={(selected) => selected.join(', ')}
                   MenuProps={MenuProps}
                 >
-                  {names.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      <Checkbox checked={personName.indexOf(name) > -1} />
-                      <ListItemText primary={name} />
+                  {multi.map((option: any) => (
+                    <MenuItem key={option.optionName} value={option.optionName}>
+                      <Checkbox
+                        checked={
+                          selectedOptions.indexOf(option.optionName) > -1
+                        }
+                      />
+                      <ListItemText
+                        primary={`${option.optionName} (${option.priceChangeAmount > 0 ? '+' : ''}${option.priceChangeAmount})`}
+                      />
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                <InputLabel id="demo-simple-select-label">옵션</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={age}
-                  label="Age"
-                  onChange={handleChange}
+                  label="option"
+                  onChange={handleChangeSingle}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {single.map((el: any) => {
+                    return (
+                      <MenuItem value={el.priceChangeAmount}>
+                        {el.optionName}
+                      </MenuItem>
+                    );
+                  })}
                 </Select>
               </FormControl>
             </div>
@@ -831,55 +841,6 @@ export default function Page() {
                   Model is 5'9" with 32" bust, 24" waist, 34" hips and wearing a
                   size XS
                 </p>
-              </div>
-              <div className="col-span-2 grid grid-cols-subgrid border-t border-t-[#d0dbe6] py-5">
-                <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                  Imported
-                </p>
-                <p className="text-[#0e141b] text-sm font-normal leading-normal">
-                  Style: #001C01
-                </p>
-              </div>
-            </div>
-            <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/0334aa5f-397a-44b2-af8c-493f1d4492ed.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/d56e711b-ba26-482e-92ea-747df5f63cc2.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/071d839d-27c7-475c-be07-24099683802e.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/b3e2f555-6734-4d88-8498-782c5f222f27.png")',
-                  }}
-                ></div>
               </div>
             </div>
           </div>
