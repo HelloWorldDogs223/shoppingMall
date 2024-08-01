@@ -6,13 +6,14 @@ import { useEffect, useState } from 'react';
 
 export default function Page() {
   const [numberOfOptions, setNumberOfOptions] = useState<number>(0);
+  const [numberOfSingle, setNumberOfSingle] = useState<number>(0);
   const [numberOfBlocks, setNumberOfBlocks] = useState<number>(0);
   const [blockSelect, setBlockSelect] = useState<string[]>([]);
 
   const [name, setName] = useState('');
-  const [category, setCategory] = useState(1);
-  const [singleName, setSingleName] = useState('');
-  const [singleAmount, setSingleAmount] = useState(0);
+  const [category, setCategory] = useState<number>(0);
+  const [singleName, setSingleName] = useState<string[]>([]);
+  const [singleAmount, setSingleAmount] = useState<number[]>([]);
   const [multiNames, setMultiNames] = useState<string[]>([]);
   const [multiPrices, setMultiPrices] = useState<number[]>([]);
 
@@ -39,6 +40,11 @@ export default function Page() {
     setBlockText(Array.from({ length: numberOfBlocks }).fill(null) as string[]);
   }, [numberOfBlocks]);
 
+  useEffect(() => {
+    setSingleName(Array.from({ length: numberOfSingle }).fill('') as string[]);
+    setSingleAmount(Array.from({ length: numberOfSingle }).fill(0) as number[]);
+  }, [numberOfSingle]);
+
   const onSubmitHandler = async () => {
     let blockDataList = Array.from({ length: numberOfBlocks }).fill(null);
 
@@ -53,7 +59,9 @@ export default function Page() {
     const productData = {
       productTypeId: category,
       name,
-      singleOption: { optionName: singleName, priceChangeAmount: singleAmount },
+      singleOption: singleName.map((el, idx) => {
+        return { optionName: el, priceChangeAmount: singleAmount[idx] };
+      }),
       multiOptions: multiNames.map((el, idx) => {
         return { optionName: el, priceChangeAmount: multiPrices[idx] };
       }),
@@ -182,29 +190,60 @@ export default function Page() {
               <div className="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3">
                 <label className="flex flex-col min-w-40 flex-1">
                   <p className="text-[#111418] text-base font-medium leading-normal pb-2">
-                    단일 선택 옵션 (EX. 색깔)
+                    단일 선택 옵션 개수
                   </p>
                   <input
-                    placeholder=""
+                    type="number"
+                    placeholder="옵션 개수"
                     className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
-                    value={singleName}
-                    onChange={(e: any) => setSingleName(e.target.value)}
+                    value={numberOfSingle}
+                    onChange={(e: any) => setNumberOfSingle(e.target.value)}
                   />
                 </label>
               </div>
-              <div className="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3">
-                <label className="flex flex-col min-w-40 flex-1">
-                  <p className="text-[#111418] text-base font-medium leading-normal pb-2">
-                    단일 선택 옵션 가격
-                  </p>
-                  <input
-                    placeholder="$0.00"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
-                    value={singleAmount}
-                    onChange={(e: any) => setSingleAmount(e.target.value)}
-                  />
-                </label>
-              </div>
+
+              {Array.from({ length: numberOfSingle }).map((_, index) => (
+                <div className="flex gap-[1rem] max-w-[960px]" key={index}>
+                  <label className="flex min-w-40 flex-1">
+                    <label className="mr-[1rem]">
+                      <p>단일 선택 옵션 상품명</p>
+                      <input
+                        placeholder=""
+                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
+                        onChange={(e: any) =>
+                          setSingleName(
+                            singleName.map((el, idx) => {
+                              if (index === idx) {
+                                return e.target.value;
+                              } else {
+                                return el;
+                              }
+                            }),
+                          )
+                        }
+                      />
+                    </label>
+                    <label>
+                      <p>단일 상품 옵션 가격</p>
+                      <input
+                        placeholder=""
+                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
+                        onChange={(e: any) =>
+                          setSingleAmount(
+                            singleAmount.map((el, idx) => {
+                              if (index === idx) {
+                                return e.target.value;
+                              } else {
+                                return el;
+                              }
+                            }),
+                          )
+                        }
+                      />
+                    </label>
+                  </label>
+                </div>
+              ))}
               <div className="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3">
                 <label className="flex flex-col min-w-40 flex-1">
                   <p className="text-[#111418] text-base font-medium leading-normal pb-2">

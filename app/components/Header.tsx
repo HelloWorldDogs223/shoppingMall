@@ -149,7 +149,7 @@ export default function Home() {
             className="cursor-pointer bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
             style={{
               backgroundImage:
-                'url("https://cdn.usegalileo.ai/stability/8a31f216-93c7-4e43-a376-51163e59cedc.png");',
+                'url("https://cdn.usegalileo.ai/stability/8a31f216-93c7-4e43-a376-51163e59cedc.png")',
             }}
           ></div>
         </div>
