@@ -61,7 +61,7 @@ const MenuProps = {
 
 const names = ['tv', '3구 콘센트', '케이블', '스위치 케이스', '플러그'];
 
-export default function Page() {
+export default function Page({ params }: any) {
   const [age, setAge] = useState('선택');
   const [personName, setPersonName] = useState<string[]>([]);
   const searchParams = useSearchParams();
@@ -72,7 +72,7 @@ export default function Page() {
 
   const getProductById = async () => {
     const productRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${searchParams.get('uid')}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${params}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
