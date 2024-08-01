@@ -127,9 +127,14 @@ export default function Home() {
           </div>
           <div>
             {accessToken !== null ? (
-              <Button onClick={() => logout()} variant="contained">
-                SignOut
-              </Button>
+              <div className="flex gap-4">
+                <Button onClick={() => logout()} variant="contained">
+                  SignOut
+                </Button>
+                <Button onClick={() => router.push('/product/new')}>
+                  제품 등록하기
+                </Button>
+              </div>
             ) : (
               <Button
                 onClick={() => router.push('/signin')}
