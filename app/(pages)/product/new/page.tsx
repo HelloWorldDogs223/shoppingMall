@@ -95,6 +95,7 @@ export default function Page() {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
         },
       },
     );
