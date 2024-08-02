@@ -32,7 +32,7 @@ export default function Page() {
     const query = new URLSearchParams(window.location.search);
     setPrice(Number(query.get('price')));
     setName(query.get('name') as string);
-    setDiscountRate(query.get('discountRate'));
+    setDiscountRate(Number(query.get('discountRate')));
   }, [router]);
 
   useEffect(() => {
