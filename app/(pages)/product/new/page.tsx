@@ -99,6 +99,8 @@ export default function Page() {
         },
       },
     );
+
+    console.log(res);
   };
 
   return (
