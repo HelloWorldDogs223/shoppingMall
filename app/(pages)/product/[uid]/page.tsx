@@ -33,6 +33,7 @@ interface ProductType {
 }
 
 import {
+  Button,
   Checkbox,
   FormControl,
   InputLabel,
@@ -47,6 +48,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useFetch } from '@/app/hooks/useFetch';
+import { useRouter } from 'next/navigation';
+import useCartStore from '@/app/store/cart';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -60,6 +63,10 @@ const MenuProps = {
 };
 
 export default function Page() {
+  const router = useRouter();
+
+  const addItem = useCartStore((state: any) => state.addItem);
+
   const [age, setAge] = useState('선택');
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -100,6 +107,34 @@ export default function Page() {
     getProductById();
   }, []);
 
+  const handleClick = () => {
+    const query = new URLSearchParams(productInfo).toString();
+    router.push(`/product/edit?${query}`);
+  };
+
+  /*{
+  productId : Long               // 제품 ID
+  singleOptionId : Long          // 선택된 단일옵션 ID (null 가능)
+  multipleOptionId : List<Long>  // 선택된 다중옵션 ID (null 가능)
+} */
+
+  const getCart = () => {
+    addItem({ id: productInfo?.productId, name: name });
+    axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+      {
+        productId: productInfo?.productId,
+        singleOptionId: age,
+        multiOptionId: selectedOptions,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+  };
+
   return (
     <div
       className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden"
@@ -125,9 +160,25 @@ export default function Page() {
                 </div>
               </div>
             </div>
-            <div className="flex gap-4 mt-4">
-              <h2 className="text-2xl">가격</h2>
-              <h3 className="text-2xl">{productInfo?.price}원</h3>
+            <div className="flex gap-4 mt-4 justify-between">
+              <div>
+                <h2 className="text-2xl">가격</h2>
+                <h3 className="text-2xl">{productInfo?.price}원</h3>
+              </div>
+              <Button
+                onClick={() => handleClick()}
+                variant="contained"
+                className="w-[400px]"
+              >
+                수정하기
+              </Button>
+              <Button
+                onClick={() => getCart()}
+                variant="contained"
+                className="w-[400px] bg-red-500 hover:bg-white hover:text-black"
+              >
+                장바구니 담기
+              </Button>
             </div>
             <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
               Product Details
