@@ -140,21 +140,22 @@ export default function Page() {
 
   const getCart = async () => {
     addItem({ id: productInfo?.productId, name: name });
-    console.log(res.data, productInfo?.productId, Number(age), selectedOptions);
-  };
-  const res = await axios.post(
-    `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
-    {
-      productId: productInfo?.productId,
-      singleOptionId: Number(age),
-      multiOptionId: selectedOptions,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    console.log(productInfo?.productId, Number(age), selectedOptions);
+
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+      {
+        productId: productInfo?.productId,
+        singleOptionId: Number(age),
+        multiOptionId: selectedOptions,
       },
-    },
-  );
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+  };
 
   return (
     <div
