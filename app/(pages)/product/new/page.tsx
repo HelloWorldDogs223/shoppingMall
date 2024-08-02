@@ -74,6 +74,8 @@ export default function Page() {
 
     const formData = new FormData();
 
+    console.log(productData, blockFiles, imageFiles);
+
     const productDataJson = new Blob([JSON.stringify(productData)], {
       type: 'application/json',
     });

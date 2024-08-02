@@ -16,8 +16,6 @@ export default function Home() {
     router.push('/');
   };
 
-  console.log(cartCount);
-
   async function logout() {
     try {
       const res: any = await axios.get(
