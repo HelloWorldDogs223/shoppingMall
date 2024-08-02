@@ -52,7 +52,8 @@ export default function Page() {
       return {
         index: idx + 1,
         blockType: blockText[idx] === null ? 'IMAGE_TYPE' : 'TEXT_TYPE',
-        content: blockText[idx] === null ? blockFiles[idx] : blockText[idx],
+        content:
+          blockText[idx] === null ? blockFiles[idx].name : blockText[idx],
       };
     });
 
