@@ -67,7 +67,7 @@ export default function Page() {
 
   const addItem = useCartStore((state: any) => state.addItem);
 
-  const [age, setAge] = useState('선택');
+  const [age, setAge] = useState('0');
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const [single, setSingle] = useState([]);
@@ -138,19 +138,13 @@ export default function Page() {
     router.push(`/product/edit?${query}`);
   };
 
-  /*{
-  productId : Long               // 제품 ID
-  singleOptionId : Long          // 선택된 단일옵션 ID (null 가능)
-  multipleOptionId : List<Long>  // 선택된 다중옵션 ID (null 가능)
-} */
-
   const getCart = () => {
     addItem({ id: productInfo?.productId, name: name });
     axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
       {
         productId: productInfo?.productId,
-        singleOptionId: age,
+        singleOptionId: Number(age),
         multiOptionId: selectedOptions,
       },
       {
@@ -159,6 +153,8 @@ export default function Page() {
         },
       },
     );
+
+    console.log(productInfo?.productId, Number(age), selectedOptions);
   };
 
   return (
@@ -223,7 +219,7 @@ export default function Page() {
                   MenuProps={MenuProps}
                 >
                   {multi.map((option: any) => (
-                    <MenuItem key={option.optionName} value={option.optionName}>
+                    <MenuItem key={option.optionName} value={option.optionId}>
                       <Checkbox
                         checked={
                           selectedOptions.indexOf(option.optionName) > -1
@@ -247,9 +243,7 @@ export default function Page() {
                 >
                   {single.map((el: any) => {
                     return (
-                      <MenuItem value={el.priceChangeAmount}>
-                        {el.optionName}
-                      </MenuItem>
+                      <MenuItem value={el.optionId}>{el.optionName}</MenuItem>
                     );
                   })}
                 </Select>
