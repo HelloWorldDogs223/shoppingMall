@@ -138,9 +138,9 @@ export default function Page() {
     router.push(`/product/edit?${query}`);
   };
 
-  const getCart = () => {
+  const getCart = async () => {
     addItem({ id: productInfo?.productId, name: name });
-    axios.post(
+    const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
       {
         productId: productInfo?.productId,
@@ -154,7 +154,7 @@ export default function Page() {
       },
     );
 
-    console.log(productInfo?.productId, Number(age), selectedOptions);
+    console.log(res.data, productInfo?.productId, Number(age), selectedOptions);
   };
 
   return (

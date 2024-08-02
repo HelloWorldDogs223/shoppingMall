@@ -59,7 +59,7 @@ export default function Page() {
     const productData = {
       productTypeId: category,
       name,
-      singleOption: singleName.map((el, idx) => {
+      singleOptions: singleName.map((el, idx) => {
         return { optionName: el, priceChangeAmount: singleAmount[idx] };
       }),
       multiOptions: multiNames.map((el, idx) => {
