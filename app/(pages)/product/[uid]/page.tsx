@@ -108,7 +108,33 @@ export default function Page() {
   }, []);
 
   const handleClick = () => {
-    const query = new URLSearchParams(productInfo).toString();
+    const convertToRecord = (product: ProductType): Record<string, string> => {
+      return {
+        productId: product.productId.toString(),
+        sellerId: product.sellerId.toString(),
+        productTypeId: product.productTypeId.toString(),
+        productImageDownloadUrlList: JSON.stringify(
+          product.productImageDownloadUrlList,
+        ),
+        blockDataList: JSON.stringify(product.blockDataList),
+        singleOptions: JSON.stringify(product.singleOptions),
+        multipleOptions: JSON.stringify(product.multipleOptions),
+        name: product.name,
+        price: product.price.toString(),
+        discountAmount: product.discountAmount.toString(),
+        discountRate: product.discountRate.toString(),
+        isBan: product.isBan.toString(),
+        scoreAvg: product.scoreAvg.toString(),
+      };
+    };
+
+    if (!productInfo) {
+      console.error('Product information is undefined');
+      return;
+    }
+
+    const query = new URLSearchParams(convertToRecord(productInfo)).toString();
+
     router.push(`/product/edit?${query}`);
   };
 
