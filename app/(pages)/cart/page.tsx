@@ -8,11 +8,11 @@ export default function Page() {
   const router = useRouter();
 
   const { error } = useFetch();
-  useEffect(() => {
-    if (error) {
-      router.push('/signin');
-    }
-  }, [error, router]);
+  // useEffect(() => {
+  //   if (error) {
+  //     router.push('/signin');
+  //   }
+  // }, [error, router]);
 
   return (
     <div className="flex flex-col justify-center px-[196px]">

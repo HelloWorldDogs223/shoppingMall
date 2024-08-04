@@ -67,7 +67,7 @@ export default function Page() {
 
   const addItem = useCartStore((state: any) => state.addItem);
 
-  const [age, setAge] = useState('0');
+  const [age, setAge] = useState<string | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const [single, setSingle] = useState([]);
@@ -96,11 +96,12 @@ export default function Page() {
     const {
       target: { value },
     } = event;
+
     setSelectedOptions(typeof value === 'string' ? value.split(',') : value);
   };
 
   const handleChangeSingle = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+    setAge((event.target.value as string) || '');
   };
 
   useEffect(() => {
@@ -207,7 +208,7 @@ export default function Page() {
             </h2>
             <div className="flex items-center">
               <FormControl sx={{ m: 1, width: 300 }}>
-                <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+                <InputLabel id="demo-multiple-checkbox-label">옵션</InputLabel>
                 <Select
                   labelId="demo-multiple-checkbox-label"
                   id="demo-multiple-checkbox"
@@ -219,11 +220,9 @@ export default function Page() {
                   MenuProps={MenuProps}
                 >
                   {multi.map((option: any) => (
-                    <MenuItem key={option.optionName} value={option.optionId}>
+                    <MenuItem key={option.optionId} value={option.optionId}>
                       <Checkbox
-                        checked={
-                          selectedOptions.indexOf(option.optionName) > -1
-                        }
+                        checked={selectedOptions.indexOf(option.optionId) > -1}
                       />
                       <ListItemText
                         primary={`${option.optionName} (${option.priceChangeAmount > 0 ? '+' : ''}${option.priceChangeAmount})`}
@@ -237,7 +236,7 @@ export default function Page() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={age}
+                  value={age || ''}
                   label="option"
                   onChange={handleChangeSingle}
                 >
