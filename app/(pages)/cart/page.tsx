@@ -1,18 +1,52 @@
 'use client';
 
 import { useFetch } from '@/app/hooks/useFetch';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import BasketProduct from '@/app/components/BasketProduct';
 
 export default function Page() {
   const router = useRouter();
 
-  const { error } = useFetch();
+  const [basketInfo, setBasketInfo] = useState<any>([]);
+
+  const { error, accessToken } = useFetch();
   // useEffect(() => {
   //   if (error) {
   //     router.push('/signin');
   //   }
   // }, [error, router]);
+
+  const basketDeleteHandler = (id: number) => {
+    setBasketInfo(
+      basketInfo.filter((el: any) => {
+        if (el.basketItemId !== id) {
+          return true;
+        }
+      }),
+    );
+
+    // delete에는 바디가 없다고 알려주기
+    const deleteRes: any = axios.delete(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+      { headers: { authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
+  useEffect(() => {
+    try {
+      const basketRes: any = axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      );
+      setBasketInfo(basketRes.data.basketItemDtos);
+    } catch (e: any) {
+      console.log(e);
+    }
+  }, []);
 
   return (
     <div className="flex flex-col justify-center px-[196px]">
@@ -21,105 +55,10 @@ export default function Page() {
           Shopping Cart
         </div>
       </div>
-      <div className="flex justify-between items-center mb-[32px]">
-        <div className="flex justify-center">
-          <img
-            src="/example4.png"
-            className="w-[70px] h-[70px]"
-            alt="product"
-          />
-          <div className="flex flex-col ml-[16px]">
-            <div className="w-[142px] text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              Nike Air Max 1
-            </div>
-            <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              $180.00
-            </div>
-            <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              Size 7.5, Color: Black
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex mr-[32px] cursor-pointer">
-            <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              -
-            </div>
-          </div>
-          <span className="mr-[32px]">1</span>
-          <div className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex cursor-pointer">
-            <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              +
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-between items-center mb-[32px]">
-        <div className="flex justify-center">
-          <img
-            src="/example4.png"
-            className="w-[70px] h-[70px]"
-            alt="product"
-          />
-          <div className="flex flex-col ml-[16px]">
-            <div className="w-[142px] text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              Nike Air Max 1
-            </div>
-            <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              $180.00
-            </div>
-            <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              Size 7.5, Color: Black
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex mr-[32px] cursor-pointer">
-            <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              -
-            </div>
-          </div>
-          <span className="mr-[32px]">1</span>
-          <div className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex cursor-pointer">
-            <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              +
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex justify-center">
-          <img
-            src="/example4.png"
-            className="w-[70px] h-[70px]"
-            alt="product"
-          />
-          <div className="flex flex-col ml-[16px]">
-            <div className="w-[142px] text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              Nike Air Max 1
-            </div>
-            <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              $180.00
-            </div>
-            <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              Size 7.5, Color: Black
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex mr-[32px] cursor-pointer">
-            <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              -
-            </div>
-          </div>
-          <span className="mr-[32px]">1</span>
-          <div className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex cursor-pointer">
-            <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-              +
-            </div>
-          </div>
-        </div>
-      </div>
+      {basketInfo.map((el: any) => {
+        <BasketProduct basket={el} basketDeleteHandler={basketDeleteHandler} />;
+      })}
+
       <div className="mt-[150px] w-full">
         <div className="w-full py-2 justify-between items-start inline-flex">
           <div className="flex-col justify-start items-start inline-flex">
