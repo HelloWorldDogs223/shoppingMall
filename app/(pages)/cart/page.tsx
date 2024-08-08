@@ -44,7 +44,6 @@ export default function Page() {
             headers: { Authorization: `Bearer ${accessToken}` },
           },
         );
-        console.log(basketRes.data);
         setBasketInfo(basketRes.data.basketItemDtos);
       } catch (e) {
         console.log(e);
@@ -53,10 +52,6 @@ export default function Page() {
 
     asyncFunction();
   }, [accessToken]);
-
-  useEffect(() => {
-    console.log(basketInfo);
-  }, [basketInfo]);
 
   const purchaseHandler = () => {};
 
@@ -67,8 +62,15 @@ export default function Page() {
           Shopping Cart
         </div>
       </div>
+
       {basketInfo.map((el: any) => {
-        <BasketProduct basket={el} basketDeleteHandler={basketDeleteHandler} />;
+        console.log(el);
+        return (
+          <BasketProduct
+            basket={el}
+            basketDeleteHandler={basketDeleteHandler}
+          />
+        );
       })}
 
       <div className="mt-[150px] w-full">
