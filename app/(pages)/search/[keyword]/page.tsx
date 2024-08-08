@@ -10,10 +10,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchData();
-    const productRes: any = axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=20&sliceNumber=2&filterType=HIGH_PRICE`,
-    );
-    setProductList(productRes.data.productList);
+    fetchProductListData();
   }, []);
 
   const fetchData = async () => {
@@ -21,6 +18,14 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
     setProductTypes(productListRes.data.productTypeList);
+  };
+
+  const fetchProductListData = async () => {
+    const productRes: any = axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=20&sliceNumber=2&filterType=HIGH_PRICE`,
+    );
+    console.log(productRes);
+    if (productRes.data) setProductList(productRes.data.productList);
   };
 
   const handleProductType = (type: number) => {
