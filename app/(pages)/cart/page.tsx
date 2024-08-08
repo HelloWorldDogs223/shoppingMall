@@ -53,7 +53,7 @@ export default function Page() {
   const purchaseHandler = () => {};
 
   return (
-    <div className="flex flex-col justify-center px-[196px]">
+    <div className="flex flex-col justify-center px-[196px] mb-[10rem]">
       <div className="flex justify-center mb-[24px] mt-[40px]">
         <div className=" text-neutral-900 text-[22px] font-bold font-['Work Sans'] leading-7">
           Shopping Cart
