@@ -225,7 +225,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
                       onChange={(e: any) =>
                         setDeliveryInfo({
                           ...deliveryInfo,
-                          senderTell: e.target.value,
+                          senderTel: e.target.value,
                         })
                       }
                     />
