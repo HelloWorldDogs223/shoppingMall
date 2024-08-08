@@ -37,22 +37,22 @@ export default function Page() {
 
   useEffect(() => {
     const asyncFunction = async () => {
-      const basketRes: any = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        },
-      );
-      console.log(basketRes);
-      setBasketInfo(basketRes.data.basketItemDtos);
+      try {
+        const basketRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
+        );
+        console.log(basketRes.data);
+        setBasketInfo(basketRes.data.basketItemDtos);
+      } catch (e) {
+        console.log(e);
+      }
     };
 
-    try {
-      asyncFunction();
-    } catch (e: any) {
-      console.log(e);
-    }
-  }, []);
+    asyncFunction();
+  }, [accessToken]);
 
   const purchaseHandler = () => {};
 
@@ -93,11 +93,11 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div
-        className="flex items-center justify-end mt-[36px]"
-        onClick={() => router.push('/')}
-      >
-        <div className="text-center text-neutral-900 text-base font-bold font-['Work Sans'] leading-normal mr-[32px] cursor-pointer">
+      <div className="flex items-center justify-end mt-[36px]">
+        <div
+          onClick={() => router.push('/')}
+          className="text-center text-neutral-900 text-base font-bold font-['Work Sans'] leading-normal mr-[32px] cursor-pointer"
+        >
           Continue Shopping
         </div>
         <div
