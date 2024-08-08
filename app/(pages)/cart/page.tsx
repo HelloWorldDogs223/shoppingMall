@@ -12,6 +12,7 @@ export default function Page() {
   const [basketInfo, setBasketInfo] = useState<any>([]);
 
   const { error, accessToken } = useFetch();
+
   // useEffect(() => {
   //   if (error) {
   //     router.push('/signin');
@@ -47,6 +48,8 @@ export default function Page() {
       console.log(e);
     }
   }, []);
+
+  const purchaseHandler = () => {};
 
   return (
     <div className="flex flex-col justify-center px-[196px]">
@@ -85,11 +88,17 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end mt-[36px]">
+      <div
+        className="flex items-center justify-end mt-[36px]"
+        onClick={() => router.push('/')}
+      >
         <div className="text-center text-neutral-900 text-base font-bold font-['Work Sans'] leading-normal mr-[32px] cursor-pointer">
           Continue Shopping
         </div>
-        <div className="w-[206px] h-12 px-5 bg-blue-500 rounded-xl justify-center items-center inline-flex cursor-pointer">
+        <div
+          className="w-[206px] h-12 px-5 bg-blue-500 rounded-xl justify-center items-center inline-flex cursor-pointer"
+          onClick={purchaseHandler}
+        >
           <div className="flex-col justify-start items-center inline-flex">
             <div className="text-center text-white text-base font-bold font-['Work Sans'] leading-normal">
               Proceed to Checkout

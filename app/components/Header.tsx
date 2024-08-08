@@ -5,10 +5,12 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '../store/login';
 import useCartStore from '../store/cart';
+import { useState } from 'react';
 
 export default function Home() {
   const router = useRouter();
   const { accessToken, clearAccessToken } = useAuthStore();
+  const [keyword, setKeyword] = useState('/');
   const cart = useCartStore((state: any) => state.cart);
   const cartCount = cart.length; // cart의 길이를 계산
 
@@ -33,6 +35,10 @@ export default function Home() {
       clearAccessToken();
     }
   }
+
+  const searchHandler = () => {
+    router.push(`/search/${keyword}`);
+  };
 
   return (
     <div className="pt-[65px]">
@@ -69,6 +75,8 @@ export default function Home() {
                 data-weight="regular"
               >
                 <svg
+                  className="cursor-pointer"
+                  onClick={searchHandler}
                   xmlns="http://www.w3.org/2000/svg"
                   width="24px"
                   height="24px"
@@ -78,10 +86,18 @@ export default function Home() {
                   <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
                 </svg>
               </div>
-              <input
-                placeholder="Search"
-                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border-none bg-[#e8edf3] focus:border-none h-full placeholder:text-[#4f7396] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-              />
+              <form
+                onSubmit={(e: any) => {
+                  e.preventDefault();
+                  searchHandler();
+                }}
+              >
+                <input
+                  onChange={(e: any) => setKeyword(e.target.value)}
+                  placeholder="Search"
+                  className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border-none bg-[#e8edf3] focus:border-none h-full placeholder:text-[#4f7396] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                />
+              </form>
             </div>
           </label>
           <div className="flex gap-2">

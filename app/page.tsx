@@ -63,11 +63,11 @@ export default function Home() {
                       />
                       <div className="flex items-center justify-center rounded-r-xl border-l-0 border border-[#d0dbe6] bg-[#f8fafb] pr-[7px]">
                         <Button
-                          onClick={() => router.push('/list')}
+                          onClick={() => router.push(`/search/${search}`)}
                           variant="contained"
                           className=" flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#348de5] text-[#f8fafb] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
                         >
-                          <span className="truncate">눌러보세요</span>
+                          <span className="truncate">검색</span>
                         </Button>
                       </div>
                     </div>
