@@ -147,14 +147,12 @@ export default function Page() {
       return;
     }
 
-    console.log(selectedOptions);
-
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
       {
         productId: productInfo?.productId,
         singleOptionId: Number(age),
-        multiOptionId: selectedOptions,
+        multipleOptionId: selectedOptions,
       },
       {
         headers: {
@@ -162,8 +160,6 @@ export default function Page() {
         },
       },
     );
-
-    console.log(res);
   };
 
   return (
