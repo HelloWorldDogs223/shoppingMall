@@ -5,28 +5,28 @@ import { useEffect, useState } from 'react';
 
 export default function Page() {
   const params = useParams();
-  const [prodcutList, setProductList] = useState([]);
+  const [productTypes, setProductTypes] = useState([]);
+  const [productList, setProductList] = useState([]);
 
   useEffect(() => {
     fetchData();
     const productRes: any = axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=10&sliceNumber=2&filterType=HIGH_PRICE`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=20&sliceNumber=2&filterType=HIGH_PRICE`,
     );
-    console.log(productRes.data);
+    setProductList(productRes.data.productList);
   }, []);
 
   const fetchData = async () => {
     const productListRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
-    setProductList(productListRes.data.productTypeList);
+    setProductTypes(productListRes.data.productTypeList);
   };
 
   const handleProductType = (type: number) => {
     const productRes: any = axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/${type}/products?sliceSize=10&sliceNumber=2&filterType=HIGH_PRICE`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/${type}/products?sliceSize=20&sliceNumber=2&filterType=HIGH_PRICE`,
     );
-    console.log(productRes);
   };
 
   return (
@@ -178,7 +178,7 @@ export default function Page() {
             </div>
             <div className="flex gap-3 p-3 flex-wrap pr-4">
               <div className="flex flex-wrap">
-                {prodcutList.map((el: any) => {
+                {productTypes.map((el: any) => {
                   return (
                     <div>
                       <div
@@ -215,154 +215,37 @@ export default function Page() {
                       <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
                     </svg>
                   </div>
-                  <input
-                    placeholder="Search within Women's Clothing"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111118] focus:outline-0 focus:ring-0 border-none bg-[#f0f0f4] focus:border-none h-full placeholder:text-[#636388] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-                    value=""
-                  />
                 </div>
               </label>
             </div>
-            <div className="flex items-center gap-4 bg-white px-4 py-3 justify-between">
-              <div className="flex items-center gap-4">
-                <div className="bg-center bg-no-repeat aspect-video bg-cover rounded-lg h-14 w-fit"></div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[#111118] text-base font-medium leading-normal line-clamp-1">
-                    Uniqlo
-                  </p>
-                  <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                    Women's Wool-Blend Coat
-                  </p>
+            {productList.map((el: any) => {
+              return (
+                <div className="flex items-center gap-4 bg-white px-4 py-3 justify-between">
+                  <div className="flex items-center gap-4">
+                    <img src={el.firstProductImageUrl} />
+                    <div className="flex flex-col justify-center">
+                      <p className="text-[#111118] text-base font-medium leading-normal line-clamp-1">
+                        {el.name}
+                      </p>
+                      <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
+                        {el.typeName}
+                      </p>
+                      <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
+                        {el.finalPrice}
+                      </p>
+                      <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
+                        {el.sellerName}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="shrink-0">
+                    <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#f0f0f4] text-[#111118] text-sm font-medium leading-normal w-fit">
+                      <span className="truncate">Add to cart</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="shrink-0">
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#f0f0f4] text-[#111118] text-sm font-medium leading-normal w-fit">
-                  <span className="truncate">Add to cart</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white px-4 py-3 justify-between">
-              <div className="flex items-center gap-4">
-                <div className="bg-center bg-no-repeat aspect-video bg-cover rounded-lg h-14 w-fit"></div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[#111118] text-base font-medium leading-normal line-clamp-1">
-                    Everlane
-                  </p>
-                  <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                    Women's Cashmere Sweater
-                  </p>
-                </div>
-              </div>
-              <div className="shrink-0">
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#f0f0f4] text-[#111118] text-sm font-medium leading-normal w-fit">
-                  <span className="truncate">Add to cart</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white px-4 py-3 justify-between">
-              <div className="flex items-center gap-4">
-                <div className="bg-center bg-no-repeat aspect-video bg-cover rounded-lg h-14 w-fit"></div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[#111118] text-base font-medium leading-normal line-clamp-1">
-                    Madewell
-                  </p>
-                  <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                    Women's Leather Crossbody Bag
-                  </p>
-                </div>
-              </div>
-              <div className="shrink-0">
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#f0f0f4] text-[#111118] text-sm font-medium leading-normal w-fit">
-                  <span className="truncate">Add to cart</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white px-4 py-3 justify-between">
-              <div className="flex items-center gap-4">
-                <div className="bg-center bg-no-repeat aspect-video bg-cover rounded-lg h-14 w-fit"></div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[#111118] text-base font-medium leading-normal line-clamp-1">
-                    Levi's
-                  </p>
-                  <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                    Women's High-Rise Skinny Jeans
-                  </p>
-                </div>
-              </div>
-              <div className="shrink-0">
-                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#f0f0f4] text-[#111118] text-sm font-medium leading-normal w-fit">
-                  <span className="truncate">Add to cart</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4">
-              <a href="#" className="flex size-10 items-center justify-center">
-                <div
-                  className="text-[#111118]"
-                  data-icon="CaretLeft"
-                  data-size="18px"
-                  data-weight="regular"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18px"
-                    height="18px"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"></path>
-                  </svg>
-                </div>
-              </a>
-              <a
-                className="text-sm font-bold leading-normal tracking-[0.015em] flex size-10 items-center justify-center text-[#111118] rounded-full bg-[#f0f0f4]"
-                href="#"
-              >
-                1
-              </a>
-              <a
-                className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111118] rounded-full"
-                href="#"
-              >
-                2
-              </a>
-              <a
-                className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111118] rounded-full"
-                href="#"
-              >
-                3
-              </a>
-              <a
-                className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111118] rounded-full"
-                href="#"
-              >
-                4
-              </a>
-              <a
-                className="text-sm font-normal leading-normal flex size-10 items-center justify-center text-[#111118] rounded-full"
-                href="#"
-              >
-                5
-              </a>
-              <a href="#" className="flex size-10 items-center justify-center">
-                <div
-                  className="text-[#111118]"
-                  data-icon="CaretRight"
-                  data-size="18px"
-                  data-weight="regular"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18px"
-                    height="18px"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
-                  </svg>
-                </div>
-              </a>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
