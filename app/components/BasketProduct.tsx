@@ -49,25 +49,6 @@ export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
             {basket.singleOption.priceChangeAmount})
           </div>
         </div>
-      </div>
-      <div>
-        <div
-          onClick={minusProduct}
-          className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex mr-[32px] cursor-pointer"
-        >
-          <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-            -
-          </div>
-        </div>
-        <span className="mr-[32px]">{count}</span>
-        <div
-          onClick={plusProduct}
-          className="w-7 h-7 bg-gray-100 rounded-[14px] justify-center items-center inline-flex cursor-pointer"
-        >
-          <div className="text-center text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-            +
-          </div>
-        </div>
         <div onClick={() => basketDeleteHandler(basket.basketItemId)}>
           X ( 삭제하기 )
         </div>
