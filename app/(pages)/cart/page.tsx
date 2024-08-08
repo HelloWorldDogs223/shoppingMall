@@ -36,15 +36,19 @@ export default function Page() {
   };
 
   useEffect(() => {
-    try {
-      const basketRes: any = axios.get(
+    const asyncFunction = async () => {
+      const basketRes: any = await axios.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         },
       );
-      console.log(basketRes.data);
+      console.log(basketRes);
       setBasketInfo(basketRes.data.basketItemDtos);
+    };
+
+    try {
+      asyncFunction();
     } catch (e: any) {
       console.log(e);
     }
