@@ -22,7 +22,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
   const completePurchase = (imp_uid: any, merchant_uid: any, status: any) => {
     console.log('구매완료 요청 시작');
     axios
-      .post('http://localhost:8080/purchase/payment', {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchase/payment`, {
         imp_uid: imp_uid,
         merchant_uid: merchant_uid,
         status: status,
@@ -76,7 +76,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
     console.log(body);
     axios
       .post(
-        'http://localhost:8080/purchase',
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchase`,
         {
           basketItems: body,
           deliveryInfo,
