@@ -24,6 +24,8 @@ export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
     setPrice(price - basket.finalPrice);
   };
 
+  console.log(basket);
+
   return (
     <div className="flex justify-between items-center mb-[32px]">
       <div
