@@ -24,7 +24,6 @@ export default function Page() {
     const productRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=20&sliceNumber=2&filterType=HIGH_PRICE`,
     );
-    console.log(productRes);
     if (productRes.data) setProductList(productRes.data.productList);
   };
 
@@ -33,10 +32,6 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/${type}/products?sliceSize=20&sliceNumber=2&filterType=HIGH_PRICE`,
     );
   };
-
-  useEffect(() => {
-    console.log(productList);
-  }, [productList]);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden">
@@ -210,26 +205,24 @@ export default function Page() {
               return (
                 <div className="flex items-center gap-4 bg-white px-4 py-3 justify-between">
                   <div className="flex items-center gap-4">
-                    <img src={el.firstProductImageUrl} />
+                    <img
+                      src={el.firstProductImageUrl}
+                      className="w-[100px] h-[100px]"
+                    />
                     <div className="flex flex-col justify-center">
                       <p className="text-[#111118] text-base font-medium leading-normal line-clamp-1">
-                        {el.name}
+                        상품명 : {el.name}
                       </p>
                       <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                        {el.typeName}
+                        타입 : {el.typeName}
                       </p>
                       <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                        {el.finalPrice}
+                        가격 : {el.finalPrice}
                       </p>
                       <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                        {el.sellerName}
+                        판매자 : {el.sellerName}
                       </p>
                     </div>
-                  </div>
-                  <div className="shrink-0">
-                    <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-8 px-4 bg-[#f0f0f4] text-[#111118] text-sm font-medium leading-normal w-fit">
-                      <span className="truncate">Add to cart</span>
-                    </button>
                   </div>
                 </div>
               );

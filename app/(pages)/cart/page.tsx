@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import BasketProduct from '@/app/components/BasketProduct';
+import PurchaseModal from '@/app/components/PurchaseModal';
 
 export default function Page() {
   const router = useRouter();
 
   const [basketInfo, setBasketInfo] = useState<any>([]);
+  const [modal, setModal] = useState(false);
 
   const { error, accessToken } = useFetch();
 
@@ -53,70 +55,75 @@ export default function Page() {
     asyncFunction();
   }, [accessToken]);
 
-  const purchaseHandler = () => {};
+  const purchaseHandler = () => {
+    setModal(true);
+  };
 
   return (
-    <div className="flex flex-col justify-center px-[196px] mb-[10rem]">
-      <div className="flex justify-center mb-[24px] mt-[40px]">
-        <div className=" text-neutral-900 text-[22px] font-bold font-['Work Sans'] leading-7">
-          Shopping Cart
+    <div>
+      <div className="flex flex-col justify-center px-[196px] mb-[10rem]">
+        <div className="flex justify-center mb-[24px] mt-[40px]">
+          <div className=" text-neutral-900 text-[22px] font-bold font-['Work Sans'] leading-7">
+            Shopping Cart
+          </div>
         </div>
-      </div>
 
-      {basketInfo.map((el: any) => {
-        console.log(el);
-        return (
-          <BasketProduct
-            basket={el}
-            basketDeleteHandler={basketDeleteHandler}
-          />
-        );
-      })}
+        {basketInfo.map((el: any) => {
+          console.log(el);
+          return (
+            <BasketProduct
+              basket={el}
+              basketDeleteHandler={basketDeleteHandler}
+            />
+          );
+        })}
 
-      <div className="mt-[150px] w-full">
-        <div className="w-full py-2 justify-between items-start inline-flex">
-          <div className="flex-col justify-start items-start inline-flex">
-            <div className="text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              Subtotal (3 items)
+        <div className="mt-[150px] w-full">
+          <div className="w-full py-2 justify-between items-start inline-flex">
+            <div className="flex-col justify-start items-start inline-flex">
+              <div className="text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
+                Subtotal (3 items)
+              </div>
+            </div>
+            <div className="flex-col justify-start  items-start inline-flex">
+              <div className="text-right text-neutral-900 text-sm font-normal font-['Work Sans'] leading-[21px]">
+                $540.00
+              </div>
             </div>
           </div>
-          <div className="flex-col justify-start  items-start inline-flex">
-            <div className="text-right text-neutral-900 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              $540.00
+          <div className="w-full py-2 justify-between items-start inline-flex">
+            <div className="flex-col justify-start items-start inline-flex">
+              <div className="text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
+                Estimated Tax
+              </div>
+            </div>
+            <div className="flex-col justify-start items-start inline-flex">
+              <div className="text-right text-neutral-900 text-sm font-normal font-['Work Sans'] leading-[21px]">
+                To be determined
+              </div>
             </div>
           </div>
         </div>
-        <div className="w-full py-2 justify-between items-start inline-flex">
-          <div className="flex-col justify-start items-start inline-flex">
-            <div className="text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              Estimated Tax
-            </div>
+        <div className="flex items-center justify-end mt-[36px]">
+          <div
+            onClick={() => router.push('/')}
+            className="text-center text-neutral-900 text-base font-bold font-['Work Sans'] leading-normal mr-[32px] cursor-pointer"
+          >
+            Continue Shopping
           </div>
-          <div className="flex-col justify-start items-start inline-flex">
-            <div className="text-right text-neutral-900 text-sm font-normal font-['Work Sans'] leading-[21px]">
-              To be determined
+          <div
+            className="w-[206px] h-12 px-5 bg-blue-500 rounded-xl justify-center items-center inline-flex cursor-pointer"
+            onClick={purchaseHandler}
+          >
+            <div className="flex-col justify-start items-center inline-flex">
+              <div className="text-center text-white text-base font-bold font-['Work Sans'] leading-normal">
+                Proceed to Checkout
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end mt-[36px]">
-        <div
-          onClick={() => router.push('/')}
-          className="text-center text-neutral-900 text-base font-bold font-['Work Sans'] leading-normal mr-[32px] cursor-pointer"
-        >
-          Continue Shopping
-        </div>
-        <div
-          className="w-[206px] h-12 px-5 bg-blue-500 rounded-xl justify-center items-center inline-flex cursor-pointer"
-          onClick={purchaseHandler}
-        >
-          <div className="flex-col justify-start items-center inline-flex">
-            <div className="text-center text-white text-base font-bold font-['Work Sans'] leading-normal">
-              Proceed to Checkout
-            </div>
-          </div>
-        </div>
-      </div>
+      {modal && <PurchaseModal basketInfo={basketInfo} setModal={setModal} />}
     </div>
   );
 }
