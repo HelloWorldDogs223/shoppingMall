@@ -54,6 +54,10 @@ export default function Page() {
     asyncFunction();
   }, [accessToken]);
 
+  useEffect(() => {
+    console.log(basketInfo);
+  }, [basketInfo]);
+
   const purchaseHandler = () => {};
 
   return (
