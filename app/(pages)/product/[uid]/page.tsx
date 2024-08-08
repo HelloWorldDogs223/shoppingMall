@@ -147,6 +147,8 @@ export default function Page() {
       return;
     }
 
+    console.log(selectedOptions);
+
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
       {

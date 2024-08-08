@@ -11,21 +11,6 @@ export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
 
   const router = useRouter();
 
-  const plusProduct = () => {
-    setCount(count + 1);
-    setPrice(price + basket.finalPrice);
-  };
-
-  const minusProduct = () => {
-    if (count <= 1) {
-      return;
-    }
-    setCount(count - 1);
-    setPrice(price - basket.finalPrice);
-  };
-
-  console.log(basket);
-
   return (
     <div className="flex justify-between items-center mb-[32px]">
       <div
