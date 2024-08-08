@@ -141,7 +141,11 @@ export default function Page() {
 
   const getCart = async () => {
     addItem({ id: productInfo?.productId, name: name });
-    console.log(productInfo?.productId, Number(age), selectedOptions);
+
+    if (single.length === 0 || multi.length === 0) {
+      alert('옵션을 골라주세요');
+      return;
+    }
 
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,

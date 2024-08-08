@@ -43,6 +43,7 @@ export default function Page() {
           headers: { Authorization: `Bearer ${accessToken}` },
         },
       );
+      console.log(basketRes.data);
       setBasketInfo(basketRes.data.basketItemDtos);
     } catch (e: any) {
       console.log(e);
