@@ -48,6 +48,16 @@ export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
             {basket.singleOption.optionName} (
             {basket.singleOption.priceChangeAmount})
           </div>
+          <div>
+            {basket.multiOptions.map((el: any) => {
+              return (
+                <div>
+                  <div>{el.optionName}</div>
+                  <div>{el.priceChangeAmount}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
         <div onClick={() => basketDeleteHandler(basket.basketItemId)}>
           X ( 삭제하기 )
