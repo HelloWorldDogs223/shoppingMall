@@ -50,6 +50,7 @@ import { useParams } from 'next/navigation';
 import { useFetch } from '@/app/hooks/useFetch';
 import { useRouter } from 'next/navigation';
 import useCartStore from '@/app/store/cart';
+import ReportModal from '@/app/components/ReportModal';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -72,6 +73,8 @@ export default function Page() {
 
   const [single, setSingle] = useState([]);
   const [multi, setMulti] = useState([]);
+  const [modal, setModal] = useState(false);
+
   const params = useParams();
 
   const { accessToken } = useFetch();
@@ -205,6 +208,13 @@ export default function Page() {
                 className="w-[400px] bg-red-500 hover:bg-white hover:text-black"
               >
                 장바구니 담기
+              </Button>
+              <Button
+                onClick={() => setModal(true)}
+                variant="contained"
+                className="w-[400px] bg-red-500 hover:bg-white hover:text-black"
+              >
+                제품 신고하기
               </Button>
             </div>
             <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
@@ -920,6 +930,12 @@ export default function Page() {
           </div>
         </div>
       </div>
+      {modal && (
+        <ReportModal
+          setModal={setModal}
+          productId={productInfo?.productId as number}
+        />
+      )}
     </div>
   );
 }

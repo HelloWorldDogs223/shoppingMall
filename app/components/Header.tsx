@@ -2,21 +2,28 @@
 import { Button } from '@mui/material';
 
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '../store/login';
 import useCartStore from '../store/cart';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const router = useRouter();
+  const params = useParams();
+
   const { accessToken, clearAccessToken } = useAuthStore();
-  const [keyword, setKeyword] = useState('/');
+
+  const [keyword, setKeyword] = useState(params.keyword);
   const cart = useCartStore((state: any) => state.cart);
   const cartCount = cart.length; // cart의 길이를 계산
 
   const onClickHandler = () => {
     router.push('/');
   };
+
+  useEffect(() => {
+    if (!params.keyword) setKeyword('');
+  }, [router, params]);
 
   async function logout() {
     try {
@@ -95,6 +102,7 @@ export default function Home() {
                 <input
                   onChange={(e: any) => setKeyword(e.target.value)}
                   placeholder="Search"
+                  value={decodeURIComponent(keyword as string)}
                   className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border-none bg-[#e8edf3] focus:border-none h-full placeholder:text-[#4f7396] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
                 />
               </form>
