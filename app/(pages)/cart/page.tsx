@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import BasketProduct from '@/app/components/BasketProduct';
 import PurchaseModal from '@/app/components/PurchaseModal';
+import useCartStore from '@/app/store/cart';
 
 export default function Page() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function Page() {
   const [modal, setModal] = useState(false);
 
   const { error, accessToken } = useFetch();
+
+  const removeItem = useCartStore((state: any) => state.removeItem);
 
   // useEffect(() => {
   //   if (error) {
@@ -29,6 +32,8 @@ export default function Page() {
         }
       }),
     );
+
+    removeItem(id);
 
     // delete에는 바디가 없다고 알려주기
     const deleteRes: any = axios.delete(

@@ -26,7 +26,7 @@ export default function Page() {
     }
 
     const refundRes: any = axios.post(
-      `${process.env.SERVER_DOMAIN}/refund`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refund`,
       {
         purchaseItemId,
         requestTitle,
@@ -47,7 +47,7 @@ export default function Page() {
     <div>
       {list.map((el: any) => {
         return (
-          <>
+          <div className="pl-[100px] flex flex-col gap-4">
             <div>{el.purchaseId}</div>
             <div>{el.state}</div>
             <div>{el.purchaseTitle}</div>
@@ -67,11 +67,13 @@ export default function Page() {
                     <div>{item.finalPrice}</div>
                     <div>{item.isRefund}</div>
                     <input
+                      className="w-[480px] border-solid border border-red-500"
                       placeholder="환불 요청 제목"
                       value={requestTitle}
                       onChange={(e) => setRequestTitle(e.target.value)}
                     />
                     <textarea
+                      className="w-[480px] border-solid border border-red-500 resize-none"
                       value={requestContent}
                       placeholder="환불 요청 내용"
                       onChange={(e) => setRequestContent(e.target.value)}
@@ -86,7 +88,7 @@ export default function Page() {
                 );
               })}
             </div>
-          </>
+          </div>
         );
       })}
     </div>
