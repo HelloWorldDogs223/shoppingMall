@@ -19,13 +19,13 @@ export default function Page() {
     setList(listRes.data.purchaseList);
   };
 
-  const getRefund = (purchaseItemId: number) => {
+  const getRefund = async (purchaseItemId: number) => {
     if (requestTitle === '' || requestContent === '') {
       alert('제목과 내용을 입력해주세요.');
       return;
     }
 
-    const refundRes: any = axios.post(
+    const refundRes: any = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refund`,
       {
         purchaseItemId,
@@ -34,8 +34,6 @@ export default function Page() {
       },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
-
-    console.log(refundRes);
 
     if (refundRes.data.refundId) {
       alert('환불 요청이 완료되었습니다.');
@@ -47,10 +45,10 @@ export default function Page() {
   }, [accessToken]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-8">
       {list.map((el: any) => {
         return (
-          <div className="pl-[100px] flex flex-col gap-4">
+          <div className="pl-[100px] flex flex-col gap-4 pt-[100px]">
             <div>구매 ID : {el.purchaseId}</div>
             <div>구매 상태 : {el.state}</div>
             <div>구매 제목 : {el.purchaseTitle}</div>
@@ -88,6 +86,7 @@ export default function Page() {
                         onChange={(e) => setRequestContent(e.target.value)}
                       />
                       <Button
+                        className="w-[480px]"
                         variant="contained"
                         onClick={() => getRefund(el.purchaseId)}
                       >
