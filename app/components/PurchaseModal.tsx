@@ -17,7 +17,19 @@ declare global {
 
 export default function PurchaseModal({ basketInfo, setModal }: Props) {
   const { accessToken } = useFetch();
+
   const [deliveryInfo, setDeliveryInfo] = useState({});
+
+  const deleteHandler = () => {
+    const list = basketInfo
+      .map((el) => {
+        return el.el.basketItemId;
+      })
+      .join(',');
+    axios.delete(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}?basketItemIdList=${list}`,
+    );
+  };
 
   const completePurchase = (imp_uid: any, merchant_uid: any, status: any) => {
     console.log('구매완료 요청 시작');
@@ -30,9 +42,11 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
       .then((res) => {
         console.log('구매완료 요청 성공');
         console.log(res);
+        setModal(false);
+        deleteHandler();
       })
       .catch((err) => {
-        console.log('구매완료 요청 실패');
+        alert('구매완료 요청 실패');
         console.log(err);
       });
   };
@@ -73,7 +87,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
       basketItemId: item.basketItemId,
       expectedPrice: item.finalPrice,
     }));
-    console.log(body);
+
     axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchase`,

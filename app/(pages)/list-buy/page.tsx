@@ -55,19 +55,15 @@ export default function Page() {
                   <>
                     <div>{item.productName}</div>
                     <div>{item.productTypeName}</div>
-                    <div>
-                      {item.productName.selectedSingleOption.optionName}
-                    </div>
-                    <div>
-                      {item.productName.selectedSingleOption.priceChangeAmount}
-                    </div>
+                    <div>{item.selectedSingleOption.optionName}</div>
+                    <div>{item.selectedSingleOption.priceChangeAmount}</div>
                     <div>{item.price}</div>
                     <div>{item.discountAmount}</div>
                     <div>{item.discountRate}</div>
                     <div>{item.finalPrice}</div>
                     <div>{item.isRefund}</div>
                     <input
-                      placeholder="환불 요청 제목목"
+                      placeholder="환불 요청 제목"
                       value={requestTitle}
                       onChange={(e) => setRequestTitle(e.target.value)}
                     />
