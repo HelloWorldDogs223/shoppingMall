@@ -42,9 +42,6 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=200&sliceNumber=0&filterType=${el.en}`,
     );
     if (productRes.data) {
-      console.log(productList);
-      console.log(productRes.data.productList);
-
       setProductList(
         getCommonElements(productRes.data.productList, productList),
       );

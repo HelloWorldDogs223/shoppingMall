@@ -168,19 +168,26 @@ export default function Page() {
                     </p>
                   </div>
                 </div>
+                <Button
+                  variant="contained"
+                  className="w-[480px]"
+                  onClick={() => router.push('/list-buy')}
+                >
+                  구매 목록 확인하기
+                </Button>
                 {!edit ? (
                   <button
                     onClick={() => setEdit(true)}
                     className="flex  cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7edf3] text-[#0e141b] text-sm font-bold leading-normal tracking-[0.015em] w-full min-w-[480px] @[480px]:w-auto"
                   >
-                    <span className="truncate">Edit profile</span>
+                    <span className="truncate">프로필 수정하기</span>
                   </button>
                 ) : (
                   <></>
                 )}
                 {postEmail === false && edit === false && (
                   <Button
-                    className="w-[480px]"
+                    className="w-[480px] bg-red-300"
                     variant="contained"
                     onClick={() => setPostEmail(true)}
                   >
