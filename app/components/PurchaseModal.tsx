@@ -28,6 +28,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
       .join(',');
     axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}?basketItemIdList=${list}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
 

@@ -25,11 +25,15 @@ export default function Page() {
       return;
     }
 
-    const refundRes: any = axios.post(`${process.env.SERVER_DOMAIN}/refund`, {
-      purchaseItemId,
-      requestTitle,
-      requestContent,
-    });
+    const refundRes: any = axios.post(
+      `${process.env.SERVER_DOMAIN}/refund`,
+      {
+        purchaseItemId,
+        requestTitle,
+        requestContent,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
     if (refundRes.data.refundId) {
       alert('환불 요청이 완료되었습니다.');
     }
