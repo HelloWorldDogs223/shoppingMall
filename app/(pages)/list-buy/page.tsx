@@ -88,7 +88,7 @@ export default function Page() {
                       <Button
                         className="w-[480px]"
                         variant="contained"
-                        onClick={() => getRefund(el.purchaseItemId)}
+                        onClick={() => getRefund(item.purchaseItemId)}
                       >
                         환불 요청하기
                       </Button>
