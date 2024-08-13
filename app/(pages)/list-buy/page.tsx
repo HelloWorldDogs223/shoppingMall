@@ -52,7 +52,7 @@ export default function Page() {
             <div>구매 ID : {el.purchaseId}</div>
             <div>구매 상태 : {el.state}</div>
             <div>구매 제목 : {el.purchaseTitle}</div>
-            <div>최종 가격 : {el.totalPrice}</div>
+            <div>최종 구매 가격 : {el.totalPrice}</div>
             <div>시간 : {el.dateTime}</div>
             <div>
               {el.purchaseItems.map((item: any) => {
@@ -70,7 +70,7 @@ export default function Page() {
                     <div>가격 : {item.price}</div>
                     <div>할인 : {item.discountAmount}</div>
                     <div>할인율 : {item.discountRate}</div>
-                    <div>최종 가격 : {item.finalPrice}</div>
+                    <div>최종 상품 가격 : {item.finalPrice}</div>
                     <div>환불여부 : {item.isRefund}</div>
                     <div className="flex flex-col gap-4">
                       <input
@@ -88,7 +88,7 @@ export default function Page() {
                       <Button
                         className="w-[480px]"
                         variant="contained"
-                        onClick={() => getRefund(el.purchaseId)}
+                        onClick={() => getRefund(el.purchaseItemId)}
                       >
                         환불 요청하기
                       </Button>
