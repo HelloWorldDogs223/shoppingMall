@@ -171,6 +171,20 @@ export default function Page() {
                 <Button
                   variant="contained"
                   className="w-[480px]"
+                  onClick={() => router.push('/list-refund-buyer')}
+                >
+                  구매자 - 환불 요청 목록 확인하기
+                </Button>
+                <Button
+                  variant="contained"
+                  className="w-[480px]"
+                  onClick={() => router.push('/list-refund')}
+                >
+                  판매자 - 환불 요청 목록 확인하기
+                </Button>
+                <Button
+                  variant="contained"
+                  className="w-[480px]"
                   onClick={() => router.push('/list-buy')}
                 >
                   구매 목록 확인하기
