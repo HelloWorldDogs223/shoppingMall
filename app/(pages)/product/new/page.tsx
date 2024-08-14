@@ -11,7 +11,7 @@ export default function Page() {
   const [blockSelect, setBlockSelect] = useState<string[]>([]);
 
   const [name, setName] = useState('');
-  const [category, setCategory] = useState<number>(0);
+  const [category, setCategory] = useState<number>(1);
   const [singleName, setSingleName] = useState<string[]>([]);
   const [singleAmount, setSingleAmount] = useState<number[]>([]);
   const [multiNames, setMultiNames] = useState<string[]>([]);
@@ -90,15 +90,22 @@ export default function Page() {
       formData.append('blockImages', file);
     });
 
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         },
-      },
-    );
+      );
+
+      alert('제품 등록이 완료되었습니다!');
+      console.log(res);
+    } catch (e: any) {
+      console.log(e);
+    }
   };
 
   const getTags = async () => {
@@ -205,7 +212,7 @@ export default function Page() {
                     onChange={(e: any) => setCategory(e.target.value)}
                     className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 bg-[image:--select-button-svg] placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
                   >
-                    {tags.map((el: any, idx: number) => {
+                    {tags.map((el: any) => {
                       return <option value={el.typeId}>{el.typeName}</option>;
                     })}
                   </select>
