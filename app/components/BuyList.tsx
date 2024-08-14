@@ -8,11 +8,12 @@ export default function BuyList({ item }: any) {
   const [requestTitle, setRequestTitle] = useState('');
   const [requestContent, setRequestContent] = useState('');
   const { accessToken } = useFetch();
-  const [refundInfo, setRefundInfo] = useState();
+  const [refundInfo, setRefundInfo] = useState([]);
 
   const getRefundList = async (id: number) => {
     const refundRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/sliceNumber=0&sliceSize=99&purchaseItemId=${id}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refunds?sliceNumber=0&sliceSize=99&purchaseItemId=${id}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     setRefundInfo(refundRes.data.refundList);
   };
@@ -73,7 +74,17 @@ export default function BuyList({ item }: any) {
         >
           환불 요청하기
         </Button>
-        <div>{refundInfo}</div>
+        <div>
+          {refundInfo.map((el: any) => {
+            return (
+              <>
+                <div>환불 가격 : {el.refundPrice}</div>
+                <div>환불 진행 상태 : {el.refundState}</div>
+                <div>판매자 응답 : {el.responseContent}</div>
+              </>
+            );
+          })}
+        </div>
       </div>
     </>
   );
