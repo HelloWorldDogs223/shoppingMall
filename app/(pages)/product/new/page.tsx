@@ -68,10 +68,11 @@ export default function Page() {
         return { optionName: el, priceChangeAmount: multiPrices[idx] };
       }),
 
-      blockDataList: blockDataList.length === 0 ? null : blockDataList,
+      blockDataList,
       price,
       discountAmount,
       discountRate: discountRate,
+      blockImages: [],
     };
 
     const formData = new FormData();
