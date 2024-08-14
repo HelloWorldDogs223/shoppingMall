@@ -41,13 +41,15 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
         status: status,
       })
       .then((res) => {
-        alert('구매완료 요청 성공');
-        setModal(false);
-        deleteHandler();
+        console.log(res);
       })
       .catch((err) => {
-        alert('구매완료 요청 실패');
         console.log(err);
+        setModal(false);
+      })
+      .finally(() => {
+        deleteHandler();
+        setModal(false);
       });
   };
 

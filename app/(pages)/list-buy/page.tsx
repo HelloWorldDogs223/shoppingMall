@@ -11,6 +11,8 @@ export default function Page() {
   const [requestTitle, setRequestTitle] = useState('');
   const [requestContent, setRequestContent] = useState('');
 
+  const [refundInfo, setRefundInfo] = useState();
+
   const getList = async () => {
     const listRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases?sliceNumber=0&sliceSize=99`,
@@ -38,6 +40,13 @@ export default function Page() {
     if (refundRes.data.refundId) {
       alert('환불 요청이 완료되었습니다.');
     }
+  };
+
+  const getRefundList = async (id: number) => {
+    const refundRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/sliceNumber=0&sliceSize=99&purchaseItemId=${id}`,
+    );
+    setRefundInfo(refundRes.data.refundList);
   };
 
   useEffect(() => {
@@ -92,6 +101,7 @@ export default function Page() {
                       >
                         환불 요청하기
                       </Button>
+                      <div>{refundInfo}</div>
                     </div>
                   </>
                 );
