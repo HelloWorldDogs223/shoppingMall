@@ -25,6 +25,8 @@ export default function Page() {
   const [blockFiles, setBlockFiles] = useState<File[]>([]);
   const [blockText, setBlockText] = useState<string[]>([]);
 
+  const [tags, setTags] = useState([]);
+
   const { accessToken } = useFetch();
 
   useEffect(() => {
@@ -97,9 +99,18 @@ export default function Page() {
         },
       },
     );
-
-    console.log(res);
   };
+
+  const getTags = async () => {
+    const typeRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
+    );
+    setTags(typeRes.data.productTypeList);
+  };
+
+  useEffect(() => {
+    getTags();
+  }, []);
 
   return (
     <div>
@@ -191,16 +202,9 @@ export default function Page() {
                     onChange={(e: any) => setCategory(e.target.value)}
                     className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 bg-[image:--select-button-svg] placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
                   >
-                    <option value="1">게임$타이틀</option>
-                    <option value="2">게임$게임기</option>
-                    <option value="3">게임$주변기기</option>
-                    <option value="4">도서$IT</option>
-                    <option value="5">도서$문제지</option>
-                    <option value="6">도서$소설</option>
-                    <option value="7">도서$유아</option>
-                    <option value="8">식료품$유제품</option>
-                    <option value="9">식료품$밀키트</option>
-                    <option value="10">식표품$과일</option>
+                    {tags.map((el: any, idx: number) => {
+                      return <option value={idx + 1}>{el}</option>;
+                    })}
                   </select>
                 </label>
               </div>
