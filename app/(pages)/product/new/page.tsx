@@ -106,6 +106,9 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
     setTags(typeRes.data.productTypeList);
+
+    console.log('asdsdsd');
+    console.log(typeRes.data.productTypeList);
   };
 
   useEffect(() => {
