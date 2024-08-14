@@ -69,7 +69,9 @@ export default function Page() {
 
       blockDataList,
       price: price,
-      discountAmount: price - price * discountRate * 0.01,
+      discountAmount: parseFloat(
+        (price - price * discountRate * 0.01).toFixed(2),
+      ),
       discountRate: discountRate,
     };
 
@@ -95,7 +97,6 @@ export default function Page() {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data',
         },
       },
     );
