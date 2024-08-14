@@ -14,7 +14,7 @@ export default function RefundList({ el }: Props) {
 
   const getRefundRequestData = async (id: number) => {
     const refundRequetRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/purchaseItemId=${id}&sliceSize=999&sliceNumber=0`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/purchaseItem/refunds?purchaseItemId=${id}&sliceSize=999&sliceNumber=0`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     setRequest(refundRequetRes.data.refundList);

@@ -12,7 +12,7 @@ export default function BuyList({ item }: any) {
 
   const getRefundList = async (id: number) => {
     const refundRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refunds?sliceNumber=0&sliceSize=99&purchaseItemId=${id}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/purchaseItem/refunds?sliceNumber=0&sliceSize=99&purchaseItemId=${id}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     setRefundInfo(refundRes.data.refundList);

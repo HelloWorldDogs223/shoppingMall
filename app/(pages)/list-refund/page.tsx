@@ -15,7 +15,6 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/product/refunds?sliceNumber=0&sliceSize=99`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
-    console.log(refundRes.data);
     setData(refundRes.data.refundedPurchaseItemList);
   };
 
