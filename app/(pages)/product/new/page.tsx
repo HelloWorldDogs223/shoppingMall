@@ -19,6 +19,7 @@ export default function Page() {
 
   const [price, setPrice] = useState(0);
   const [discountRate, setDiscountRate] = useState(0.0);
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [blockFiles, setBlockFiles] = useState<File[]>([]);
@@ -69,9 +70,7 @@ export default function Page() {
 
       blockDataList,
       price: price,
-      discountAmount: parseFloat(
-        (price - price * discountRate * 0.01).toFixed(2),
-      ),
+      discountAmount,
       discountRate: discountRate,
     };
 
@@ -166,6 +165,20 @@ export default function Page() {
                     className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
                     value={discountRate}
                     onChange={(e: any) => setDiscountRate(e.target.value)}
+                  />
+                </label>
+              </div>
+
+              <div className="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3">
+                <label className="flex flex-col min-w-40 flex-1">
+                  <p className="text-[#111418] text-base font-medium leading-normal pb-2">
+                    할인 가격 : 숫자만 입력하시오.
+                  </p>
+                  <input
+                    placeholder="0"
+                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 placeholder:text-[#637588] p-[15px] text-base font-normal leading-normal"
+                    value={discountAmount}
+                    onChange={(e: any) => setDiscountAmount(e.target.value)}
                   />
                 </label>
               </div>
