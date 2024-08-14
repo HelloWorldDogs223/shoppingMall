@@ -72,12 +72,9 @@ export default function Page() {
       price,
       discountAmount,
       discountRate: discountRate,
-      blockImages: [],
     };
 
     const formData = new FormData();
-
-    console.log(productData, blockFiles, imageFiles);
 
     const productDataJson = new Blob([JSON.stringify(productData)], {
       type: 'application/json',
