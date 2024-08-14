@@ -68,8 +68,8 @@ export default function Page() {
         return { optionName: el, priceChangeAmount: multiPrices[idx] };
       }),
 
-      blockDataList,
-      price: price,
+      blockDataList: blockDataList.length === 0 ? null : blockDataList,
+      price,
       discountAmount,
       discountRate: discountRate,
     };
