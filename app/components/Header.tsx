@@ -4,7 +4,6 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '../store/login';
-import useCartStore from '../store/cart';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -12,10 +11,8 @@ export default function Home() {
   const params = useParams();
 
   const { accessToken, clearAccessToken } = useAuthStore();
-
   const [keyword, setKeyword] = useState(params.keyword);
-  const cart = useCartStore((state: any) => state.cart);
-  const cartCount = cart.length; // cart의 길이를 계산
+  const [cartCount, setCartCount] = useState(0);
 
   const onClickHandler = () => {
     router.push('/');
@@ -24,6 +21,23 @@ export default function Home() {
   useEffect(() => {
     if (!params.keyword) setKeyword('');
   }, [router, params]);
+
+  useEffect(() => {
+    const asyncFunction = async () => {
+      try {
+        const basketRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
+        );
+        setCartCount(basketRes.data.basketItemDtos.length);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    asyncFunction();
+  }, [accessToken]);
 
   async function logout() {
     try {

@@ -23,7 +23,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
   const deleteHandler = () => {
     const list = basketInfo
       .map((el) => {
-        return el.el.basketItemId;
+        return el.basketItemId;
       })
       .join(',');
     axios.delete(
@@ -42,13 +42,12 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
       })
       .then((res) => {
         console.log(res);
+        deleteHandler();
       })
       .catch((err) => {
         console.log(err);
-        setModal(false);
       })
       .finally(() => {
-        deleteHandler();
         setModal(false);
       });
   };
