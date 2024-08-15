@@ -41,6 +41,7 @@ export default function Home() {
         setCartCount(resData.length);
 
         resData.forEach((el: any) => {
+          console.log('왜', el);
           addItem({ id: el.product.productId, name: '' });
         });
       } catch (e) {
