@@ -72,7 +72,6 @@ export default function Page() {
         </div>
 
         {basketInfo.map((el: any) => {
-          console.log(el);
           return (
             <BasketProduct
               basket={el}

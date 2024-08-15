@@ -13,7 +13,7 @@ export default function Home() {
 
   const cart = useCartStore((state: any) => state.cart);
   const addItem = useCartStore((state: any) => state.addItem);
-
+  const removeItem = useCartStore((state: any) => state.removeItem);
   const { accessToken, clearAccessToken } = useAuthStore();
 
   const [keyword, setKeyword] = useState(params.keyword);
@@ -41,8 +41,11 @@ export default function Home() {
         setCartCount(resData.length);
 
         resData.forEach((el: any) => {
-          console.log('왜', el);
           addItem({ id: el.product.productId, name: '' });
+
+          if (process.env.NODE_ENV === 'development') {
+            removeItem(el.product.productId);
+          }
         });
       } catch (e) {
         console.log(e);

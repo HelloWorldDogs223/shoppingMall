@@ -56,6 +56,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
       })
       .finally(() => {
         setModal(false);
+        location.reload();
       });
   };
 
