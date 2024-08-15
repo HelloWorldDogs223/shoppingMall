@@ -29,6 +29,7 @@ export default function Home() {
 
   useEffect(() => {
     const asyncFunction = async () => {
+      if (!accessToken) return;
       try {
         const basketRes = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
@@ -42,10 +43,6 @@ export default function Home() {
 
         resData.forEach((el: any) => {
           addItem({ id: el.product.productId, name: '' });
-
-          if (process.env.NODE_ENV === 'development') {
-            removeItem(el.product.productId);
-          }
         });
       } catch (e) {
         console.log(e);
