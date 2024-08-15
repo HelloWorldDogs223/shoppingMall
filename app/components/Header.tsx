@@ -4,13 +4,18 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '../store/login';
+import useCartStore from '../store/cart';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const router = useRouter();
   const params = useParams();
 
+  const cart = useCartStore((state: any) => state.cart);
+  const addItem = useCartStore((state: any) => state.addItem);
+
   const { accessToken, clearAccessToken } = useAuthStore();
+
   const [keyword, setKeyword] = useState(params.keyword);
   const [cartCount, setCartCount] = useState(0);
 
@@ -31,13 +36,24 @@ export default function Home() {
             headers: { Authorization: `Bearer ${accessToken}` },
           },
         );
-        setCartCount(basketRes.data.basketItemDtos.length);
+
+        const resData = basketRes.data.baskItemDtos;
+        setCartCount(resData.length);
+
+        resData.forEach((el: any) => {
+          addItem({ id: el.product.productId, name: '' });
+        });
       } catch (e) {
         console.log(e);
       }
     };
     asyncFunction();
   }, [accessToken]);
+
+  // 확인
+  useEffect(() => {
+    setCartCount(cart.length);
+  }, [cart.length]);
 
   async function logout() {
     try {

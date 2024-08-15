@@ -18,11 +18,11 @@ export default function Page() {
 
   const removeItem = useCartStore((state: any) => state.removeItem);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     router.push('/signin');
-  //   }
-  // }, [error, router]);
+  useEffect(() => {
+    if (error) {
+      router.push('/signin');
+    }
+  }, [error, router]);
 
   const basketDeleteHandler = (id: number) => {
     setBasketInfo(
@@ -34,8 +34,6 @@ export default function Page() {
     );
 
     removeItem(id);
-
-    // delete에는 바디가 없다고 알려주기
     const deleteRes: any = axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${id}`,
       { headers: { authorization: `Bearer ${accessToken}` } },

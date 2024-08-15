@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useFetch } from '../hooks/useFetch';
+import useCartStore from '../store/cart';
 
 interface Props {
   basketInfo: any[];
@@ -19,6 +20,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
   const { accessToken } = useFetch();
 
   const [deliveryInfo, setDeliveryInfo] = useState({});
+  const removeItem = useCartStore((state: any) => state.removeItem);
 
   const deleteHandler = () => {
     const list = basketInfo
@@ -26,6 +28,11 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
         return el.basketItemId;
       })
       .join(',');
+
+    basketInfo.forEach((el: any) => {
+      removeItem(el.basketItemId);
+    });
+
     axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}?basketItemIdList=${list}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
