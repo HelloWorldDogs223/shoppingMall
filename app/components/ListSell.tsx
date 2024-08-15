@@ -17,6 +17,7 @@ export default function ListSell() {
     try {
       const idRes = await axios.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
+        { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       setUserId(idRes.data.id);
     } catch (error) {
