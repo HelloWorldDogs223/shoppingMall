@@ -191,7 +191,7 @@ export default function Page() {
                 <div
                   onClick={() =>
                     router.push(
-                      `/list-product/sell?member=${productInfo?.sellerId}`,
+                      `/list-product-sell?member=${productInfo?.sellerId}`,
                     )
                   }
                 >

@@ -3,12 +3,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useFetch } from '../hooks/useFetch';
 
 export default function ListSell() {
   const params = useSearchParams();
 
   const [userId, setUserId] = useState('');
   const [products, setProducts] = useState([]);
+
+  const { accessToken } = useFetch();
 
   const getId = async () => {
     try {
@@ -25,6 +28,7 @@ export default function ListSell() {
     try {
       const productRes = await axios.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/products?sliceSize=999&sliceNumber=0&sellerId=${sellerId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       setProducts(productRes.data.productList);
     } catch (error) {
@@ -56,11 +60,11 @@ export default function ListSell() {
               <img src={el.firstProductImageUrl} alt={el.name} />
             </div>
             <div>제품명: {el.name}</div>
-            <div>제품가격: {el.price}</div>
-            <div>할인양 : {el.discountAmount}</div>
-            <div>할인율 : {el.discountRate}</div>
-            <div>평점 : {el.scoreAvg}</div>
-            <div>최종가 : {el.finalPrice}</div>
+            <div>제품가격: {el.price}원</div>
+            <div>할인양 : {el.discountAmount}원</div>
+            <div>할인율 : {el.discountRate}%</div>
+            <div>평점 : {el.scoreAvg}점</div>
+            <div>최종가 : {el.finalPrice}원</div>
           </div>
         );
       })}
