@@ -1,7 +1,7 @@
 'use client';
 
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 export default function Page() {
@@ -30,23 +30,25 @@ export default function Page() {
   }, []);
 
   return (
-    <div>
-      {products.map((el: any) => {
-        return (
-          <>
-            <div> 제품 타입명 : {el.typeName}</div>
-            <div>
-              <img src={el.firstProductImageUrl} />
-            </div>
-            <div>제품명: {el.name}</div>
-            <div>제품가격: {el.price}</div>
-            <div>할인양 : {el.discountAmount}</div>
-            <div>할인율 : {el.discountRate}</div>
-            <div>평점 : {el.scoreAvg}</div>
-            <div>최종가 : {el.finalPrice}</div>
-          </>
-        );
-      })}
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>
+        {products.map((el: any) => {
+          return (
+            <>
+              <div> 제품 타입명 : {el.typeName}</div>
+              <div>
+                <img src={el.firstProductImageUrl} />
+              </div>
+              <div>제품명: {el.name}</div>
+              <div>제품가격: {el.price}</div>
+              <div>할인양 : {el.discountAmount}</div>
+              <div>할인율 : {el.discountRate}</div>
+              <div>평점 : {el.scoreAvg}</div>
+              <div>최종가 : {el.finalPrice}</div>
+            </>
+          );
+        })}
+      </div>
+    </Suspense>
   );
 }
