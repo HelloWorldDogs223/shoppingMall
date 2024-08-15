@@ -37,7 +37,7 @@ export default function Home() {
           },
         );
 
-        const resData = basketRes.data.baskItemDtos;
+        const resData = basketRes.data.basketItemDtos;
         setCartCount(resData.length);
 
         resData.forEach((el: any) => {
