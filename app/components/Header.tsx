@@ -25,6 +25,8 @@ export default function Home() {
     if (!params.keyword) setKeyword('');
   }, [router, params]);
 
+  console.log('컴포넌트 마운트');
+
   useEffect(() => {
     const asyncFunction = async () => {
       if (accessToken) {
