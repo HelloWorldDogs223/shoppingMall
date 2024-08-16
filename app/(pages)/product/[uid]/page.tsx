@@ -226,8 +226,6 @@ export default function Page() {
             },
           },
         );
-
-        console.log(response.data);
       } catch (error: any) {
         console.error(
           'Error uploading review:',
