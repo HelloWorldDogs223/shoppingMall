@@ -82,6 +82,8 @@ export default function Page() {
   const [commentContent, setCommentContent] = useState('');
   const [commentImg, setCommentImg] = useState(null);
 
+  const [id, setId] = useState(0);
+
   const [score, setScore] = useState<number | null>(0);
 
   const params = useParams();
@@ -89,6 +91,7 @@ export default function Page() {
   const { accessToken } = useFetch();
 
   const [productInfo, setProductInfo] = useState<ProductType>();
+  const [buyInfo, setBuyInfo] = useState([]);
 
   const getProductById = async () => {
     const productRes: any = await axios.get(
@@ -123,10 +126,24 @@ export default function Page() {
     setComments(commentRes.data.reviewsList);
   };
 
+  const getBuyProducts = async () => {
+    const buyProductRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases`,
+    );
+    buyProductRes.data.purchaseList.forEach((el: any) => {
+      el.purchaseItems.forEach((item: any) => {
+        if (item.productId === productInfo?.productId) {
+          setId(item.purchaseItemId);
+        }
+      });
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await getProductById(); // 첫 번째 함수 실행
       await getComments(); // 첫 번째 함수가 완료된 후 두 번째 함수 실행
+      await getBuyProducts();
     };
 
     fetchData();
@@ -194,7 +211,7 @@ export default function Page() {
         title: commentTitle,
         description: commentContent,
         score,
-        purchaseItemId: productInfo?.productId,
+        purchaseItemId: id,
       };
 
       const formData = new FormData();
