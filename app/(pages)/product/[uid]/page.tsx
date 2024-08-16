@@ -80,7 +80,7 @@ export default function Page() {
 
   const [commentTitle, setCommentTitle] = useState('');
   const [commentContent, setCommentContent] = useState('');
-  const [commentImg, setCommentImg] = useState<string>('');
+  const [commentImg, setCommentImg] = useState(null);
 
   const [score, setScore] = useState<number | null>(0);
 
@@ -124,8 +124,12 @@ export default function Page() {
   };
 
   useEffect(() => {
-    getProductById();
-    getComments();
+    const fetchData = async () => {
+      await getProductById(); // 첫 번째 함수 실행
+      await getComments(); // 첫 번째 함수가 완료된 후 두 번째 함수 실행
+    };
+
+    fetchData();
   }, []);
 
   const handleClick = () => {
@@ -184,19 +188,30 @@ export default function Page() {
 
   const commentOnSubmitHandler = async () => {
     if (commentImg !== '' && commentTitle !== '') {
-      axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
-        {
-          reviewData: {
-            purchaseItemId: productInfo?.productId,
-            score,
-            title: commentTitle,
-            description: commentContent,
-          },
-          reviewImage: commentImg,
-        },
-        { headers: { Authorization: `Bearer ${accessToken}` } },
+      const formData = new FormData();
+
+      // 리뷰 데이터 추가
+      formData.append(
+        'reviewData',
+        JSON.stringify({
+          purchaseItemId: productInfo?.productId,
+          score,
+          title: commentTitle,
+          description: commentContent,
+        }),
       );
+
+      // 이미지 파일 추가
+      if (commentImg) {
+        formData.append('reviewImage', commentImg); // 'reviewImage'는 백엔드에서 기대하는 key 이름입니다.
+      }
+
+      axios.post(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
     } else {
       alert('모두 입력해주세요!');
     }
@@ -413,7 +428,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div>
+            <div className="flex flex-col items-center justify-center">
               <form onSubmit={commentOnSubmitHandler}>
                 <Typography component="legend">Controlled</Typography>
                 <Rating
@@ -424,17 +439,20 @@ export default function Page() {
                   }}
                 />
                 <input
+                  className="w-[400px]"
                   value={commentTitle}
                   onChange={(e: any) => setCommentTitle(e.target.value)}
                 />
                 <textarea
+                  className="w-[600px] resize-none h-[400px]"
                   value={commentContent}
                   onChange={(e: any) => setCommentContent(e.target.value)}
                 />
                 <input
                   type="file"
-                  value={commentImg}
-                  onChange={(e: any) => setCommentImg(e.target.value)}
+                  onChange={(event: any) => {
+                    setCommentImg(event.target.files[0]);
+                  }}
                 />
                 <Button onClick={commentOnSubmitHandler}>제출하기</Button>
               </form>
