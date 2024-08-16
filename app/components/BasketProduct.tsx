@@ -47,7 +47,7 @@ export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
         <div
           onClick={(e: any) => {
             e.stopPropagation();
-            basketDeleteHandler(basket.basketItemId);
+            basketDeleteHandler(basket.productId);
           }}
         >
           X ( 삭제하기 )
