@@ -12,7 +12,7 @@ export default function Home() {
   const params = useParams();
 
   const cart = useCartStore((state: any) => state.cart);
-  const addItem = useCartStore((state: any) => state.addItem);
+  const setCart = useCartStore((state: any) => state.setCart);
   const { accessToken, clearAccessToken } = useAuthStore();
 
   const [keyword, setKeyword] = useState(params.keyword);
@@ -22,10 +22,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!params.keyword) setKeyword('');
-  }, [router, params]);
-
-  console.log('컴포넌트 마운트');
+    if (!params.keyword) {
+      setKeyword('');
+    } else {
+      setKeyword(params.keyword);
+    }
+  }, [params]);
 
   useEffect(() => {
     const asyncFunction = async () => {
@@ -39,9 +41,12 @@ export default function Home() {
           );
 
           const resData = basketRes.data.basketItemDtos;
-          resData.forEach((el: any) => {
-            addItem({ id: el.product.productId, name: '' });
-          });
+
+          setCart(
+            resData.map((el: any) => {
+              return { id: el.productId, name: el.name };
+            }),
+          );
         } catch (e) {
           console.log(e);
         }

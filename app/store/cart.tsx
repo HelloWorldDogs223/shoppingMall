@@ -12,6 +12,7 @@ const useCartStore = create((set) => ({
     })),
   clearCart: () => set({ cart: [] }),
   getCartCount: () => set((state: any) => state.cart.length),
+  setCart: (newCart: any[]) => set({ cart: newCart }), // 새로운 함수 추가
 }));
 
 export default useCartStore;
