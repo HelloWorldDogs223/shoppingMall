@@ -128,6 +128,7 @@ export default function Page() {
   const getBuyProducts = async () => {
     const buyProductRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
 
     console.log(buyProductRes.data.purchaseList);
@@ -146,8 +147,10 @@ export default function Page() {
   }, [accessToken]);
 
   useEffect(() => {
-    getComments(); // 첫 번째 함수가 완료된 후 두 번째 함수 실행
-    getBuyProducts();
+    if (accessToken) {
+      getComments();
+      getBuyProducts();
+    }
   }, [productInfo]);
 
   const handleClick = () => {
