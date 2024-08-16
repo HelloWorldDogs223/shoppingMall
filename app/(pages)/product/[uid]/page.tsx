@@ -142,15 +142,13 @@ export default function Page() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await getProductById(); // 첫 번째 함수 실행
-      if (productInfo) {
-        await getComments(); // 첫 번째 함수가 완료된 후 두 번째 함수 실행
-        await getBuyProducts();
-      }
-    };
-    fetchData();
+    getProductById();
   }, [accessToken]);
+
+  useEffect(() => {
+    getComments(); // 첫 번째 함수가 완료된 후 두 번째 함수 실행
+    getBuyProducts();
+  }, [productInfo]);
 
   const handleClick = () => {
     const convertToRecord = (product: ProductType): Record<string, string> => {
