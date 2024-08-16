@@ -40,8 +40,9 @@ export default function Home() {
 
         console.log('use Effect 실행');
 
+        console.log(process.env.NODE_ENV);
+
         resData.forEach((el: any) => {
-          console.log('왜 2번 실행됨???', el);
           addItem({ id: el.product.productId, name: '' });
         });
       } catch (e) {
