@@ -91,7 +91,6 @@ export default function Page() {
   const { accessToken } = useFetch();
 
   const [productInfo, setProductInfo] = useState<ProductType>();
-  const [buyInfo, setBuyInfo] = useState([]);
 
   const getProductById = async () => {
     const productRes: any = await axios.get(
@@ -130,6 +129,9 @@ export default function Page() {
     const buyProductRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases`,
     );
+
+    console.log(buyProductRes.data.purchaseList);
+
     buyProductRes.data.purchaseList.forEach((el: any) => {
       el.purchaseItems.forEach((item: any) => {
         if (item.productId === productInfo?.productId) {
@@ -142,12 +144,13 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       await getProductById(); // 첫 번째 함수 실행
-      await getComments(); // 첫 번째 함수가 완료된 후 두 번째 함수 실행
-      await getBuyProducts();
+      if (productInfo) {
+        await getComments(); // 첫 번째 함수가 완료된 후 두 번째 함수 실행
+        await getBuyProducts();
+      }
     };
-
     fetchData();
-  }, []);
+  }, [accessToken]);
 
   const handleClick = () => {
     const convertToRecord = (product: ProductType): Record<string, string> => {
@@ -446,7 +449,7 @@ export default function Page() {
                 </p>
                 <Rating
                   name="half-rating-read"
-                  defaultValue={4}
+                  defaultValue={productInfo?.scoreAvg}
                   precision={0.5}
                   readOnly
                 />
