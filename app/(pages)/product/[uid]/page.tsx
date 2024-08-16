@@ -145,7 +145,7 @@ export default function Page() {
   const getCart = async () => {
     addItem({ id: productInfo?.productId, name });
 
-    if (single.length === 0 || multi.length === 0) {
+    if (single.length === 0) {
       alert('옵션을 골라주세요');
       return;
     }
