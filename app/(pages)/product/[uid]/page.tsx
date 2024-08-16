@@ -188,45 +188,24 @@ export default function Page() {
 
   const commentOnSubmitHandler = async () => {
     if (commentImg !== '' && commentTitle !== '') {
-      console.log('score', score);
-      console.log('comment', commentContent);
-      console.log('commentCo', commentTitle);
-      console.log('file', commentImg);
-
-      const formData = new FormData();
-
       // 리뷰 데이터 개별 필드로 추가
-      if (
-        productInfo?.productId !== null &&
-        productInfo?.productId !== undefined
-      ) {
-        formData.append('purchaseItemId', productInfo.productId.toString());
-      }
-
-      if (score !== null && score !== undefined) {
-        formData.append('score', score.toString());
-      }
-
-      if (commentTitle) {
-        formData.append('title', commentTitle);
-      }
-
-      if (commentContent) {
-        formData.append('description', commentContent);
-      }
-
-      // 이미지 파일 추가 - 서버에서 MultipartFile 형식으로 받을 수 있도록 설정
-      if (commentImg) {
-        formData.append('reviewImage', commentImg); // 여기서 reviewImage는 백엔드에서 기대하는 필드 이름이어야 합니다.
-      }
 
       try {
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
-          formData,
+          {
+            reviewData: {
+              title: commentTitle,
+              description: commentContent,
+              score,
+              purchaseId: productInfo?.productId,
+            },
+            reviewImage: commentImg,
+          },
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'multipart/form-data',
             },
           },
         );
@@ -435,7 +414,7 @@ export default function Page() {
                 <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
               </details>
             </div>
-            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px]">
+            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px] mb-[200px]">
               <div className="flex flex-col gap-2">
                 <p className="text-[#0e141b] text-4xl font-black leading-tight tracking-[-0.033em]">
                   {productInfo?.scoreAvg}점
@@ -463,11 +442,13 @@ export default function Page() {
                   }}
                 />
                 <div className="flex flex-col gap-4 mt-[100px]">
+                  <label>타이틀</label>
                   <input
                     className="w-[400px] border border-solid border-red-500 mb-[100px]"
                     value={commentTitle}
                     onChange={(e: any) => setCommentTitle(e.target.value)}
                   />
+                  <label>내용</label>
                   <textarea
                     className="w-[600px] resize-none h-[400px] border border-solid border-red-500"
                     value={commentContent}
