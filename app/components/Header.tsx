@@ -13,11 +13,9 @@ export default function Home() {
 
   const cart = useCartStore((state: any) => state.cart);
   const addItem = useCartStore((state: any) => state.addItem);
-  const removeItem = useCartStore((state: any) => state.removeItem);
   const { accessToken, clearAccessToken } = useAuthStore();
 
   const [keyword, setKeyword] = useState(params.keyword);
-  const [cartCount, setCartCount] = useState(0);
 
   const onClickHandler = () => {
     router.push('/');
@@ -39,9 +37,11 @@ export default function Home() {
         );
 
         const resData = basketRes.data.basketItemDtos;
-        setCartCount(resData.length);
+
+        console.log('use Effect 실행');
 
         resData.forEach((el: any) => {
+          console.log('왜 2번 실행됨???', el);
           addItem({ id: el.product.productId, name: '' });
         });
       } catch (e) {
@@ -50,11 +50,6 @@ export default function Home() {
     };
     asyncFunction();
   }, [accessToken]);
-
-  // 확인
-  useEffect(() => {
-    setCartCount(cart.length);
-  }, [cart.length]);
 
   async function logout() {
     try {
@@ -181,7 +176,7 @@ export default function Home() {
                   <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path>
                 </svg>
               </div>
-              <p className="text-red-500">{cartCount}</p>
+              <p className="text-red-500">{cart.length}</p>
             </button>
           </div>
           <div>
