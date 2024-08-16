@@ -656,10 +656,6 @@ export default function Page() {
                       </div>
                       <div className="flex flex-col gap-3 bg-[#fcfbf8]">
                         <div className="flex items-center gap-3">
-                          <div
-                            className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                            style='background-image: url("https://cdn.usegalileo.ai/stability/bd4a32b7-642d-477f-abbb-2f68d209efa5.png");'
-                          ></div>
                           <div className="flex-1">
                             <p className="text-[#1c190d] text-base font-medium leading-normal">
                               Sara
@@ -798,10 +794,6 @@ export default function Page() {
                       </div>
                       <div className="flex flex-col gap-3 bg-[#fcfbf8]">
                         <div className="flex items-center gap-3">
-                          <div
-                            className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                            style='background-image: url("https://cdn.usegalileo.ai/stability/c263a69a-35ef-4390-87fd-9cdf761e37a1.png");'
-                          ></div>
                           <div className="flex-1">
                             <p className="text-[#1c190d] text-base font-medium leading-normal">
                               John
