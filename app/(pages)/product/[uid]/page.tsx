@@ -127,7 +127,7 @@ export default function Page() {
 
   const getBuyProducts = async () => {
     const buyProductRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases?sliceSize=99&sliceNumber=0`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
 
