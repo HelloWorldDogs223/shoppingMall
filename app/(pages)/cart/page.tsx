@@ -32,7 +32,9 @@ export default function Page() {
       );
 
       // API 요청 성공 후에만 상태 업데이트
-      setBasketInfo(basketInfo.filter((el: any) => el.basketItemId !== id));
+      setBasketInfo(
+        basketInfo.filter((el: any) => el.basketItemId !== basketId),
+      );
       removeItem(id);
     } catch (error) {
       console.error('Failed to delete item from basket:', error);
