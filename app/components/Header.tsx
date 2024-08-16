@@ -44,7 +44,7 @@ export default function Home() {
 
           setCart(
             resData.map((el: any) => {
-              return { id: el.productId, name: el.name };
+              return { id: el.baksetId, name: el.name };
             }),
           );
         } catch (e) {
