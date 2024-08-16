@@ -147,7 +147,7 @@ export default function Page() {
   }, [accessToken]);
 
   useEffect(() => {
-    if (accessToken) {
+    if (productInfo) {
       getComments();
       getBuyProducts();
     }
