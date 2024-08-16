@@ -188,29 +188,51 @@ export default function Page() {
 
   const commentOnSubmitHandler = async () => {
     if (commentImg !== '' && commentTitle !== '') {
-      const reviewData = {
-        purchaseItemId: productInfo?.productId,
-        score,
-        title: commentTitle,
-        description: commentContent,
-        reviewImage: commentImg, // 이미지를 base64로 변환하거나 URL로 보낼 수 있습니다.
-      };
+      const formData = new FormData();
+
+      // 리뷰 데이터 개별 필드로 추가
+      if (
+        productInfo?.productId !== null &&
+        productInfo?.productId !== undefined
+      ) {
+        formData.append('purchaseItemId', productInfo.productId.toString());
+      }
+
+      if (score !== null && score !== undefined) {
+        formData.append('score', score.toString());
+      }
+
+      if (commentTitle) {
+        formData.append('title', commentTitle);
+      }
+
+      if (commentContent) {
+        formData.append('description', commentContent);
+      }
+
+      // 이미지 파일 추가 - 서버에서 MultipartFile 형식으로 받을 수 있도록 설정
+      if (commentImg) {
+        formData.append('reviewImage', commentImg); // 여기서 reviewImage는 백엔드에서 기대하는 필드 이름이어야 합니다.
+      }
 
       try {
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
-          reviewData, // 이 경우 JSON 데이터를 보냄
+          formData,
           {
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${accessToken}`,
             },
           },
         );
 
         console.log(response.data);
-      } catch (error) {
-        console.error('Error uploading review:', error);
+      } catch (error: any) {
+        console.error(
+          'Error uploading review:',
+          error.response?.data || error.message,
+        );
       }
     } else {
       alert('모두 입력해주세요!');
@@ -411,7 +433,7 @@ export default function Page() {
                 <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
               </details>
             </div>
-            <div className="flex flex-wrap gap-x-8 gap-y-6 p-4 mt-[100px]">
+            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px]">
               <div className="flex flex-col gap-2">
                 <p className="text-[#0e141b] text-4xl font-black leading-tight tracking-[-0.033em]">
                   {productInfo?.scoreAvg}점
@@ -419,7 +441,7 @@ export default function Page() {
                 <Rating
                   name="half-rating-read"
                   defaultValue={productInfo?.scoreAvg}
-                  precision={0.1}
+                  precision={0.5}
                   readOnly
                 />
                 <p className="text-[#0e141b] text-base font-normal leading-normal">
@@ -428,9 +450,9 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col">
               <form onSubmit={commentOnSubmitHandler}>
-                <Typography component="legend">Controlled</Typography>
+                <Typography component="legend">별점</Typography>
                 <Rating
                   name="simple-controlled"
                   value={score}
