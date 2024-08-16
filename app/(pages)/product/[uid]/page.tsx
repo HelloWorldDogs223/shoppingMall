@@ -194,7 +194,7 @@ export default function Page() {
         title: commentTitle,
         description: commentContent,
         score,
-        purchaseId: productInfo?.productId,
+        purchaseItemId: productInfo?.productId,
       };
 
       const formData = new FormData();
