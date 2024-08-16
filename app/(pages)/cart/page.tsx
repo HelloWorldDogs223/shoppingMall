@@ -34,6 +34,7 @@ export default function Page() {
     );
 
     removeItem(id);
+
     const deleteRes: any = axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${id}`,
       { headers: { authorization: `Bearer ${accessToken}` } },
