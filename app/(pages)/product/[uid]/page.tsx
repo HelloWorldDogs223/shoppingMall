@@ -190,22 +190,30 @@ export default function Page() {
     if (commentImg !== '' && commentTitle !== '') {
       // 리뷰 데이터 개별 필드로 추가
 
+      const reviewData = {
+        title: commentTitle,
+        description: commentContent,
+        score,
+        purchaseId: productInfo?.productId,
+      };
+
+      const formData = new FormData();
+
+      const productDataJson = new Blob([JSON.stringify(reviewData)], {
+        type: 'application/json',
+      });
+
+      formData.append('reviewData', productDataJson);
+
+      if (commentImg !== null) formData.append('reviewImage', commentImg);
+
       try {
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
-          {
-            reviewData: {
-              title: commentTitle,
-              description: commentContent,
-              score,
-              purchaseId: productInfo?.productId,
-            },
-            reviewImage: commentImg,
-          },
+          formData,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'multipart/form-data',
             },
           },
         );
@@ -421,7 +429,7 @@ export default function Page() {
                 </p>
                 <Rating
                   name="half-rating-read"
-                  defaultValue={productInfo?.scoreAvg}
+                  defaultValue={4}
                   precision={0.5}
                   readOnly
                 />
@@ -444,7 +452,7 @@ export default function Page() {
                 <div className="flex flex-col gap-4 mt-[100px]">
                   <label>타이틀</label>
                   <input
-                    className="w-[400px] border border-solid border-red-500 mb-[100px]"
+                    className="w-[400px] border border-solid border-red-500 mb-[50px]"
                     value={commentTitle}
                     onChange={(e: any) => setCommentTitle(e.target.value)}
                   />
