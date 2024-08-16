@@ -188,30 +188,30 @@ export default function Page() {
 
   const commentOnSubmitHandler = async () => {
     if (commentImg !== '' && commentTitle !== '') {
-      const formData = new FormData();
+      const reviewData = {
+        purchaseItemId: productInfo?.productId,
+        score,
+        title: commentTitle,
+        description: commentContent,
+        reviewImage: commentImg, // 이미지를 base64로 변환하거나 URL로 보낼 수 있습니다.
+      };
 
-      // 리뷰 데이터 추가
-      formData.append(
-        'reviewData',
-        JSON.stringify({
-          purchaseItemId: productInfo?.productId,
-          score,
-          title: commentTitle,
-          description: commentContent,
-        }),
-      );
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
+          reviewData, // 이 경우 JSON 데이터를 보냄
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
 
-      // 이미지 파일 추가
-      if (commentImg) {
-        formData.append('reviewImage', commentImg); // 'reviewImage'는 백엔드에서 기대하는 key 이름입니다.
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error uploading review:', error);
       }
-
-      axios.post(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
     } else {
       alert('모두 입력해주세요!');
     }
@@ -438,16 +438,18 @@ export default function Page() {
                     setScore(newValue);
                   }}
                 />
-                <input
-                  className="w-[400px]"
-                  value={commentTitle}
-                  onChange={(e: any) => setCommentTitle(e.target.value)}
-                />
-                <textarea
-                  className="w-[600px] resize-none h-[400px]"
-                  value={commentContent}
-                  onChange={(e: any) => setCommentContent(e.target.value)}
-                />
+                <div className="flex flex-col gap-4 mt-[100px]">
+                  <input
+                    className="w-[400px] border border-solid border-red-500 mb-[100px]"
+                    value={commentTitle}
+                    onChange={(e: any) => setCommentTitle(e.target.value)}
+                  />
+                  <textarea
+                    className="w-[600px] resize-none h-[400px] border border-solid border-red-500"
+                    value={commentContent}
+                    onChange={(e: any) => setCommentContent(e.target.value)}
+                  />
+                </div>
                 <input
                   type="file"
                   onChange={(event: any) => {
