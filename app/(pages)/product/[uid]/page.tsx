@@ -188,6 +188,11 @@ export default function Page() {
 
   const commentOnSubmitHandler = async () => {
     if (commentImg !== '' && commentTitle !== '') {
+      console.log('score', score);
+      console.log('comment', commentContent);
+      console.log('commentCo', commentTitle);
+      console.log('file', commentImg);
+
       const formData = new FormData();
 
       // 리뷰 데이터 개별 필드로 추가
