@@ -221,7 +221,6 @@ export default function Page() {
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${accessToken}`,
             },
           },
