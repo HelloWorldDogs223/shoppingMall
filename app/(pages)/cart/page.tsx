@@ -24,10 +24,10 @@ export default function Page() {
     }
   }, [error, router]);
 
-  const basketDeleteHandler = async (id: number) => {
+  const basketDeleteHandler = async (id: number, basketId: number) => {
     try {
       const deleteRes: any = await axios.delete(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${basketId}`,
         { headers: { authorization: `Bearer ${accessToken}` } },
       );
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 interface Props {
   basket: any;
-  basketDeleteHandler: (args: number) => void;
+  basketDeleteHandler: (args: number, args2: number) => void;
 }
 
 export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
@@ -47,7 +47,7 @@ export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
         <div
           onClick={(e: any) => {
             e.stopPropagation();
-            basketDeleteHandler(basket.productId);
+            basketDeleteHandler(basket.productId, basket.basketItemId);
           }}
         >
           X ( 삭제하기 )
