@@ -27,26 +27,22 @@ export default function Home() {
 
   useEffect(() => {
     const asyncFunction = async () => {
-      if (!accessToken) return;
-      try {
-        const basketRes = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          },
-        );
+      if (accessToken) {
+        try {
+          const basketRes = await axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+            {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            },
+          );
 
-        const resData = basketRes.data.basketItemDtos;
-
-        console.log('use Effect 실행');
-
-        console.log(process.env.NODE_ENV);
-
-        resData.forEach((el: any) => {
-          addItem({ id: el.product.productId, name: '' });
-        });
-      } catch (e) {
-        console.log(e);
+          const resData = basketRes.data.basketItemDtos;
+          resData.forEach((el: any) => {
+            addItem({ id: el.product.productId, name: '' });
+          });
+        } catch (e) {
+          console.log(e);
+        }
       }
     };
     asyncFunction();
