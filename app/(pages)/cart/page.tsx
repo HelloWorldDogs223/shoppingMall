@@ -24,21 +24,19 @@ export default function Page() {
     }
   }, [error, router]);
 
-  const basketDeleteHandler = (id: number) => {
-    setBasketInfo(
-      basketInfo.filter((el: any) => {
-        if (el.basketItemId !== id) {
-          return true;
-        }
-      }),
-    );
+  const basketDeleteHandler = async (id: number) => {
+    try {
+      const deleteRes: any = await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${id}`,
+        { headers: { authorization: `Bearer ${accessToken}` } },
+      );
 
-    removeItem(id);
-
-    const deleteRes: any = axios.delete(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${id}`,
-      { headers: { authorization: `Bearer ${accessToken}` } },
-    );
+      // API 요청 성공 후에만 상태 업데이트
+      setBasketInfo(basketInfo.filter((el: any) => el.basketItemId !== id));
+      removeItem(id);
+    } catch (error) {
+      console.error('Failed to delete item from basket:', error);
+    }
   };
 
   useEffect(() => {
