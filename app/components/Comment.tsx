@@ -29,6 +29,8 @@ export default function Comment({ el, setComments, comments }: Props) {
   const [commentImg, setCommentImg] = useState('');
   const [modal, setModal] = useState<boolean>(false);
 
+  const [rating, setRating] = useState(0);
+
   const [reportModal, setReportModal] = useState(false);
 
   const getMemberInfo = async () => {
@@ -44,6 +46,10 @@ export default function Comment({ el, setComments, comments }: Props) {
   useEffect(() => {
     getMemberInfo();
   }, []);
+
+  useEffect(() => {
+    setRating(el.scoreAvg);
+  }, [el.scoreAvg]);
 
   const commentDeleteHandler = () => {
     const res: any = axios.delete(
@@ -116,7 +122,7 @@ export default function Comment({ el, setComments, comments }: Props) {
             </div>
           </div>
 
-          <Rating value={el.scoreAvg ?? 5} readOnly />
+          <Rating value={rating} readOnly />
 
           <img src={el.reviewImageUrl} className="w-[100px] h-[100px] " />
           <p className="text-[#1c190d] text-base font-normal leading-normal">
