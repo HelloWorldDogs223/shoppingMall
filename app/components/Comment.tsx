@@ -100,7 +100,7 @@ export default function Comment({ el, setComments, comments }: Props) {
                 리뷰 신고하기
               </Button>
               <p>
-                {el.writerName === memberInfo?.nickName ? (
+                {el.writerId === memberInfo?.id ? (
                   <div>
                     <Button
                       variant="contained"
