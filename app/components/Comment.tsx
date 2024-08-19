@@ -39,9 +39,6 @@ export default function Comment({ el, setComments, comments }: Props) {
       },
     );
     setMemberInfo(memberRes.data);
-
-    console.log('멤버, 라이터네임');
-    console.log(memberRes.data, el.writerName);
   };
 
   useEffect(() => {
@@ -119,7 +116,7 @@ export default function Comment({ el, setComments, comments }: Props) {
             </div>
           </div>
 
-          <Rating value={el.scoreAvg} readOnly />
+          <Rating value={el.scoreAvg ?? 5} readOnly />
 
           <img src={el.reviewImageUrl} className="w-[100px] h-[100px] " />
           <p className="text-[#1c190d] text-base font-normal leading-normal">
