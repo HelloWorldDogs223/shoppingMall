@@ -97,7 +97,7 @@ export default function Comment({ el, setComments, comments }: Props) {
                 닉네임 : {el.writerName}
               </p>
               <p className="text-[#9c8d49] text-sm font-normal leading-normal">
-                {el.title}
+                제목 : {el.title}
               </p>
               <Button onClick={() => setReportModal(true)}>
                 리뷰 신고하기
@@ -122,7 +122,7 @@ export default function Comment({ el, setComments, comments }: Props) {
             </div>
           </div>
 
-          {el?.scoreAvg !== undefined && (
+          {el?.score !== undefined && (
             <Rating
               name="half-rating-read"
               value={rating}
@@ -133,7 +133,7 @@ export default function Comment({ el, setComments, comments }: Props) {
 
           <img src={el.reviewImageUrl} className="w-[100px] h-[100px] " />
           <p className="text-[#1c190d] text-base font-normal leading-normal">
-            {el.description}
+            리뷰내용: {el.description}
           </p>
         </div>
       </div>
