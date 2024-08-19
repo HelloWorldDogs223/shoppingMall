@@ -37,11 +37,15 @@ export default function ReportModal({
   };
 
   const reviewReportHandler = () => {
-    axios.post(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/report`, {
-      reportTitle,
-      reportDescription,
-      reviewId,
-    });
+    axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/report`,
+      {
+        reportTitle,
+        reportDescription,
+        reviewId,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
   };
 
   return (

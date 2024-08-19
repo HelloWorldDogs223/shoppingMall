@@ -54,6 +54,7 @@ export default function CommentModal({
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       setModal(false);
+      location.reload();
     }
   };
 
