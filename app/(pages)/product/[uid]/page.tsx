@@ -237,6 +237,8 @@ export default function Page() {
             },
           },
         );
+
+        location.reload();
       } catch (error: any) {
         console.error(
           'Error uploading review:',
@@ -501,7 +503,13 @@ export default function Page() {
                     </h2>
 
                     {comments.map((el: any) => {
-                      return <Comment el={el} />;
+                      return (
+                        <Comment
+                          el={el}
+                          setComments={setComments}
+                          comments={comments}
+                        />
+                      );
                     })}
                   </div>
                 </div>

@@ -65,7 +65,7 @@ export default function CommentModal({
         onClick={() => setModal(false)}
       ></div>
       <div
-        className="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+        className="absoulte z-[105] relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden top-[50%] left-[50%] transform translate-x-[-1/2] translate-y-[-1/2]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="layout-container flex h-full grow flex-col">

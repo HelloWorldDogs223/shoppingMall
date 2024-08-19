@@ -7,6 +7,8 @@ import ReportModal from './ReportModal';
 
 interface Props {
   el: any;
+  setComments: (args: any) => void;
+  comments: any;
 }
 
 interface Member {
@@ -17,7 +19,7 @@ interface Member {
   isBan: Boolean;
 }
 
-export default function Comment({ el }: Props) {
+export default function Comment({ el, setComments, comments }: Props) {
   const [memberInfo, setMemberInfo] = useState<Member>();
   const { accessToken } = useFetch();
 
@@ -50,6 +52,11 @@ export default function Comment({ el }: Props) {
     const res: any = axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/${el.id}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+    setComments(
+      comments.filter((item: any) => {
+        return item.id !== el.id;
+      }),
     );
   };
 
