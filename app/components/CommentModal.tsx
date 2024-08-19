@@ -29,18 +29,14 @@ export default function CommentModal({
 }: Props) {
   const { accessToken } = useFetch();
 
-  const commentEditHandler = () => {
+  const commentEditHandler = async () => {
     if (commentTitle !== '') {
-      // 리뷰 데이터 개별 필드로 추가
-
       const reviewData = {
         title: commentTitle,
         description,
         score,
         reviewId: id,
       };
-
-      console.log('에딧 핸들러 실행');
 
       const formData = new FormData();
 
@@ -52,11 +48,13 @@ export default function CommentModal({
 
       if (commentImg !== null) formData.append('reviewImage', commentImg);
 
-      const editRes: any = axios.put(
+      const editRes: any = await axios.put(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
         formData,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
+
+      console.log('에딧 핸들러 실행');
     }
   };
 

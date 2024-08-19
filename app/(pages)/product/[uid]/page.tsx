@@ -102,6 +102,7 @@ export default function Page() {
         },
       },
     );
+    console.log('평가', productRes.data.scoreAvg);
     setProductInfo(productRes.data);
     setSingle(productRes.data.singleOptions);
     setMulti(productRes.data.multipleOptions);
