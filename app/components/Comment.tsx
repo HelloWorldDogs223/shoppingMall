@@ -48,10 +48,8 @@ export default function Comment({ el, setComments, comments }: Props) {
   }, []);
 
   useEffect(() => {
-    console.log(el);
-    console.log(el.scoreAvg);
-    setRating(el.scoreAvg);
-  }, [el.scoreAvg]);
+    setRating(el.score);
+  }, [el.score]);
 
   const commentDeleteHandler = () => {
     const res: any = axios.delete(
