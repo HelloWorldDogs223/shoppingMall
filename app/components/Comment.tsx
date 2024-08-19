@@ -29,9 +29,6 @@ export default function Comment({ el }: Props) {
 
   const [reportModal, setReportModal] = useState(false);
 
-  const [reportTitle, setReportTitle] = useState('');
-  const [reportDescription, setReportDescription] = useState('');
-
   const getMemberInfo = async () => {
     const memberRes: any = axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
@@ -40,6 +37,9 @@ export default function Comment({ el }: Props) {
       },
     );
     setMemberInfo(memberRes.data);
+
+    console.log('멤버, 라이터네임');
+    console.log(memberRes.data, el.writeName);
   };
 
   useEffect(() => {

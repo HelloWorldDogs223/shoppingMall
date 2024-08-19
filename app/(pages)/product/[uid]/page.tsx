@@ -449,7 +449,7 @@ export default function Page() {
                 </p>
                 <Rating
                   name="half-rating-read"
-                  defaultValue={productInfo?.scoreAvg}
+                  value={productInfo?.scoreAvg}
                   precision={0.5}
                   readOnly
                 />
