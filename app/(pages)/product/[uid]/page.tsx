@@ -92,6 +92,7 @@ export default function Page() {
   const { accessToken } = useFetch();
 
   const [productInfo, setProductInfo] = useState<ProductType>();
+  const [memberInfo, setMemberInfo] = useState<any>({});
 
   const getProductById = async () => {
     const productRes: any = await axios.get(
@@ -142,6 +143,14 @@ export default function Page() {
     });
   };
 
+  const getMemberInfo = async () => {
+    const res: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+    setMemberInfo(res.data);
+  };
+
   useEffect(() => {
     getProductById();
   }, [accessToken]);
@@ -150,6 +159,7 @@ export default function Page() {
     if (productInfo) {
       getComments();
       getBuyProducts();
+      getMemberInfo();
     }
   }, [productInfo]);
 
@@ -251,6 +261,29 @@ export default function Page() {
     }
   };
 
+  const getProductStatusOn = async () => {
+    const res: any = await axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}/sale-state/on-sale`,
+      {},
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
+  const getProductStatusOff = async () => {
+    const res: any = await axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}/sale-state/discontinued`,
+      {},
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
+  const deleteProduct = async () => {
+    const res: any = await axios.delete(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
   return (
     <div
       className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden"
@@ -273,6 +306,19 @@ export default function Page() {
                       제품명 : {productInfo?.name}
                     </h1>
                   </div>
+                  {memberInfo?.id === productInfo?.sellerId ? (
+                    <div>
+                      <Button onClick={() => getProductStatusOn()}>
+                        판매중으로 변경
+                      </Button>
+                      <Button onClick={() => getProductStatusOff()}>
+                        판매중단으로 변경
+                      </Button>
+                      <Button onClick={() => deleteProduct()}>제품 삭제</Button>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div
                   onClick={() =>
@@ -281,15 +327,16 @@ export default function Page() {
                     )
                   }
                 >
-                  판매자 : {productInfo?.sellerId}
+                  판매자 (클릭시 판매자 조회 가능) : {productInfo?.sellerId}
                 </div>
               </div>
             </div>
-            <div className="flex gap-4 mt-4 justify-between w-[100px]">
+            <div className="flex gap-4 mt-4 justify-between w-[100px] mb-[10px]">
               <div>
                 <h2 className="text-2xl">가격</h2>
                 <h3 className="text-2xl">{productInfo?.price}원</h3>
               </div>
+              <br />
               <Button
                 onClick={() => handleClick()}
                 variant="contained"
@@ -445,7 +492,7 @@ export default function Page() {
                 <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
               </details>
             </div>
-            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px] mb-[200px]">
+            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px] mb-[150px]">
               <div className="flex flex-col gap-2">
                 <p className="text-[#0e141b] text-4xl font-black leading-tight tracking-[-0.033em]">
                   {productInfo?.scoreAvg}점
@@ -472,7 +519,7 @@ export default function Page() {
                     setScore(newValue);
                   }}
                 />
-                <div className="flex flex-col gap-4 mt-[100px]">
+                <div className="flex flex-col gap-4 mt-[50px]">
                   <label>타이틀</label>
                   <input
                     className="w-[400px] border border-solid border-red-500 mb-[50px]"
