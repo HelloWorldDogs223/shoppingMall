@@ -61,7 +61,7 @@ export default function CommentModal({
   return (
     <>
       <div
-        className="fixed w-screen h-screen bg-black/30"
+        className="fixed w-screen h-screen bg-black/30  top-0 left-0 z-[101] flex items-center justify-center"
         onClick={() => setModal(false)}
       ></div>
       <div

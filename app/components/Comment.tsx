@@ -3,6 +3,7 @@ import { useFetch } from '../hooks/useFetch';
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import CommentModal from './CommentModal';
+import ReportModal from './ReportModal';
 
 interface Props {
   el: any;
@@ -25,6 +26,11 @@ export default function Comment({ el }: Props) {
   const [score, setScore] = useState<number | null>(0);
   const [commentImg, setCommentImg] = useState('');
   const [modal, setModal] = useState<boolean>(false);
+
+  const [reportModal, setReportModal] = useState(false);
+
+  const [reportTitle, setReportTitle] = useState('');
+  const [reportDescription, setReportDescription] = useState('');
 
   const getMemberInfo = async () => {
     const memberRes: any = axios.get(
@@ -64,6 +70,15 @@ export default function Comment({ el }: Props) {
         />
       )}
 
+      {reportModal && (
+        <ReportModal
+          setModal={setReportModal}
+          productId={0}
+          reviewId={el.id}
+          review={true}
+        />
+      )}
+
       <div className="flex flex-col gap-8 overflow-x-hidden bg-[#fcfbf8] p-4">
         <div className="flex flex-col gap-3 bg-[#fcfbf8]">
           <div className="flex items-center gap-3">
@@ -74,8 +89,11 @@ export default function Comment({ el }: Props) {
               <p className="text-[#9c8d49] text-sm font-normal leading-normal">
                 {el.title}
               </p>
+              <Button onClick={() => setReportModal(true)}>
+                리뷰 신고하기
+              </Button>
               <p>
-                {el.writerId === memberInfo?.id ? (
+                {el.writerName === memberInfo?.nickName ? (
                   <div>
                     <Button
                       variant="contained"

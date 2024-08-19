@@ -7,6 +7,8 @@ import { useFetch } from '../hooks/useFetch';
 interface Props {
   setModal: (args: boolean) => void;
   productId: number;
+  review?: boolean;
+  reviewId?: number;
 }
 
 declare global {
@@ -15,7 +17,12 @@ declare global {
   }
 }
 
-export default function PurchaseModal({ setModal, productId }: Props) {
+export default function ReportModal({
+  setModal,
+  productId,
+  review,
+  reviewId,
+}: Props) {
   const { accessToken } = useFetch();
 
   const [reportTitle, setReportTitle] = useState('');
@@ -27,6 +34,14 @@ export default function PurchaseModal({ setModal, productId }: Props) {
       { productId, reportTitle, reportDescription },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
+  };
+
+  const reviewReportHandler = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/report`, {
+      reportTitle,
+      reportDescription,
+      reviewId,
+    });
   };
 
   return (
@@ -67,7 +82,7 @@ export default function PurchaseModal({ setModal, productId }: Props) {
 
               <div className="flex px-4 py-3 mt-[1rem]">
                 <button
-                  onClick={reportHandler}
+                  onClick={review ? reportHandler : reviewReportHandler}
                   className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 flex-1 bg-[#197ce6] text-white text-base font-bold leading-normal tracking-[0.015em]"
                 >
                   <span className="truncate">Continue to Report</span>
