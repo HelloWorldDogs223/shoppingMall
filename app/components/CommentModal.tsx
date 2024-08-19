@@ -53,8 +53,7 @@ export default function CommentModal({
         formData,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
-
-      console.log('에딧 핸들러 실행');
+      setModal(false);
     }
   };
 
