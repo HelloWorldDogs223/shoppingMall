@@ -308,13 +308,24 @@ export default function Page() {
                   </div>
                   {memberInfo?.id === productInfo?.sellerId ? (
                     <div>
-                      <Button onClick={() => getProductStatusOn()}>
+                      <Button
+                        variant="contained"
+                        onClick={() => getProductStatusOn()}
+                      >
                         판매중으로 변경
                       </Button>
-                      <Button onClick={() => getProductStatusOff()}>
+                      <Button
+                        variant="contained"
+                        onClick={() => getProductStatusOff()}
+                      >
                         판매중단으로 변경
                       </Button>
-                      <Button onClick={() => deleteProduct()}>제품 삭제</Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => deleteProduct()}
+                      >
+                        제품 삭제
+                      </Button>
                     </div>
                   ) : (
                     <></>
