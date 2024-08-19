@@ -48,6 +48,8 @@ export default function Comment({ el, setComments, comments }: Props) {
   }, []);
 
   useEffect(() => {
+    console.log(el);
+    console.log(el.scoreAvg);
     setRating(el.scoreAvg);
   }, [el.scoreAvg]);
 
@@ -94,7 +96,7 @@ export default function Comment({ el, setComments, comments }: Props) {
           <div className="flex items-center gap-3">
             <div className="flex-1">
               <p className="text-[#1c190d] text-base font-medium leading-normal">
-                이름 : {el.writerName} 아이디 : {el.writerId}
+                닉네임 : {el.writerName}
               </p>
               <p className="text-[#9c8d49] text-sm font-normal leading-normal">
                 {el.title}
@@ -122,7 +124,14 @@ export default function Comment({ el, setComments, comments }: Props) {
             </div>
           </div>
 
-          <Rating value={rating} readOnly />
+          {el?.scoreAvg !== undefined && (
+            <Rating
+              name="half-rating-read"
+              value={rating}
+              precision={0.5}
+              readOnly
+            />
+          )}
 
           <img src={el.reviewImageUrl} className="w-[100px] h-[100px] " />
           <p className="text-[#1c190d] text-base font-normal leading-normal">

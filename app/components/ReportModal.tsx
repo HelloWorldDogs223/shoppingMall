@@ -34,6 +34,8 @@ export default function ReportModal({
       { productId, reportTitle, reportDescription },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
+    alert('신고가 완료되었습니다.');
+    setModal(false);
   };
 
   const reviewReportHandler = () => {
@@ -46,6 +48,8 @@ export default function ReportModal({
       },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
+    alert('신고가 완료되었습니다.');
+    setModal(false);
   };
 
   return (
