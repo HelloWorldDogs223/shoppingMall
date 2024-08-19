@@ -40,6 +40,8 @@ export default function CommentModal({
         reviewId: id,
       };
 
+      console.log('에딧 핸들러 실행');
+
       const formData = new FormData();
 
       const productDataJson = new Blob([JSON.stringify(reviewData)], {
@@ -134,6 +136,7 @@ export default function CommentModal({
                       Your feedback helps us improve. Thank you for your time!
                     </p>
                     <Button
+                      variant="contained"
                       className="text-sm font-bold leading-normal tracking-[0.015em] flex gap-2 text-[#111418]"
                       onClick={() => commentEditHandler()}
                     >
