@@ -34,7 +34,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
     });
 
     axios.delete(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}?basketItemIdList=${list}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${list}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
