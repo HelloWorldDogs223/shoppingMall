@@ -101,10 +101,7 @@ export default function Comment({ el }: Props) {
                     >
                       삭제하기
                     </Button>
-                    <Button
-                      variant="contained"
-                      onClick={() => commentDeleteHandler()}
-                    >
+                    <Button variant="contained" onClick={() => setModal(true)}>
                       수정하기
                     </Button>
                   </div>

@@ -503,8 +503,6 @@ export default function Page() {
                     {comments.map((el: any) => {
                       return <Comment el={el} />;
                     })}
-
-                    {/*  */}
                   </div>
                 </div>
               </div>
