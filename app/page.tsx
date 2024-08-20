@@ -1,23 +1,91 @@
 'use client';
 
-import { Button } from '@mui/material';
-
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFetch } from './hooks/useFetch';
+import axios from 'axios';
+import Carousel from 'react-material-ui-carousel';
+import { Paper, Button } from '@mui/material';
+
+interface ProductType {
+  productId: number; // 제품ID
+  sellerId: number; // 판매자ID
+  sellerName: string; // 판매자명
+  typeId: number; // 제품타입ID
+  typeName: string; // 제품타입명
+  firstProductImageUrl: string; // 첫번째 제품 이미지
+  name: string; // 제품명
+  price: number; // 가격
+  discountAmount: number; // 할인양
+  discountRate: number; // 할인율
+  isBan: Boolean; // 밴여부
+  scoreAvg: number; // 평점
+  finalPrice: number; // 최종가격
+  saleState: 'ON_SALE' | 'DISCONTINUED'; // 제품 판매여부
+}
 
 export default function Home() {
   // router
   const router = useRouter();
+
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [sliceNumber, setSliceNumber] = useState<number>(0);
+  const [display, setDisplay] = useState<ProductType[]>([]);
+
+  const observeRef = useRef<HTMLDivElement>(null); // 옵저버 ref
 
   // state
   const [search, setSearch] = useState('');
 
   useFetch();
 
+  const getProductsFirst = async () => {
+    const productRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products/random?sliceNumber=${sliceNumber}&sliceSize=10`,
+    );
+
+    setSliceNumber(sliceNumber + 1);
+    setProducts(productRes.data.productList);
+    setDisplay(productRes.data.productList);
+  };
+
+  const getProductsLast = async () => {
+    const productRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products/random?sliceNumber=${sliceNumber}&sliceSize=10`,
+    );
+
+    if (productRes.data.hasNext) {
+      setSliceNumber(sliceNumber + 1);
+      setProducts([...products, ...productRes.data.productList]);
+    }
+  };
+
+  const ioCallback = ([entry]: IntersectionObserverEntry[]) => {
+    if (entry.isIntersecting) {
+      getProductsLast();
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(ioCallback, {
+      threshold: 0.9,
+      root: null,
+    });
+
+    observeRef.current && observer.observe(observeRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [ioCallback, observeRef.current]);
+
+  useEffect(() => {
+    getProductsFirst();
+  }, []);
+
   return (
     <div
-      className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden"
+      className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden mt-[100px]"
       style={{ fontFamily: 'Epilogue, Noto Sans, sans-serif' }}
     >
       <div className="layout-container flex h-full grow flex-col">
@@ -25,15 +93,22 @@ export default function Home() {
           <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
             <div className="@container">
               <div className="@[480px]:p-4">
-                <div
-                  className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
-                  style={{
-                    backgroundImage:
-                      'linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("/example2.png")',
-                  }}
-                >
-                  <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] text-center">
-                    Discover the latest fashion trends
+                <div className="relative flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10">
+                  <Carousel className="w-[960px]">
+                    {display?.map((item: ProductType) => (
+                      <div className="w-[960px]" key={item.productId}>
+                        <img
+                          onClick={() =>
+                            router.push(`/product/${item.productId}`)
+                          }
+                          src={item.firstProductImageUrl}
+                          className="w-[960px] h-[480px] cursor-pointer"
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
+                  <h1 className=" text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] text-center">
+                    최신 상품들을 살펴보세요!
                   </h1>
                   <label className="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16">
                     <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
@@ -82,192 +157,27 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/stability/d68c25bc-d94b-40c9-b9ae-340cc1d12997.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/stability/c1e9756b-74ea-422f-9aca-209bb668b6c3.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/294c44d3-cec9-498c-b438-bfebe847c92b.png")',
-                  }}
-                ></div>
-              </div>
-            </div>
             <h3 className="text-[#0e141b] tracking-light text-2xl font-bold leading-tight px-4 text-left pb-2 pt-5">
               Featured Stores
             </h3>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/adf52f89-2889-4232-879c-8b279bb7df1a.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/ae3ecbe8-50d3-4053-a2a6-f53686454a9c.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/61d37e15-dbbc-459b-a8c7-b194e74615d1.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/3ed077e6-18da-4b47-ac9e-8449c386edef.png")',
-                  }}
-                ></div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/0da04058-22ff-4fa8-a901-acbabff7afa0.png")',
-                  }}
-                ></div>
-              </div>
+              {products?.map((item: ProductType, index: number) => {
+                return (
+                  <div key={index + 50000}>
+                    <div className="flex flex-col gap-3">
+                      <img
+                        onClick={() =>
+                          router.push(`/product/${item.productId}`)
+                        }
+                        className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl cursor-pointer"
+                        src={item.firstProductImageUrl}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <h3 className="text-[#0e141b] tracking-light text-2xl font-bold leading-tight px-4 text-left pb-2 pt-5">
-              Latest Deals
-            </h3>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              <div className="flex flex-col gap-3 pb-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/20b70f4b-01bb-49b4-ada2-16fd71f4b747.png")',
-                  }}
-                ></div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Men's Fashion
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    Up to 50% off
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/stability/1be2dfdf-5efb-4fb8-b0a0-b224e5766f7d.png")',
-                  }}
-                ></div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Women's Fashion
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    Up to 40% off
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/3e4e65ba-dded-427a-85d8-35dd4dd88ee9.png")',
-                  }}
-                ></div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Kids' Fashion
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    Up to 60% off
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/128f526e-7bac-4a19-9b89-3f8b61ce7bb9.png")',
-                  }}
-                ></div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Home Decor
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    Up to 30% off
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/stability/bca8239d-243b-4579-b61b-158e4389ac85.png")',
-                  }}
-                ></div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Electronics
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    Up to 20% off
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 pb-3">
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style={{
-                    backgroundImage:
-                      'url("https://cdn.usegalileo.ai/sdxl10/23868830-8272-4a5c-b1ea-4433c6f96872.png")',
-                  }}
-                ></div>
-                <div>
-                  <p className="text-[#0e141b] text-base font-medium leading-normal">
-                    Sports Gear
-                  </p>
-                  <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                    Up to 70% off
-                  </p>
-                </div>
-              </div>
-            </div>
+            <div ref={observeRef} className="mt-[50px]"></div>
           </div>
         </div>
       </div>
