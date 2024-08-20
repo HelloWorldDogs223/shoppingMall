@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useFetch } from '../hooks/useFetch';
+import { Button } from '@mui/material';
 
 export default function ListSell() {
   const params = useSearchParams();
@@ -12,6 +13,29 @@ export default function ListSell() {
   const [products, setProducts] = useState([]);
 
   const { accessToken } = useFetch();
+
+  const getProductStatusOn = async (id: number) => {
+    const res: any = await axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${id}/sale-state/on-sale`,
+      {},
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
+  const getProductStatusOff = async (id: number) => {
+    const res: any = await axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${id}/sale-state/discontinued`,
+      {},
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
+  const deleteProduct = async (id: number) => {
+    const res: any = await axios.delete(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${id}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
 
   const getId = async () => {
     try {
@@ -66,6 +90,24 @@ export default function ListSell() {
             <div>할인율 : {el.discountRate}%</div>
             <div>평점 : {el.scoreAvg}점</div>
             <div>최종가 : {el.finalPrice}원</div>
+            <Button
+              variant="contained"
+              onClick={() => getProductStatusOn(el.productId)}
+            >
+              판매중으로 변경
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => getProductStatusOff(el.productId)}
+            >
+              판매중단으로 변경
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => deleteProduct(el.productId)}
+            >
+              제품 삭제
+            </Button>
           </div>
         );
       })}
