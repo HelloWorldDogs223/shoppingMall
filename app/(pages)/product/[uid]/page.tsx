@@ -267,6 +267,8 @@ export default function Page() {
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
+    alert('판매 중으로 변경되었습니다.');
+    location.reload();
   };
 
   const getProductStatusOff = async () => {
@@ -275,6 +277,8 @@ export default function Page() {
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
+    alert('판매 중단으로 변경되었습니다.');
+    location.reload();
   };
 
   const deleteProduct = async () => {
@@ -282,6 +286,8 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
+    alert('삭제되었습니다.');
+    location.reload();
   };
 
   return (
