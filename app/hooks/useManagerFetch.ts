@@ -6,7 +6,11 @@ export const useManagerFetch = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const accessToken = localStorage.getItem('manager');
+  let accessToken = null;
+  if (typeof window !== 'undefined') {
+    // 클라이언트 사이드에서만 localStorage 접근
+    accessToken = localStorage.getItem('manager');
+  }
 
   useEffect(() => {
     const fetchToken = async () => {

@@ -91,7 +91,7 @@ export default function Page() {
           </div>
         );
       })}
-      <div></div>
+      <hr />
       {products.map((el: ProductType) => {
         return (
           <div key={el.reportId}>
