@@ -31,8 +31,8 @@ export default function Page() {
     const productListRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
-    setProductTypes(productListRes.data.reviewReportList);
-    setTypeSearch(productListRes.data.reviewReportList[0]);
+    setProductTypes(productListRes.data.productTypeList);
+    setTypeSearch(productListRes.data.productTypeList[0]);
   };
 
   const handleProductType = async (type: number, name: string) => {
@@ -45,7 +45,7 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product-type/review-report?sliceSize=99&sliceNumber=0&productTypeId=${typeId}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
-    setProducts(res.data.productReportList);
+    setProducts(res.data.reviewReportList);
   };
 
   const banClickHandler = (reviewId: number) => {
@@ -75,7 +75,7 @@ export default function Page() {
   return (
     <div>
       <div className="flex flex-wrap">
-        {productTypes.map((el: any) => {
+        {productTypes?.map((el: any) => {
           return (
             <div
               key={el.typeId}
@@ -96,7 +96,7 @@ export default function Page() {
         })}
       </div>
       <hr />
-      {products.map((el: ProductType) => {
+      {products?.map((el: ProductType) => {
         return (
           <div key={el.reportId}>
             <div>{el.reportCreatedDate}</div>
