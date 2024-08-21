@@ -24,6 +24,18 @@ export default function Page() {
       >
         관리자 계정 만들러 가기
       </Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push('/manager/ban-list')}
+      >
+        제품 신고 리스트
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push('/manager/ban-review-list')}
+      >
+        리뷰 신고 리스트
+      </Button>
     </div>
   );
 }
