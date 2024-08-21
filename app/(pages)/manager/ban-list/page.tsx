@@ -2,7 +2,7 @@
 
 interface ProductType {
   reportId: number; // 신고 데이터 ID
-  reportCreatedDate: Date; // 신고 일자
+  reportCreatedDate: string; // 신고 일자
   reporterId: number; // 신고자 ID
   reporterName: string; // 신고자 닉네임
   title: string; // 신고 제목
@@ -74,29 +74,31 @@ export default function Page() {
 
   return (
     <div>
-      {productTypes.map((el: any) => {
-        return (
-          <div
-            key={el.typeId}
-            onClick={() => handleProductType(el.typeId, el.typeName)}
-            className="cursor-pointer mb-[3rem] mr-[1rem]"
-          >
-            <div className="flex gap-3 p-3 overflow-x-hidden">
-              <div
-                className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full ${typeSearch === el.typeName ? 'bg-red-500' : 'bg-[#e8edf3]'}  pl-4 pr-4`}
-              >
-                <p className="text-[#0e141b] text-sm font-medium leading-normal">
-                  {el.typeName}
-                </p>
+      <div className="flex flex-wrap">
+        {productTypes.map((el: any) => {
+          return (
+            <div
+              key={el.typeId}
+              onClick={() => handleProductType(el.typeId, el.typeName)}
+              className="cursor-pointer mb-[3rem] mr-[1rem]"
+            >
+              <div className="flex gap-3 p-3 overflow-x-hidden">
+                <div
+                  className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full ${typeSearch === el.typeName ? 'bg-red-500' : 'bg-[#e8edf3]'}  pl-4 pr-4`}
+                >
+                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
+                    {el.typeName}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
       {products.map((el: ProductType) => {
         return (
           <div key={el.productId}>
-            <div>{el.reportCreatedDate.getDate()}</div>
+            <div>{el.reportCreatedDate}</div>
             <div>처리 여부 : {el.isProcessedComplete}</div>
             <div>신고 제목 : {el.title}</div>
             <div>신고 내용 : {el.description}</div>
