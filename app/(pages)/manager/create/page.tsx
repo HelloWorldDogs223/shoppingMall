@@ -10,36 +10,33 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { useManagerFetch } from '@/app/hooks/useManagerFetch';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const defaultTheme = createTheme();
 
 export default function Page() {
   const router = useRouter();
+  const { accessToken } = useManagerFetch();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const loginRes: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/login`,
+    const makeRes: any = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/root-manager/manager`,
       { serialNumber: data.get('email'), password: data.get('password') },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
-    if (loginRes.data) {
-      localStorage.setItem('manager', loginRes.data.accessToken as string);
-      router.push('/');
-    }
+    console.log(makeRes.data);
   };
 
-  const handleGoogleLogin = async () => {
-    location.href = 'https://api.group-group.com/oauth2/authorization/google';
-  };
-  const handleKakaoLogin = async () => {
-    location.href = 'https://api.group-group.com/oauth2/authorization/kakao';
-  };
-  const handleNaverLogin = async () => {
-    location.href = 'https://api.group-group.com/oauth2/authorization/naver';
-  };
+  useEffect(() => {
+    if (!accessToken) {
+      router.push('/');
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -57,7 +54,7 @@ export default function Page() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            관리자 계정 만들기
           </Typography>
           <Box
             component="form"
@@ -96,29 +93,6 @@ export default function Page() {
           </Box>
         </Box>
       </Container>
-      <div className="w-full flex justify-center mt-[50px]">
-        <hr className="w-[500px]" />
-      </div>
-      <div className="w-full flex justify-center mt-[32px] font-[20px]">
-        SNS 로그인하기
-      </div>
-      <div className="w-full flex justify-center mt-[100px] mb-[100px]">
-        <img
-          onClick={handleNaverLogin}
-          src="/naver.svg"
-          className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
-        />
-        <img
-          onClick={handleGoogleLogin}
-          src="/google.svg"
-          className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
-        />
-        <img
-          onClick={handleKakaoLogin}
-          src="/kakao.svg"
-          className="w-[55px] h-[55px] rounded-full cursor-pointer mr-[32px] object-fill"
-        />
-      </div>
     </ThemeProvider>
   );
 }

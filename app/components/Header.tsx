@@ -11,6 +11,8 @@ export default function Home() {
   const router = useRouter();
   const params = useParams();
 
+  const [managerAccessToken, setManagerAccessToken] = useState('');
+
   const cartLength = useCartStore((state: any) => state.cart.length);
   const setCart = useCartStore((state: any) => state.setCart);
   const { accessToken, clearAccessToken } = useAuthStore();
@@ -27,6 +29,7 @@ export default function Home() {
     } else {
       setKeyword(params.keyword);
     }
+    setManagerAccessToken(localStorage.getItem('manager') as string);
   }, [params]);
 
   useEffect(() => {
@@ -56,20 +59,31 @@ export default function Home() {
   }, [accessToken]);
 
   async function logout() {
-    try {
-      const res: any = await axios.get(
-        'https://api.group-group.com/auth/logout',
+    if (managerAccessToken) {
+      const res: any = axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/logout`,
         {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${managerAccessToken}` },
         },
       );
-    } catch (e) {
-      console.log(e);
-    } finally {
-      clearAccessToken();
+      localStorage.removeItem('manager');
+      location.reload();
+    } else {
+      try {
+        const res: any = await axios.get(
+          'https://api.group-group.com/auth/logout',
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+      } catch (e) {
+        console.log(e);
+      } finally {
+        clearAccessToken();
+      }
     }
   }
 
@@ -184,7 +198,7 @@ export default function Home() {
             </button>
           </div>
           <div>
-            {accessToken !== null ? (
+            {accessToken !== null || managerAccessToken !== null ? (
               <div className="flex gap-4">
                 <Button onClick={() => logout()} variant="contained">
                   SignOut
@@ -203,7 +217,11 @@ export default function Home() {
             )}
           </div>
           <div
-            onClick={() => router.push('/user/info')}
+            onClick={() => {
+              !managerAccessToken
+                ? router.push('/user/info')
+                : router.push('/manager/info');
+            }}
             className="cursor-pointer bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
             style={{
               backgroundImage:
