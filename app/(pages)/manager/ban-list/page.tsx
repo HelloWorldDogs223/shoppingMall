@@ -35,9 +35,9 @@ export default function Page() {
     setTypeSearch(productListRes.data.productTypeList[0]);
   };
 
-  const getProducts = async (type?: number) => {
+  const getProducts = async () => {
     const res: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product-type/product-report?sliceSize=99&sliceNumber=0&productTypeId=${type || typeId}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product-type/product-report?sliceSize=99&sliceNumber=0&productTypeId=${typeId}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     setProducts(res.data.productReportList);
