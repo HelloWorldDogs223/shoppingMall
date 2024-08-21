@@ -23,6 +23,7 @@ export default function Page() {
   const [products, setProducts] = useState([]);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [typeSearch, setTypeSearch] = useState('');
+  const [typeId, setTypeId] = useState(0);
 
   const { accessToken } = useManagerFetch();
 
@@ -36,7 +37,7 @@ export default function Page() {
 
   const getProducts = async (type?: number) => {
     const res: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product-type/product-report?sliceSize=99&sliceNumber=0&productTypeId=${type || typeSearch}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product-type/product-report?sliceSize=99&sliceNumber=0&productTypeId=${type || typeId}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     setProducts(res.data.productReportList);
@@ -44,6 +45,7 @@ export default function Page() {
 
   const handleProductType = async (type: number, name: string) => {
     setTypeSearch(name);
+    setTypeId(type);
   };
 
   const banClickHandler = (productId: number) => {
