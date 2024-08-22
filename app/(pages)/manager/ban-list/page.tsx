@@ -50,7 +50,7 @@ export default function Page() {
 
   const banClickHandler = (productId: number) => {
     const res: any = axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban?productId=${productId}&isBan=${true}`,
       { productId, isBan: true },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
@@ -58,8 +58,8 @@ export default function Page() {
 
   const notBanClickHandler = (productId: number) => {
     const res: any = axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban`,
-      { productId, isBan: false },
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban?productId=${productId}&isBan=${false}`,
+      {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };

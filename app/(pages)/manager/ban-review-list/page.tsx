@@ -50,16 +50,16 @@ export default function Page() {
 
   const banClickHandler = (reviewId: number) => {
     const res: any = axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/ban`,
-      { reviewId, isBan: true },
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/ban?reviewId=${reviewId}&isBan=${true}`,
+      {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
 
   const notBanClickHandler = (reviewId: number) => {
     const res: any = axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/ban`,
-      { reviewId, isBan: false },
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/ban?reviewId=${reviewId}&isBan=${true}`,
+      {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
