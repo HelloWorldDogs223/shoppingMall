@@ -171,6 +171,7 @@ export default function Page() {
               {modal && (
                 <ReportRecordModal
                   sellerId={el.sellerId}
+                  mode="product"
                   onClose={() => setModal(false)}
                 />
               )}

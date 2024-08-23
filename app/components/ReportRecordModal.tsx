@@ -23,6 +23,9 @@ interface ReportRecordType {
   productName: string; // 신고 제품 이름
   sellerId: number; // 신고 제품 판매자 ID
   sellerName: string; // 신고 제품 판매자 이름
+  writer: number; // 신고된 리뷰 작성자 ID
+  writerName: string;
+  reviewTitle: string;
 }
 const getReportResultText = (
   reportResultType: ReportRecordType['reportResultType'],
@@ -41,17 +44,25 @@ const getReportResultText = (
   }
 };
 
-export default function ReportRecordModal({ sellerId, onClose }: any) {
+export default function ReportRecordModal({ sellerId, onClose, mode }: any) {
   const { accessToken } = useManagerFetch();
 
   const [report, setReport] = useState<ReportRecordType[]>([]);
 
   const getReportRecord = async () => {
-    const reportRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/seller/reports?sliceNumber=0&sliceSize=999&sell&productSellerId=${sellerId}`,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
-    );
-    setReport(reportRes.data.productReportList);
+    if (mode === 'review') {
+      const reportRes: any = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/writer/reports?sliceNumber=0&sliceSize=999&sell&reviewWriterId=${sellerId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } },
+      );
+      setReport(reportRes.data.reviewReportList);
+    } else {
+      const reportRes: any = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/seller/reports?sliceNumber=0&sliceSize=999&sell&productSellerId=${sellerId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } },
+      );
+      setReport(reportRes.data.productReportList);
+    }
   };
 
   useEffect(() => {
@@ -97,10 +108,12 @@ export default function ReportRecordModal({ sellerId, onClose }: any) {
                     Product Information
                   </h3>
                   <p className="text-gray-700">
-                    <strong>Product Name:</strong> {el.productName}
+                    <strong>Product Name:</strong>{' '}
+                    {el.productName || el.reviewTitle}
                   </p>
                   <p className="text-gray-700">
-                    <strong>Seller:</strong> {el.sellerName} (ID: {el.sellerId})
+                    <strong>Seller:</strong> {el.sellerName || el.writerName}{' '}
+                    (ID: {el.sellerId})
                   </p>
                 </div>
                 <div className="flex justify-end">

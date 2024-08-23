@@ -14,6 +14,7 @@ interface ProductType {
   writerName: string;
 }
 
+import ReportRecordModal from '@/app/components/ReportRecordModal';
 import { useManagerFetch } from '@/app/hooks/useManagerFetch';
 import { Button } from '@mui/material';
 import axios from 'axios';
@@ -24,6 +25,7 @@ export default function Page() {
   const [typeSearch, setTypeSearch] = useState('');
   const [typeId, setTypeId] = useState(0);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+  const [modal, setModal] = useState(false);
 
   const { accessToken } = useManagerFetch();
 
@@ -158,6 +160,18 @@ export default function Page() {
               <div>작성자 이름: {el.writerName}</div>
               <div>작성자 아이디: {el.writer}</div>
             </div>
+
+            <Button variant="contained" onClick={() => setModal(true)}>
+              유저의 신고 이력 보기
+            </Button>
+
+            {modal && (
+              <ReportRecordModal
+                sellerId={el.writer}
+                mode="review"
+                onClose={() => setModal(false)}
+              />
+            )}
 
             <div className="mt-4 flex flex-wrap gap-3">
               <Button
