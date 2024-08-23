@@ -20,6 +20,7 @@ export default function Tags({ el, fetchData }: props) {
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     fetchData();
+    location.reload();
   };
 
   return (
