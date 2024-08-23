@@ -195,13 +195,11 @@ export default function Page() {
   };
 
   const getCart = async () => {
-    addItem({ id: productInfo?.productId, name });
-
     if (age === null) {
       alert('옵션을 골라주세요');
       return;
     }
-
+    addItem({ id: productInfo?.productId, name });
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
       {
