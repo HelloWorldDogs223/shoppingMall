@@ -57,61 +57,60 @@ export default function ReportRecordModal({ sellerId, onClose }: any) {
   }, []);
 
   return (
-    <div>
-      {report.map((el: ReportRecordType) => {
-        return (
-          <div
-            key={el.productId}
-            className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-          >
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
-              <h2 className="text-2xl font-bold mb-4">Report Details</h2>
-              <div className="mb-4">
-                <p className="text-gray-700">
-                  <strong>Title:</strong> {el.title}
-                </p>
-                <p className="text-gray-700">
-                  <strong>reporter:</strong> {el.reporterName} (ID:{' '}
-                  {el.reportId})
-                </p>
-                <p className="text-gray-700">
-                  <strong>report Date:</strong> {el.reportCreatedDate}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Description:</strong> {el.description}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Processed:</strong>{' '}
-                  {el.isProcessedComplete ? 'Yes' : 'No'}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Result:</strong>{' '}
-                  {getReportResultText(el.reportResultType)}
-                </p>
-              </div>
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2">
-                  Product Information
-                </h3>
-                <p className="text-gray-700">
-                  <strong>Product Name:</strong> {el.productName}
-                </p>
-                <p className="text-gray-700">
-                  <strong>Seller:</strong> {el.sellerName} (ID: {el.sellerId})
-                </p>
-              </div>
-              <div className="flex justify-end">
-                <Button
-                  onClick={() => onClose()}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                >
-                  Close
-                </Button>
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
+        {report.map((el: ReportRecordType) => {
+          return (
+            <div key={el.productId}>
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Report Details</h2>
+                <div className="mb-4">
+                  <p className="text-gray-700">
+                    <strong>Title:</strong> {el.title}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>reporter:</strong> {el.reporterName} (ID:{' '}
+                    {el.reportId})
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>report Date:</strong> {el.reportCreatedDate}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Description:</strong> {el.description}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Processed:</strong>{' '}
+                    {el.isProcessedComplete ? 'Yes' : 'No'}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Result:</strong>{' '}
+                    {getReportResultText(el.reportResultType)}
+                  </p>
+                </div>
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold mb-2">
+                    Product Information
+                  </h3>
+                  <p className="text-gray-700">
+                    <strong>Product Name:</strong> {el.productName}
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>Seller:</strong> {el.sellerName} (ID: {el.sellerId})
+                  </p>
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    onClick={() => onClose()}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                  >
+                    Close
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
