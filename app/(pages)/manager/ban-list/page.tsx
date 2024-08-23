@@ -80,6 +80,28 @@ export default function Page() {
     );
   };
 
+  const banStatusChangerNo = (productReportId: number) => {
+    const res: any = axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/report/state`,
+      { productReportId, resultType: 'NO_ACTION' },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+  const banStatusChangerTarget = (productReportId: number) => {
+    const res: any = axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/report/state`,
+      { productReportId, resultType: 'TARGET_BAN' },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+  const banStatusChangerUser = (productReportId: number) => {
+    const res: any = axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/report/state`,
+      { productReportId, resultType: 'MEMBER_BAN' },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -164,6 +186,25 @@ export default function Page() {
                   className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
                 >
                   판매자 밴 풀기
+                </Button>
+
+                <Button
+                  onClick={() => banStatusChangerNo(el.reportId)}
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                >
+                  밴 처리 하지 않음
+                </Button>
+                <Button
+                  onClick={() => banStatusChangerTarget(el.reportId)}
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                >
+                  제품 밴 처리 수행
+                </Button>
+                <Button
+                  onClick={() => banStatusChangerUser(el.reportId)}
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                >
+                  회원 밴 처리 수행
                 </Button>
               </div>
             </div>
