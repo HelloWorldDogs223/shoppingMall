@@ -11,7 +11,7 @@ interface ProductType {
   productId: number; // 제품 Id
   sellerId: number; // 판매자 Id
   productTypeId: number; // 제품타입 Id
-  productImageDownloadUrlList: [];
+  productImageDownloadUrlList: any[];
   blockDataList: Block[];
   singleOptions: // 단일옵션 리스트
   {
@@ -298,82 +298,97 @@ export default function Page() {
           <div className="layout-content-container flex flex-col max-w-[920px] flex-1">
             <div className="@container">
               <div className="@[480px]:p-4">
-                <div
-                  className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
-                  style={{
-                    backgroundImage:
-                      'linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://cdn.usegalileo.ai/sdxl10/10eb26d3-ae55-41eb-a6d5-c2ac6f1dea78.png")',
-                  }}
-                >
-                  <div className="flex flex-col gap-2 text-left">
-                    <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
-                      제품명 : {productInfo?.name}
-                    </h1>
-                  </div>
-                  {memberInfo?.id === productInfo?.sellerId ? (
-                    <div>
-                      <Button
-                        variant="contained"
-                        onClick={() => getProductStatusOn()}
-                      >
-                        판매중으로 변경
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() => getProductStatusOff()}
-                      >
-                        판매중단으로 변경
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() => deleteProduct()}
-                      >
-                        제품 삭제
-                      </Button>
+                <div className="relative flex min-h-[480px] rounded-lg overflow-hidden">
+                  <img
+                    src={productInfo?.productImageDownloadUrlList[0] as string}
+                    alt="제품 이미지"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {/* 그라데이션 오버레이 */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10"></div>
+
+                  {/* 텍스트 및 버튼 컨텐츠 */}
+                  <div className="relative z-10 flex flex-col gap-6 justify-end px-4 pb-10 sm:px-10">
+                    <div className="flex flex-col gap-2 text-left">
+                      <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] sm:text-5xl sm:leading-tight sm:tracking-[-0.033em]">
+                        제품명: {productInfo?.name}
+                      </h1>
                     </div>
-                  ) : (
-                    <></>
-                  )}
+
+                    {memberInfo?.id === productInfo?.sellerId && (
+                      <div className="flex gap-4 mt-4">
+                        <Button
+                          variant="contained"
+                          className="bg-green-500 text-white hover:bg-green-600 transition duration-300"
+                          onClick={() => getProductStatusOn()}
+                        >
+                          판매중으로 변경
+                        </Button>
+                        <Button
+                          variant="contained"
+                          className="bg-yellow-500 text-white hover:bg-yellow-600 transition duration-300"
+                          onClick={() => getProductStatusOff()}
+                        >
+                          판매중단으로 변경
+                        </Button>
+                        <Button
+                          variant="contained"
+                          className="bg-red-500 text-white hover:bg-red-600 transition duration-300"
+                          onClick={() => deleteProduct()}
+                        >
+                          제품 삭제
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
+
                 <div
+                  className="mt-6 text-blue-600 cursor-pointer hover:underline"
                   onClick={() =>
                     router.push(
                       `/list-product-sell?member=${productInfo?.sellerId}`,
                     )
                   }
                 >
-                  판매자 (클릭시 판매자 조회 가능) : {productInfo?.sellerId}
+                  판매자 (클릭시 판매자 상품 조회 가능)
                 </div>
               </div>
             </div>
-            <div className="flex gap-4 mt-4 justify-between w-[100px] mb-[10px]">
-              <div>
-                <h2 className="text-2xl">가격</h2>
-                <h3 className="text-2xl">{productInfo?.price}원</h3>
+            <div className="flex flex-wrap gap-4 mt-4 justify-between items-center mb-4">
+              <div className="flex flex-col">
+                <h2 className="text-2xl font-semibold">가격:</h2>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  {productInfo?.price}원
+                </h3>
               </div>
-              <br />
-              <Button
-                onClick={() => handleClick()}
-                variant="contained"
-                className="w-[400px]"
-              >
-                수정하기
-              </Button>
-              <Button
-                onClick={() => getCart()}
-                variant="contained"
-                className="w-[400px] bg-red-500 hover:bg-white hover:text-black"
-              >
-                장바구니 담기
-              </Button>
-              <Button
-                onClick={() => setModal(true)}
-                variant="contained"
-                className="w-[400px] bg-red-500 hover:bg-white hover:text-black"
-              >
-                제품 신고하기
-              </Button>
+              <div className="flex gap-4 flex-wrap">
+                {memberInfo?.id === productInfo?.sellerId && (
+                  <Button
+                    onClick={() => handleClick()}
+                    variant="contained"
+                    className="w-full sm:w-[200px] bg-blue-500 hover:bg-blue-600 text-white transition duration-300 ease-in-out"
+                  >
+                    수정하기
+                  </Button>
+                )}
+                <Button
+                  onClick={() => getCart()}
+                  variant="contained"
+                  className="w-full sm:w-[200px] bg-red-500 hover:bg-red-600 text-white transition duration-300 ease-in-out"
+                >
+                  장바구니 담기
+                </Button>
+                <Button
+                  onClick={() => setModal(true)}
+                  variant="contained"
+                  className="w-full sm:w-[200px] bg-red-500 hover:bg-red-600 text-white transition duration-300 ease-in-out"
+                >
+                  제품 신고하기
+                </Button>
+              </div>
             </div>
+
             <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
               Product Details
             </h2>
@@ -413,7 +428,9 @@ export default function Page() {
                 >
                   {single.map((el: any) => {
                     return (
-                      <MenuItem value={el.optionId}>{el.optionName}</MenuItem>
+                      <MenuItem key={el.optionId} value={el.optionId}>
+                        {el.optionName}
+                      </MenuItem>
                     );
                   })}
                 </Select>
@@ -442,21 +459,23 @@ export default function Page() {
                     </svg>
                   </div>
                 </summary>
-                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2">
-                  {productInfo?.blockDataList?.map((item: Block) => {
-                    return (
-                      <div>
-                        {item.blockType === 'TEXT_TYPE' ? (
-                          <div>{item.contentInTextBlock}</div>
-                        ) : (
-                          <div>
-                            <img src={item.imgDownloadUrlInImageBlock} />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </p>
+                <div className="text-[#4f7396] text-sm font-normal leading-normal pb-2">
+                  {productInfo?.blockDataList?.map(
+                    (item: Block, index: number) => {
+                      return (
+                        <div key={index}>
+                          {item.blockType === 'TEXT_TYPE' ? (
+                            <div>{item.contentInTextBlock}</div>
+                          ) : (
+                            <div>
+                              <img src={item.imgDownloadUrlInImageBlock} />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    },
+                  )}
+                </div>
               </details>
               <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
                 <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
@@ -507,7 +526,7 @@ export default function Page() {
                 <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
               </details>
             </div>
-            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px] mb-[150px]">
+            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px] ">
               <div className="flex flex-col gap-2">
                 <p className="text-[#0e141b] text-4xl font-black leading-tight tracking-[-0.033em]">
                   {productInfo?.scoreAvg}점
@@ -524,9 +543,17 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="flex flex-col">
-              <form onSubmit={commentOnSubmitHandler}>
-                <Typography component="legend">별점</Typography>
+            <div className="flex flex-col items-center p-6 bg-[#f9f9f7]">
+              <form
+                onSubmit={commentOnSubmitHandler}
+                className="w-full max-w-[800px] bg-white shadow-lg rounded-lg p-8"
+              >
+                <Typography
+                  component="legend"
+                  className="text-xl font-semibold mb-4"
+                >
+                  별점
+                </Typography>
                 <Rating
                   name="simple-controlled"
                   value={score}
@@ -534,79 +561,54 @@ export default function Page() {
                     setScore(newValue);
                   }}
                 />
-                <div className="flex flex-col gap-4 mt-[50px]">
-                  <label>타이틀</label>
+                <div className="flex flex-col gap-6 mt-8">
+                  <label className="text-lg font-medium">타이틀</label>
                   <input
-                    className="w-[400px] border border-solid border-red-500 mb-[50px]"
+                    className="w-full border border-solid border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 mb-6"
                     value={commentTitle}
                     onChange={(e: any) => setCommentTitle(e.target.value)}
                   />
-                  <label>내용</label>
+                  <label className="text-lg font-medium">내용</label>
                   <textarea
-                    className="w-[600px] resize-none h-[400px] border border-solid border-red-500"
+                    className="w-full resize-none h-[200px] border border-solid border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400"
                     value={commentContent}
                     onChange={(e: any) => setCommentContent(e.target.value)}
                   />
                 </div>
                 <input
                   type="file"
+                  className="mt-6 mb-8"
                   onChange={(event: any) => {
                     setCommentImg(event.target.files[0]);
                   }}
                 />
-                <Button onClick={commentOnSubmitHandler}>제출하기</Button>
+                <Button
+                  className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition duration-300 ease-in-out"
+                  onClick={commentOnSubmitHandler}
+                >
+                  제출하기
+                </Button>
               </form>
-            </div>
-            <div className="relative flex size-full min-h-screen flex-col bg-[#fcfbf8] group/design-root overflow-x-hidden">
-              <div className="layout-container flex h-full grow flex-col">
-                <div className="px-40 flex flex-1 justify-center py-5">
-                  <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-                    <h2 className="text-[#1c190d] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-                      Rating &amp; Reviews
-                    </h2>
-
-                    {comments.map((el: any) => {
-                      return (
-                        <Comment
-                          el={el}
-                          setComments={setComments}
-                          comments={comments}
-                        />
-                      );
-                    })}
+              <div className="relative flex flex-col w-full min-h-screen bg-[#fcfbf8] overflow-x-hidden">
+                <div className="layout-container flex flex-col items-center">
+                  <div className="px-6 flex flex-1 justify-center py-8">
+                    <div className="layout-content-container flex flex-col max-w-[960px] w-full">
+                      <h2 className="text-[#1c190d] text-[24px] font-bold leading-tight tracking-[-0.015em] px-4 pb-4 pt-5">
+                        Rating &amp; Reviews
+                      </h2>
+                      {comments.map((el: any) => {
+                        return (
+                          <Comment
+                            key={el.id} // or any unique identifier
+                            el={el}
+                            setComments={setComments}
+                            comments={comments}
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-              Description
-            </h2>
-            <p className="text-[#0e141b] text-base font-normal leading-normal pb-3 pt-1 px-4">
-              Crafted from a blend of lustrous 100% grade-6a mulberry silk and
-              premium grade-a-16-gauge cashmere, this featherlight knit is a
-              luxurious upgrade for beloved wardrobe staple
-            </p>
-            <h2 className="text-[#0e141b] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-              Details
-            </h2>
-            <div className="p-4 grid grid-cols-[20%_1fr] gap-x-6">
-              <div className="col-span-2 grid grid-cols-subgrid border-t border-t-[#d0dbe6] py-5">
-                <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                  100% silk 100% cashmere
-                </p>
-                <p className="text-[#0e141b] text-sm font-normal leading-normal">
-                  Fit: Slim
-                </p>
-              </div>
-              <div className="col-span-2 grid grid-cols-subgrid border-t border-t-[#d0dbe6] py-5">
-                <p className="text-[#4f7396] text-sm font-normal leading-normal">
-                  Dry clean only
-                </p>
-                <p className="text-[#0e141b] text-sm font-normal leading-normal">
-                  Model is 5'9" with 32" bust, 24" waist, 34" hips and wearing a
-                  size XS
-                </p>
               </div>
             </div>
           </div>
