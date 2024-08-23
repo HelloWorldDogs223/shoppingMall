@@ -20,9 +20,9 @@ export default function Page() {
     setProductTypes(productListRes.data.productTypeList);
   };
 
-  const addTags = () => {
+  const addTags = async () => {
     if (add === '') return;
-    const res: any = axios.post(
+    const res: any = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type`,
       { typeName: add },
       { headers: { Authorization: `Bearer ${accessToken}` } },

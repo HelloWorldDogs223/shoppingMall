@@ -12,9 +12,9 @@ export default function Tags({ el, fetchData }: props) {
   const [edit, setEdit] = useState('');
   const { accessToken } = useManagerFetch();
 
-  const editTags = (tagId: number) => {
+  const editTags = async (tagId: number) => {
     if (edit === '') return;
-    const res: any = axios.put(
+    const res: any = await axios.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type`,
       { typeName: edit, productTypeId: tagId },
       { headers: { Authorization: `Bearer ${accessToken}` } },
