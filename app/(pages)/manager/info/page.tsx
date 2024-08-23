@@ -17,7 +17,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center w-full h-screen">
+    <div className="flex justify-center items-center w-full h-screen gap-4">
       <Button
         variant="contained"
         onClick={() => router.push('/manager/create')}

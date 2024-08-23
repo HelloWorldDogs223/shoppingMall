@@ -64,6 +64,22 @@ export default function Page() {
     );
   };
 
+  const banClicUserkHandler = (memberId: number) => {
+    const res: any = axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban?memberId=${memberId}&isBan=${true}`,
+      { memberId, isBan: true },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
+  const notBanClickUserHandler = (memberId: number) => {
+    const res: any = axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban?memberId=${memberId}&isBan=${false}`,
+      {},
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -73,20 +89,18 @@ export default function Page() {
   }, [typeSearch]);
 
   return (
-    <div>
-      <div className="flex flex-wrap">
+    <div className="space-y-6">
+      <div className="flex flex-wrap gap-4">
         {productTypes.map((el: any) => {
           return (
             <div
               key={el.typeId}
               onClick={() => handleProductType(el.typeId, el.typeName)}
-              className="cursor-pointer mb-[3rem] mr-[1rem]"
+              className={`cursor-pointer mb-4 mr-4 p-3 rounded-lg shadow-sm transition-transform transform hover:scale-105 ${typeSearch === el.typeName ? 'bg-red-500 text-white' : 'bg-[#e8edf3] text-[#0e141b]'} `}
             >
-              <div className="flex gap-3 p-3 overflow-x-hidden">
-                <div
-                  className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full ${typeSearch === el.typeName ? 'bg-red-500' : 'bg-[#e8edf3]'}  pl-4 pr-4`}
-                >
-                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 items-center justify-center gap-x-2 rounded-full pl-4 pr-4">
+                  <p className="text-sm font-medium leading-normal">
                     {el.typeName}
                   </p>
                 </div>
@@ -95,29 +109,67 @@ export default function Page() {
           );
         })}
       </div>
-      {products.map((el: ProductType) => {
-        return (
-          <div key={el.productId}>
-            <div>{el.reportCreatedDate}</div>
-            <div>처리 여부 : {el.isProcessedComplete}</div>
-            <div>신고 제목 : {el.title}</div>
-            <div>신고 내용 : {el.description}</div>
-            <div>상품 이름 : {el.productName}</div>
-            <div>상품 아이디 : {el.productId}</div>
-            <div>신고자 이름 : {el.reporterName}</div>
-            <div>신고자 아이디 : {el.reporterId}</div>
-            <div>신고 아이디 : {el.reportId}</div>
-            <div>판매자 이름: {el.sellerName}</div>
-            <div>판매자 아이디: {el.sellerId}</div>
-            <Button onClick={() => banClickHandler(el.productId)}>
-              밴 처리하기
-            </Button>
-            <Button onClick={() => notBanClickHandler(el.productId)}>
-              밴 풀기
-            </Button>
-          </div>
-        );
-      })}
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {products.map((el: ProductType) => {
+          return (
+            <div
+              key={el.productId}
+              className="bg-white rounded-lg shadow p-6 border border-gray-200"
+            >
+              <div className="space-y-2 mb-4">
+                <div className="text-sm text-gray-500">
+                  신고 날짜: {el.reportCreatedDate}
+                </div>
+                <div
+                  className={`text-sm font-semibold ${el.isProcessedComplete ? 'text-green-600' : 'text-red-600'}`}
+                >
+                  처리 여부: {el.isProcessedComplete ? '완료' : '미완료'}
+                </div>
+                <div className="text-lg font-bold">신고 제목: {el.title}</div>
+                <div className="text-gray-700">신고 내용: {el.description}</div>
+              </div>
+
+              <div className="space-y-1 text-sm text-gray-600">
+                <div>상품 이름: {el.productName}</div>
+                <div>상품 아이디: {el.productId}</div>
+                <div>신고자 이름: {el.reporterName}</div>
+                <div>신고자 아이디: {el.reporterId}</div>
+                <div>신고 아이디: {el.reportId}</div>
+                <div>판매자 이름: {el.sellerName}</div>
+                <div>판매자 아이디: {el.sellerId}</div>
+              </div>
+
+              <div className="mt-4 space-x-2">
+                <Button
+                  onClick={() => banClickHandler(el.productId)}
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                >
+                  상품 밴 처리하기
+                </Button>
+                <Button
+                  onClick={() => notBanClickHandler(el.productId)}
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                >
+                  상품 밴 풀기
+                </Button>
+                <Button
+                  onClick={() => banClicUserkHandler(el.sellerId)}
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                >
+                  판매자 밴 처리하기
+                </Button>
+                <Button
+                  onClick={() => notBanClickUserHandler(el.sellerId)}
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                >
+                  판매자 밴 풀기
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
