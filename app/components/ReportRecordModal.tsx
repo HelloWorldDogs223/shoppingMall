@@ -105,15 +105,20 @@ export default function ReportRecordModal({ sellerId, onClose, mode }: any) {
                 </div>
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold mb-2">
-                    Product Information
+                    {el.productName ? 'Product Info:' : 'review Info'}
                   </h3>
                   <p className="text-gray-700">
-                    <strong>Product Name:</strong>{' '}
+                    <strong>
+                      {el.productName ? 'Product Name:' : 'review Name'}
+                    </strong>
                     {el.productName || el.reviewTitle}
                   </p>
                   <p className="text-gray-700">
-                    <strong>Seller:</strong> {el.sellerName || el.writerName}{' '}
-                    (ID: {el.sellerId})
+                    <strong>
+                      {el.productName ? 'Seller Name:' : 'writer Name:'}
+                    </strong>
+                    {el.sellerName || el.writerName} (ID:
+                    {el.sellerId || el.writer})
                   </p>
                 </div>
                 <div className="flex justify-end">
