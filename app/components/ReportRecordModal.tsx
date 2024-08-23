@@ -59,11 +59,14 @@ export default function ReportRecordModal({ sellerId, onClose }: any) {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto">
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto"
+      onClick={onClose}
+    >
       <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
         {report.map((el: ReportRecordType) => {
           return (
-            <div key={el.productId}>
+            <div key={el.productId} onClick={(e) => e.stopPropagation()}>
               <div>
                 <h2 className="text-2xl font-bold mb-4">Report Details</h2>
                 <div className="mb-4">
