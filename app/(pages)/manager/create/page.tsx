@@ -88,7 +88,7 @@ export default function Page() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              만들기
             </Button>
           </Box>
         </Box>

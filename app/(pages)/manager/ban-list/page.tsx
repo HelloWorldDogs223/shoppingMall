@@ -66,7 +66,7 @@ export default function Page() {
 
   const banClicUserkHandler = (memberId: number) => {
     const res: any = axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban?memberId=${memberId}&isBan=${true}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/ban?memberId=${memberId}&isBan=${true}`,
       { memberId, isBan: true },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
@@ -74,7 +74,7 @@ export default function Page() {
 
   const notBanClickUserHandler = (memberId: number) => {
     const res: any = axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/ban?memberId=${memberId}&isBan=${false}`,
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/ban?memberId=${memberId}&isBan=${false}`,
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
