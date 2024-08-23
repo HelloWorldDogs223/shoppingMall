@@ -28,7 +28,6 @@ export default function Page() {
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     fetchData();
-    location.reload();
   };
 
   useEffect(() => {

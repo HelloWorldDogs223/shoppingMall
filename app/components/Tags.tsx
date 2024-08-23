@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 
 interface props {
   el: any;
-  fetchData: any;
+  fetchData: (args: void) => void;
 }
 
 export default function Tags({ el, fetchData }: props) {
@@ -20,7 +20,6 @@ export default function Tags({ el, fetchData }: props) {
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     fetchData();
-    location.reload();
   };
 
   return (
