@@ -48,9 +48,9 @@ export default function Page() {
   };
 
   useEffect(() => {
-    // if (error) {
-    //   router.push('/signin');
-    // }
+    if (error) {
+      router.push('/signin');
+    }
     fetchUser();
   }, [error, router, accessToken]);
 

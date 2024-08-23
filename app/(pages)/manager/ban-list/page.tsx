@@ -111,7 +111,7 @@ export default function Page() {
   }, [typeSearch]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mt-[100px]">
       <div className="flex flex-wrap gap-4">
         {productTypes.map((el: any) => {
           return (
@@ -162,7 +162,7 @@ export default function Page() {
                 <div>판매자 아이디: {el.sellerId}</div>
               </div>
 
-              <div className="mt-4 space-x-2">
+              <div className="mt-4 flex flex-wrap gap-3">
                 <Button
                   onClick={() => banClickHandler(el.productId)}
                   className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"

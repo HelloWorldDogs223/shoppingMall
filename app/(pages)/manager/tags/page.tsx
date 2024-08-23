@@ -18,6 +18,7 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
     setProductTypes(productListRes.data.productTypeList);
+    location.reload();
   };
 
   const addTags = () => {
