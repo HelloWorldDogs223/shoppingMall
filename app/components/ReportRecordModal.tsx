@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useManagerFetch } from '../hooks/useManagerFetch';
 import axios from 'axios';

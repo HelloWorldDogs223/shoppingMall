@@ -168,12 +168,12 @@ export default function Page() {
                 유저의 신고 이력 보기
               </Button>
 
-              {
+              {modal && (
                 <ReportRecordModal
                   sellerId={el.sellerId}
                   onClose={setModal(false)}
                 />
-              }
+              )}
 
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button
