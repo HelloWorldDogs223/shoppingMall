@@ -164,16 +164,16 @@ export default function Page() {
                 <div>판매자 아이디: {el.sellerId}</div>
               </div>
 
-              <Button onClick={() => setModal(true)}>
+              <Button variant="contained" onClick={() => setModal(true)}>
                 유저의 신고 이력 보기
               </Button>
 
-              {modal && (
+              {
                 <ReportRecordModal
                   sellerId={el.sellerId}
                   onClose={setModal(false)}
                 />
-              )}
+              }
 
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button
