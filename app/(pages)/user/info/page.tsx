@@ -21,7 +21,7 @@ export default function Page() {
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [emailError, setEmailError] = useState(false);
 
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null); // HTMLInputElement로 타입 지정
 
   const handleFileButtonClick = () => {
     fileInputRef.current?.click(); // 파일 입력 창을 엽니다.
