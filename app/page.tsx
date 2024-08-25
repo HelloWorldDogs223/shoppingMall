@@ -85,7 +85,7 @@ export default function Home() {
 
   return (
     <div
-      className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden mt-[100px]"
+      className="relative flex size-full min-h-screen flex-col  group/design-root overflow-x-hidden mt-[100px]"
       style={{ fontFamily: 'Epilogue, Noto Sans, sans-serif' }}
     >
       <div className="layout-container flex h-full grow flex-col">

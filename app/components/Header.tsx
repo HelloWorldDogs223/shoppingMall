@@ -11,6 +11,7 @@ export default function Home() {
   const router = useRouter();
   const params = useParams();
 
+  const [img, setImg] = useState('');
   const [managerAccessToken, setManagerAccessToken] = useState('');
 
   const cartLength = useCartStore((state: any) => state.cart.length);
@@ -31,6 +32,19 @@ export default function Home() {
     }
     setManagerAccessToken(localStorage.getItem('manager') as string);
   }, [params]);
+
+  const fetchUser = async () => {
+    const userInfoRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    setImg(userInfoRes.data?.profileImageDownLoadUrl);
+  };
 
   useEffect(() => {
     const asyncFunction = async () => {
@@ -56,6 +70,7 @@ export default function Home() {
       }
     };
     asyncFunction();
+    fetchUser();
   }, [accessToken]);
 
   async function logout() {
@@ -195,18 +210,18 @@ export default function Home() {
               </Button>
             )}
           </div>
-          <div
+          <img
             onClick={() => {
               !managerAccessToken
                 ? router.push('/user/info')
                 : router.push('/manager/info');
             }}
             className="cursor-pointer bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-            style={{
-              backgroundImage:
-                'url("https://cdn.usegalileo.ai/stability/8a31f216-93c7-4e43-a376-51163e59cedc.png")',
-            }}
-          ></div>
+            src={
+              img ||
+              'https://cdn.usegalileo.ai/stability/8a31f216-93c7-4e43-a376-51163e59cedc.png'
+            }
+          />
         </div>
       </header>
     </div>

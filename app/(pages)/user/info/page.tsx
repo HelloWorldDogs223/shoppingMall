@@ -2,7 +2,7 @@
 
 import { useFetch } from '@/app/hooks/useFetch';
 import { Button } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import ProfileModal from '@/app/components/ProfileModal';
@@ -21,6 +21,11 @@ export default function Page() {
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [emailError, setEmailError] = useState(false);
 
+  const fileInputRef = useRef(null);
+
+  const handleFileButtonClick = () => {
+    fileInputRef.current?.click(); // 파일 입력 창을 엽니다.
+  };
   const router = useRouter();
 
   const { error, accessToken } = useFetch();
@@ -262,26 +267,29 @@ export default function Page() {
             {edit ? (
               <>
                 <div className="flex min-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                  <label className="flex flex-col min-w-40 flex-1">
+                  <div className="flex flex-col min-w-40 flex-1">
                     <p className="text-[#0e141b] text-base font-medium leading-normal pb-2">
                       Nickname 변경하기
                     </p>
                     <input
+                      type="text"
                       onChange={onNicknameChangeHandler}
                       value={editNickname}
                       className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
                     />
-                  </label>
-                  <label className="flex flex-col min-w-40 flex-1">
-                    <p className="text-[#0e141b] text-base font-medium leading-normal pb-2">
-                      프로필 이미지 변경하기
-                    </p>
-                    <input
-                      type="file"
-                      onChange={handleFileChange}
-                      className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 placeholder:text-[#4e7397] p-[15px] text-base font-normal leading-normal"
-                    />
-                  </label>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }} // 파일 입력을 숨깁니다.
+                  />
+                  <button
+                    onClick={handleFileButtonClick}
+                    className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0e141b] focus:outline-0 focus:ring-0 border border-[#d0dbe7] bg-slate-50 focus:border-[#d0dbe7] h-14 p-[15px] text-base font-normal leading-normal cursor-pointer"
+                  >
+                    프로필 이미지 변경하기
+                  </button>
                 </div>
 
                 <div className="flex px-4 py-3">
