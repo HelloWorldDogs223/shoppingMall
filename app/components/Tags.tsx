@@ -29,7 +29,8 @@ export default function Tags({ el, fetchData }: props) {
   const deleteTags = async (productTypeId: number) => {
     try {
       const res: any = await axios.delete(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}?productTypeId=${productTypeId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type?productTypeId=${productTypeId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } },
       );
     } catch (e: any) {
       alert('기본 타입은 제거하실 수 없습니다!');
