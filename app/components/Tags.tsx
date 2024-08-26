@@ -45,7 +45,11 @@ export default function Tags({ el, fetchData }: props) {
       <div className="flex gap-3 p-3 items-center">
         <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-blue-200 pl-4 pr-4">
           <p className="text-[#0e141b] text-sm font-medium leading-normal">
-            <span className="mr-[1rem]"> {el.typeName}</span>
+            <span className="mr-[1rem]">
+              {el.typeName.includes('base:')
+                ? el.typeName.split('base:')[1]
+                : el.typeName}
+            </span>
             <form
               onSubmit={() => editTags(el.typeId)}
               className="inline-flex items-center gap-2"

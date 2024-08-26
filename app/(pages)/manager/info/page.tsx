@@ -25,7 +25,7 @@ export default function Page() {
         관리자 계정 만들러 가기
       </Button>
       <Button variant="contained" onClick={() => router.push('/manager/tags')}>
-        태그 추가/수정하러 가기
+        태그 추가/수정/삭제하러 가기
       </Button>
       <Button
         variant="contained"
