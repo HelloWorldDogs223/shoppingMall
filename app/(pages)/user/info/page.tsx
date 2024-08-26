@@ -5,9 +5,10 @@ import { Button } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import ProfileModal from '@/app/components/ProfileModal';
 
 export default function Page() {
+  const { error, accessToken } = useFetch();
+
   const [postEmail, setPostEmail] = useState<boolean>(false);
   const [edit, setEdit] = useState(false);
   const [nickname, setNickname] = useState('');
@@ -16,7 +17,6 @@ export default function Page() {
   const [editEmail, setEditEmail] = useState('');
   const [count, setCount] = useState(false);
   const [countdown, setCountdown] = useState(180); // 3 minutes countdown in seconds
-  const [modal, setModal] = useState(false);
   const [img, setImg] = useState('');
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [emailError, setEmailError] = useState(false);
@@ -27,8 +27,6 @@ export default function Page() {
     fileInputRef.current?.click(); // 파일 입력 창을 엽니다.
   };
   const router = useRouter();
-
-  const { error, accessToken } = useFetch();
 
   const fetchUser = async () => {
     if (!accessToken) return;
@@ -123,7 +121,6 @@ export default function Page() {
         },
       );
       setNickname(editNickname);
-      setModal(false); // 성공 시 모달을 닫습니다.
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -156,7 +153,6 @@ export default function Page() {
                 <div className="flex gap-4 flex-col items-start">
                   <img
                     alt="avatar"
-                    onClick={() => setModal(true)}
                     className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32"
                     src={
                       img

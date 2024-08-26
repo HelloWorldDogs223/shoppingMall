@@ -100,6 +100,7 @@ export default function Home() {
         clearAccessToken();
       }
     }
+    location.reload();
   }
 
   const searchHandler = () => {
