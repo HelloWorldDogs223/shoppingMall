@@ -14,12 +14,26 @@ export default function Tags({ el, fetchData }: props) {
 
   const editTags = async (tagId: number) => {
     if (edit === '') return;
-    const res: any = await axios.put(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type`,
-      { typeName: edit, productTypeId: tagId },
-      { headers: { Authorization: `Bearer ${accessToken}` } },
-    );
-    fetchData();
+    try {
+      const res: any = await axios.put(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type`,
+        { typeName: edit, productTypeId: tagId },
+        { headers: { Authorization: `Bearer ${accessToken}` } },
+      );
+      fetchData();
+    } catch (e: any) {
+      alert('기본 타입은 수정하실 수 없습니다!');
+    }
+  };
+
+  const deleteTags = async (productTypeId: number) => {
+    try {
+      const res: any = await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}?productTypeId=${productTypeId}`,
+      );
+    } catch (e: any) {
+      alert('기본 타입은 제거하실 수 없습니다!');
+    }
   };
 
   return (
@@ -46,6 +60,9 @@ export default function Tags({ el, fetchData }: props) {
                 className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-300"
               >
                 태그 수정하기
+              </Button>
+              <Button onClick={() => deleteTags(el.typeId)}>
+                태그 삭제하기
               </Button>
             </form>
           </p>
