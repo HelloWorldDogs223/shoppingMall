@@ -125,7 +125,7 @@ export default function Page() {
       console.error('Error:', error);
       alert('이미지와 닉네임 모두 바꿔주세요!');
     } finally {
-      useFetch();
+      fetchUser();
     }
   };
 
