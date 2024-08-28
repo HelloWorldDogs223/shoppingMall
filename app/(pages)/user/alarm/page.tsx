@@ -1,3 +1,5 @@
+'use client';
+
 import useAlarmStore from '@/app/store/alarm';
 import { useRouter } from 'next/navigation';
 
