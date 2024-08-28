@@ -123,7 +123,7 @@ export default function Page() {
       setNickname(editNickname);
     } catch (error) {
       console.error('Error:', error);
-      alert('이미지와 닉네임 모두 바꿔주세요!');
+      alert('올바른 한글 / 영어 닉네임을 입력해주세요!');
     } finally {
       fetchUser();
     }

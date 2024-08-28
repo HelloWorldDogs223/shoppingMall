@@ -18,6 +18,8 @@ export default function Page() {
 
   const removeItem = useCartStore((state: any) => state.removeItem);
 
+  const [price, setPrice] = useState(0);
+
   useEffect(() => {
     if (error) {
       router.push('/signin');
@@ -51,6 +53,11 @@ export default function Page() {
           },
         );
         setBasketInfo(basketRes.data.basketItemDtos);
+        setPrice(
+          basketInfo.reduce((acc: any, cur: any) => {
+            return acc + cur.finalPrice;
+          }),
+        );
       } catch (e) {
         console.log(e);
       }
@@ -85,12 +92,12 @@ export default function Page() {
           <div className="w-full py-2 justify-between items-start inline-flex">
             <div className="flex-col justify-start items-start inline-flex">
               <div className="text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-                Subtotal (3 items)
+                Subtotal ({basketInfo.length} items)
               </div>
             </div>
             <div className="flex-col justify-start  items-start inline-flex">
               <div className="text-right text-neutral-900 text-sm font-normal font-['Work Sans'] leading-[21px]">
-                $540.00
+                ${price}
               </div>
             </div>
           </div>

@@ -6,8 +6,11 @@ import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '../store/login';
 import useCartStore from '../store/cart';
 import { useEffect, useState } from 'react';
+import useAlarmStore from '../store/alarm';
 
 export default function Home() {
+  const setAlarmMethod = useAlarmStore((state: any) => state.setAlarms);
+
   const router = useRouter();
   const params = useParams();
 
@@ -17,6 +20,8 @@ export default function Home() {
   const cartLength = useCartStore((state: any) => state.cart.length);
   const setCart = useCartStore((state: any) => state.setCart);
   const { accessToken, clearAccessToken } = useAuthStore();
+
+  const [alarm, setAlarm] = useState<any[]>([]);
 
   const [keyword, setKeyword] = useState(params.keyword);
 
@@ -46,6 +51,15 @@ export default function Home() {
     setImg(userInfoRes.data?.profileImageDownLoadUrl);
   };
 
+  const getAlarms = async () => {
+    const alarmRes: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/alarms?sliceSize=99&sliceNumber=0`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    );
+    setAlarm(alarmRes.data.alarmList);
+    setAlarmMethod(alarmRes.data.alarmList);
+  };
+
   useEffect(() => {
     const asyncFunction = async () => {
       if (accessToken) {
@@ -71,6 +85,7 @@ export default function Home() {
     };
     asyncFunction();
     fetchUser();
+    getAlarms();
   }, [accessToken]);
 
   async function logout() {
@@ -211,6 +226,49 @@ export default function Home() {
               </Button>
             )}
           </div>
+          {alarm.length > 0 ? (
+            <svg
+              onClick={() => {
+                router.push('/user/alarm');
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="46"
+              height="46"
+              viewBox="0 0 46 46"
+              fill="none"
+            >
+              <circle cx="29.5" cy="16.5039" r="2.5" fill="#EF4444" />
+              <path
+                d="M22.9876 13C24.4351 13 25.7878 13.4069 26.9353 14.1145C26.5934 14.4798 26.329 14.9182 26.1682 15.4038C25.2457 14.8301 24.1554 14.4996 22.9876 14.4996C19.663 14.4996 16.98 17.1731 16.9795 20.498V24.9064L15.6337 27.9997H30.3502L28.9958 24.9074L28.9959 20.5108L28.9921 20.2857C28.9884 20.1773 28.9818 20.0698 28.9725 19.963C29.1435 19.9886 29.3185 20.0019 29.4966 20.0019C29.8347 20.0019 30.1616 19.9541 30.4709 19.8649C30.4816 19.9914 30.4892 20.1188 30.4936 20.2471L30.4978 20.498V24.5938L31.8797 27.749C31.9489 27.9069 31.9846 28.0773 31.9846 28.2497C31.9846 28.9398 31.4241 29.4993 30.7329 29.4993L25.9917 29.5008C25.9917 31.1572 24.6467 32.5 22.9876 32.5C21.3878 32.5 20.08 31.2514 19.9887 29.677L19.9831 29.4985L15.252 29.4993C15.0804 29.4993 14.9107 29.4641 14.7533 29.3959C14.1193 29.1209 13.8285 28.3848 14.1039 27.7518L15.4775 24.5948V20.4979C15.4781 16.3442 18.8341 13 22.9876 13ZM24.4892 29.4985L21.4856 29.5008C21.4856 30.329 22.1581 31.0004 22.9876 31.0004C23.7684 31.0004 24.41 30.4057 24.4828 29.6452L24.4892 29.4985Z"
+                fill="#242424"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="46"
+              height="46"
+              viewBox="0 0 46 46"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_7761_149442)">
+                <path
+                  d="M23.0001 12.9961C27.05 12.9961 30.3568 16.1908 30.4959 20.2451L30.5001 20.4961V24.5931L31.8801 27.7491C31.9492 27.907 31.9848 28.0775 31.9848 28.2499C31.9848 28.9402 31.4252 29.4999 30.7348 29.4999L26.0001 29.5014C26.0001 31.1582 24.657 32.5014 23.0001 32.5014C21.4024 32.5014 20.0965 31.2524 20.0052 29.6776L19.9997 29.4991L15.275 29.4999C15.1036 29.4999 14.9341 29.4646 14.777 29.3964C14.1438 29.1213 13.8534 28.3851 14.1285 27.7519L15.5001 24.594V20.496C15.5007 16.3412 18.8522 12.9961 23.0001 12.9961ZM24.4997 29.4991L21.5001 29.5014C21.5001 30.3298 22.1717 31.0014 23.0001 31.0014C23.7798 31.0014 24.4206 30.4065 24.4932 29.6458L24.4997 29.4991ZM23.0001 14.4961C19.6799 14.4961 17.0006 17.1703 17.0001 20.4961V24.9057L15.6561 27.9999H30.3526L29.0001 24.9067L29.0002 20.5089L28.9965 20.2837C28.8854 17.0503 26.2417 14.4961 23.0001 14.4961Z"
+                  fill="#242424"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_7761_149442">
+                  <rect
+                    width="20"
+                    height="20"
+                    fill="white"
+                    transform="translate(13 13)"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
+          )}
           <img
             onClick={() => {
               !managerAccessToken
