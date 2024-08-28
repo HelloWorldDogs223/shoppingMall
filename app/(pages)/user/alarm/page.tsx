@@ -1,6 +1,8 @@
 'use client';
 
 import useAlarmStore from '@/app/store/alarm';
+import { Button } from '@mui/material';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 interface AlarmType {
@@ -24,6 +26,7 @@ export default function page() {
   const router = useRouter();
 
   const alarms = useAlarmStore((state) => state.alarms);
+  const removeAlarm = useAlarmStore((state) => state.removeAlarm);
 
   const goToAlarm = (alarm: AlarmType) => {
     switch (alarm.alarmType) {
@@ -38,12 +41,22 @@ export default function page() {
     }
   };
 
+  const alarmDelete = (alarmId: number) => {
+    const res = axios.delete(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/alarm/${alarmId}`,
+    );
+    removeAlarm(alarmId);
+  };
+
   return (
     <div>
       {alarms.map((el: AlarmType) => {
         return (
           <div onClick={() => goToAlarm(el)}>
             <div>알림 내용 : {el.content}</div>
+            <Button variant="contained" onClick={() => alarmDelete(el.alarmId)}>
+              알림 삭제하기
+            </Button>
           </div>
         );
       })}
