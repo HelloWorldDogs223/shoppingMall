@@ -5,6 +5,7 @@ import useAlarmStore from '@/app/store/alarm';
 import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface AlarmType {
   alarmId: number; // 알림 ID
@@ -26,7 +27,11 @@ interface AlarmType {
 export default function page() {
   const router = useRouter();
 
-  const { accessToken } = useFetch();
+  const { accessToken, error } = useFetch();
+
+  useEffect(() => {
+    if (error) router.push('/');
+  }, [error, accessToken]);
 
   const alarms = useAlarmStore((state) => state.alarms);
   const removeAlarm = useAlarmStore((state) => state.removeAlarm);

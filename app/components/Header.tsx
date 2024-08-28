@@ -57,8 +57,6 @@ export default function Home() {
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
 
-    console.log(alarmRes.data);
-
     setAlarm(alarmRes.data.alarmList);
     setAlarmMethod(alarmRes.data.alarmList);
   };
@@ -229,7 +227,7 @@ export default function Home() {
               </Button>
             )}
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-end gap-4">
             {alarm.length > 0 ? (
               <svg
                 onClick={() => {
