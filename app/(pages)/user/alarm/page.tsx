@@ -1,7 +1,7 @@
 'use client';
 
 import useAlarmStore from '@/app/store/alarm';
-import { Button } from '@mui/material';
+import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
@@ -49,17 +49,30 @@ export default function page() {
   };
 
   return (
-    <div>
-      {alarms.map((el: AlarmType) => {
-        return (
-          <div onClick={() => goToAlarm(el)}>
-            <div>알림 내용 : {el.content}</div>
-            <Button variant="contained" onClick={() => alarmDelete(el.alarmId)}>
-              알림 삭제하기
-            </Button>
-          </div>
-        );
-      })}
-    </div>
+    <Grid container spacing={2}>
+      {alarms.map((el: any) => (
+        <Grid item xs={12} key={el.alarmId}>
+          <Card onClick={() => goToAlarm(el)} style={{ cursor: 'pointer' }}>
+            <CardContent>
+              <Typography variant="h6">알림 내용</Typography>
+              <Typography variant="body2" color="textSecondary">
+                {el.content}
+              </Typography>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={(e) => {
+                  e.stopPropagation(); // 부모 클릭 이벤트 막기
+                  alarmDelete(el.alarmId);
+                }}
+                style={{ marginTop: '10px' }}
+              >
+                알림 삭제하기
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 }
