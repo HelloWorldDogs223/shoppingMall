@@ -1,5 +1,6 @@
 'use client';
 
+import { useFetch } from '@/app/hooks/useFetch';
 import useAlarmStore from '@/app/store/alarm';
 import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import axios from 'axios';
@@ -25,6 +26,8 @@ interface AlarmType {
 export default function page() {
   const router = useRouter();
 
+  const { accessToken } = useFetch();
+
   const alarms = useAlarmStore((state) => state.alarms);
   const removeAlarm = useAlarmStore((state) => state.removeAlarm);
 
@@ -44,6 +47,7 @@ export default function page() {
   const alarmDelete = (alarmId: number) => {
     const res = axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/alarm/${alarmId}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     removeAlarm(alarmId);
   };
