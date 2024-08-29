@@ -54,7 +54,7 @@ export default function Page() {
         );
         setBasketInfo(basketRes.data.basketItemDtos);
         setPrice(
-          basketInfo.reduce((acc: any, cur: any) => {
+          basketRes.data.basketItemDtos.reduce((acc: any, cur: any) => {
             return acc + cur.finalPrice;
           }, 0),
         );

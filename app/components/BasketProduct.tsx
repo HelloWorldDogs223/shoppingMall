@@ -13,7 +13,7 @@ export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
   const router = useRouter();
 
   return (
-    <div className="flex justify-between items-center mb-[32px]">
+    <div className="flex items-center mb-[32px]">
       <div
         onClick={() => router.push(`/product/${basket.product.productId}`)}
         className="flex justify-center"
