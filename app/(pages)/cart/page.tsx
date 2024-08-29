@@ -56,7 +56,7 @@ export default function Page() {
         setPrice(
           basketInfo.reduce((acc: any, cur: any) => {
             return acc + cur.finalPrice;
-          }),
+          }, 0),
         );
       } catch (e) {
         console.log(e);
