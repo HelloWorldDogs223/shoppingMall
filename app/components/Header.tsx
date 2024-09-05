@@ -83,10 +83,10 @@ export default function Home() {
           console.log(e);
         }
       }
+      fetchUser();
+      getAlarms();
     };
     asyncFunction();
-    fetchUser();
-    getAlarms();
   }, [accessToken]);
 
   async function logout() {

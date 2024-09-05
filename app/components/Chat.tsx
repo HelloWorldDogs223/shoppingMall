@@ -178,10 +178,7 @@ export default function Page({ params }: any) {
       <div>
         <ul>
           <div>
-            <div>
-              <h3>채팅방 생성</h3>
-            </div>
-            <h3>채팅</h3>
+            <div></div>
             <div>
               <div onClick={connect}>연결하기</div>
               <input
