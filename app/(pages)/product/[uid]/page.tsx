@@ -75,6 +75,8 @@ export default function Page() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const [single, setSingle] = useState([]);
+  const [sellerRooms, setSellerRooms] = useState<any[]>([]);
+  const [buyerRooms, setBuyerRooms] = useState<any[]>([]);
   const [multi, setMulti] = useState([]);
   const [modal, setModal] = useState(false);
   const [comments, setComments] = useState([]);
@@ -288,6 +290,65 @@ export default function Page() {
     location.reload();
   };
 
+  const getChatRoomBySeller = async () => {
+    const res: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/chatrooms?sliceNumber=0&sliceSize=100`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      },
+    );
+    setSellerRooms(res.data.chatRoomList);
+  };
+
+  // 구매자 입장에서의 채팅방 조회
+  const getChatRoomByBuyer = async () => {
+    const res: any = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/buyer/chatrooms?sliceNumber=0&sliceSize=100`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+      },
+    );
+    setBuyerRooms(res.data.chatRoomList);
+  };
+
+  // 채팅방 생성
+  const makeChatRoom = async (productId: number) => {
+    getChatRoomByBuyer();
+    getChatRoomBySeller();
+
+    const room1 = buyerRooms.find((el: any) => {
+      return el.product.productId === productId;
+    });
+
+    const room2 = sellerRooms.find((el: any) => {
+      return el.product.productId === productId;
+    });
+
+    if (room1 || room2) {
+      router.push(`/chat/${room1?.id || room2?.id}`);
+      return;
+    }
+
+    try {
+      const res: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/chat`,
+        { productId },
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+          },
+        },
+      );
+      router.push(`/chat/${res.data.chatRoomId}`);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div
       className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden"
@@ -387,13 +448,11 @@ export default function Page() {
                   제품 신고하기
                 </Button>
                 <Button
-                  onClick={() =>
-                    router.push(`/chat?productId=${productInfo?.productId}`)
-                  }
+                  onClick={() => makeChatRoom(productInfo?.productId as number)}
                   variant="contained"
                   className="w-full sm:w-[200px] bg-red-500 hover:bg-red-600 text-white transition duration-300 ease-in-out"
                 >
-                  판매자에게 문의하기
+                  판매자에게 문의하기 / 구매자 문의 확인하기
                 </Button>
               </div>
             </div>

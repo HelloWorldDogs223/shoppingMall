@@ -1,84 +1,21 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState, useRef } from 'react';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import { useFetch } from '@/app/hooks/useFetch';
 
-export default function Page() {
+export default function Page({ params }: any) {
   const stompClient = useRef<any>(null);
-
-  const searchParams = useSearchParams();
-  const productId = searchParams.get('productId'); // 전달된 값 읽기
 
   const { accessToken } = useFetch();
 
   const [messages, setMessages] = useState<any[]>([]);
-  const [chatRoomId, setChatRoomId] = useState(1);
+  const [chatRoomId, setChatRoomId] = useState(params);
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event: any) => {
     setInputValue(event.target.value);
-  };
-
-  // 판매자 입장에서의 채팅방 조회
-  const getChatRoomBySeller = () => {
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/chatrooms?sliceNumber=0&sliceSize=100`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        },
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((ex) => {
-        console.log(ex.response.data);
-      });
-  };
-
-  // 구매자 입장에서의 채팅방 조회
-  const getChatRoomByBuyer = () => {
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/buyer/chatrooms?sliceNumber=0&sliceSize=100`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        },
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((ex) => {
-        console.log(ex.response.data);
-      });
-  };
-
-  // 채팅방 생성
-  const makeChatRoom = async () => {
-    const res: any = await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/chat`,
-        { productId },
-        {
-          headers: {
-            Authorization: 'Bearer ' + accessToken,
-          },
-        },
-      )
-      .then((res) => {
-        console.log(res.data);
-        setChatRoomId(res.data.chatRoomId);
-      })
-      .catch((ex) => {
-        console.log(ex.response.data);
-      });
   };
 
   // 채팅방 연결 메서드
@@ -242,17 +179,7 @@ export default function Page() {
         <ul>
           <div>
             <div>
-              <h3>채팅방 조회</h3>
-              <div onClick={getChatRoomBySeller}>
-                판매자 입장에서의 채팅방 조회
-              </div>
-              <div onClick={getChatRoomByBuyer}>
-                구매자 입장에서의 채팅방 조회
-              </div>
-            </div>
-            <div>
               <h3>채팅방 생성</h3>
-              <div onClick={makeChatRoom}>채팅방 생성하기</div>
             </div>
             <h3>채팅</h3>
             <div>

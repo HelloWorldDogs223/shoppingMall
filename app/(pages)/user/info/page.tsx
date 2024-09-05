@@ -198,6 +198,13 @@ export default function Page() {
                 >
                   구매 목록 확인하기
                 </Button>
+                <Button
+                  variant="contained"
+                  className="w-[480px]"
+                  onClick={() => router.push('/chat')}
+                >
+                  채팅방 확인하기
+                </Button>
                 {!edit ? (
                   <button
                     onClick={() => setEdit(true)}
