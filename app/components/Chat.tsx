@@ -114,8 +114,7 @@ export default function Page() {
   const connectStomp = (res: any) => {
     console.log('2.stomp 연결 요청=========');
     const socket = new WebSocket(
-      `ws://${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/ws` +
-        `?requesterId=${res.data.requesterId}`,
+      `ws://api.group-group.com/ws` + `?requesterId=${res.data.requesterId}`,
     );
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect({}, () => {
