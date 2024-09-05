@@ -233,6 +233,7 @@ export default function Home() {
                 onClick={() => {
                   router.push('/user/alarm');
                 }}
+                className="cursor-pointer"
                 xmlns="http://www.w3.org/2000/svg"
                 width="46"
                 height="46"
@@ -247,6 +248,7 @@ export default function Home() {
               </svg>
             ) : (
               <svg
+                className="cursor-pointer"
                 onClick={() => {
                   router.push('/user/alarm');
                 }}

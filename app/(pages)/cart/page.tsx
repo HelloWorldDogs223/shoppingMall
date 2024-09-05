@@ -37,6 +37,9 @@ export default function Page() {
       setBasketInfo(
         basketInfo.filter((el: any) => el.basketItemId !== basketId),
       );
+      setPrice(
+        price - basketInfo.find((el: any) => el.id === basketId).finalPrice,
+      );
       removeItem(id);
     } catch (error) {
       console.error('Failed to delete item from basket:', error);
