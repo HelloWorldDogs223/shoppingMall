@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.4",
     "@mui/material": "^5.16.4",
+    "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^5.51.11",
     "axios": "^1.7.2",
     "iamport": "^0.3.4",
