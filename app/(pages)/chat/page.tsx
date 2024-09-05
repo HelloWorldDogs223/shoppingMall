@@ -81,56 +81,98 @@ export default function Page() {
 
   return (
     <div>
-      <h1>구매자 채팅방 목록</h1>
-      {buyerRooms.map((el: DataType) => {
-        return (
+      <h1 className="text-2xl font-bold text-center my-6">
+        구매자 채팅방 목록
+      </h1>
+      <div className="space-y-4">
+        {buyerRooms.map((el: DataType) => (
           <div
+            key={el.id}
+            className="flex items-center p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200"
             onClick={() =>
               router.push(`/chat/${el.id}?productId=${el.product.productId}`)
             }
           >
-            <div>{el.buyer.nickName}</div>
-            <img
-              className="w-[25px] h-[25px]"
-              src={el.buyer.profileImageDownLoadUrl}
-            />
-            <div>{el.seller.nickName}</div>
-            <img
-              className="w-[25px] h-[25px]"
-              src={el.seller.profileImageDownLoadUrl}
-            />
+            <div className="flex items-center space-x-4">
+              <img
+                className="w-10 h-10 rounded-full"
+                src={el.buyer.profileImageDownLoadUrl}
+                alt="구매자 프로필 이미지"
+              />
+              <div className="text-lg font-medium">{el.buyer.nickName}</div>
+            </div>
+            <div className="flex-1 flex justify-end items-center space-x-4">
+              <div className="text-lg font-medium">{el.seller.nickName}</div>
+              <img
+                className="w-10 h-10 rounded-full"
+                src={el.seller.profileImageDownLoadUrl}
+                alt="판매자 프로필 이미지"
+              />
+            </div>
             <div
-              onClick={() => router.push(`/product/${el.product.productId}`)}
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/product/${el.product.productId}`);
+              }}
+              className="flex items-center space-x-2"
             >
-              <div>{el.product.firstProductImageUrl}</div>
-              <div>{el.product.finalPrice}</div>
+              <img
+                className="w-20 h-20 object-cover rounded-md"
+                src={el.product.firstProductImageUrl}
+                alt="상품 이미지"
+              />
+              <div className="text-lg font-semibold">
+                {el.product.finalPrice.toLocaleString()}원
+              </div>
             </div>
           </div>
-        );
-      })}
-      <h1 className="mt-[100px]">판매자 채팅방 목록</h1>
-      {sellerRooms.map((el: DataType) => {
-        return (
-          <>
-            <div>{el.buyer.nickName}</div>
-            <img
-              className="w-[25px] h-[25px]"
-              src={el.buyer.profileImageDownLoadUrl}
-            />
-            <div>{el.seller.nickName}</div>
-            <img
-              className="w-[25px] h-[25px]"
-              src={el.seller.profileImageDownLoadUrl}
-            />
-            <div
-              onClick={() => router.push(`/product/${el.product.productId}`)}
-            >
-              <div>{el.product.firstProductImageUrl}</div>
-              <div>{el.product.finalPrice}</div>
+        ))}
+      </div>
+
+      <h1 className="text-2xl font-bold text-center my-6">
+        판매자 채팅방 목록
+      </h1>
+      <div className="space-y-4">
+        {sellerRooms.map((el: DataType) => (
+          <div
+            key={el.id}
+            className="flex items-center p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200"
+          >
+            <div className="flex items-center space-x-4">
+              <img
+                className="w-10 h-10 rounded-full"
+                src={el.buyer.profileImageDownLoadUrl}
+                alt="구매자 프로필 이미지"
+              />
+              <div className="text-lg font-medium">{el.buyer.nickName}</div>
             </div>
-          </>
-        );
-      })}
+            <div className="flex-1 flex justify-end items-center space-x-4">
+              <div className="text-lg font-medium">{el.seller.nickName}</div>
+              <img
+                className="w-10 h-10 rounded-full"
+                src={el.seller.profileImageDownLoadUrl}
+                alt="판매자 프로필 이미지"
+              />
+            </div>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/product/${el.product.productId}`);
+              }}
+              className="flex items-center space-x-2"
+            >
+              <img
+                className="w-20 h-20 object-cover rounded-md"
+                src={el.product.firstProductImageUrl}
+                alt="상품 이미지"
+              />
+              <div className="text-lg font-semibold">
+                {el.product.finalPrice.toLocaleString()}원
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

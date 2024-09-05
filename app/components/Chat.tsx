@@ -169,36 +169,41 @@ export default function Page({ params }: any) {
   };
 
   useEffect(() => {
+    connect();
     // 컴포넌트 언마운트 시 웹소켓 연결 해제
     return () => disconnect();
   }, []);
 
   return (
-    <div>
-      <div>
-        <ul>
-          <div>
-            <div></div>
-            <div>
-              <div onClick={connect}>연결하기</div>
-              <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-              />
-              <button onClick={sendMessage}>입력</button>
-              <div onClick={getPreviousChatMessage}>
-                {'<(클릭)이전 채팅 메세지 조회>'}
-              </div>
-              {messages.map((item: any, index: number) => (
-                <div key={index} className="list-item">
-                  {item.message}
-                </div>
-              ))}
-            </div>
-          </div>
-        </ul>
+    <div className="max-w-lg mx-auto border rounded-lg shadow overflow-hidden">
+      <div className="p-4 bg-gray-100 flex items-center">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          className="flex-1 border-gray-300 p-2 rounded mr-2"
+          placeholder="메시지 입력..."
+        />
+        <button
+          onClick={sendMessage}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          보내기
+        </button>
+        <button
+          onClick={getPreviousChatMessage}
+          className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+        >
+          이전 조회
+        </button>
       </div>
+      <ul className="p-4 space-y-2 bg-white">
+        {messages.map((item: any, index: number) => (
+          <li key={index} className="bg-gray-200 rounded p-2">
+            {item.message}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

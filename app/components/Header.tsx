@@ -82,9 +82,9 @@ export default function Home() {
         } catch (e) {
           console.log(e);
         }
+        fetchUser();
+        getAlarms();
       }
-      fetchUser();
-      getAlarms();
     };
     asyncFunction();
   }, [accessToken]);
