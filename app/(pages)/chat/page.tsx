@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState, useRef } from 'react';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
@@ -7,6 +8,9 @@ import { useFetch } from '@/app/hooks/useFetch';
 
 function ChatComp() {
   const stompClient = useRef<any>(null);
+
+  const searchParams = useSearchParams();
+  const productId = searchParams.get('productId'); // 전달된 값 읽기
 
   const { accessToken } = useFetch();
 
@@ -57,11 +61,11 @@ function ChatComp() {
   };
 
   // 채팅방 생성
-  const makeChatRoom = () => {
-    axios
+  const makeChatRoom = async () => {
+    const res: any = await axios
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/chat`,
-        { productId: 183 },
+        { productId },
         {
           headers: {
             Authorization: 'Bearer ' + accessToken,
@@ -70,6 +74,7 @@ function ChatComp() {
       )
       .then((res) => {
         console.log(res.data);
+        setChatRoomId(res.data.chatRoomId);
       })
       .catch((ex) => {
         console.log(ex.response.data);

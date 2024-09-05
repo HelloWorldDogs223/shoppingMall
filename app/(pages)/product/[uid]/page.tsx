@@ -386,6 +386,15 @@ export default function Page() {
                 >
                   제품 신고하기
                 </Button>
+                <Button
+                  onClick={() =>
+                    router.push(`/chat?productId=${productInfo?.productId}`)
+                  }
+                  variant="contained"
+                  className="w-full sm:w-[200px] bg-red-500 hover:bg-red-600 text-white transition duration-300 ease-in-out"
+                >
+                  판매자에게 문의하기
+                </Button>
               </div>
             </div>
 
