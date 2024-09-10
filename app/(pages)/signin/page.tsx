@@ -25,6 +25,7 @@ export default function Page() {
       const loginResUser: any = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/login`,
         { email: data.get('email'), password: data.get('password') },
+        { withCredentials: true },
       );
       router.push('/');
     } catch (e) {
