@@ -96,6 +96,17 @@ export default function Page() {
           </Box>
         </Box>
       </Container>
+      <div className="w-full flex justify-center">
+        <Button
+          onClick={() => router.push('/signup')}
+          type="submit"
+          className="w-[396px] bg-red-500 hover:bg-yellow-500"
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          회원가입하기
+        </Button>
+      </div>
       <div className="w-full flex justify-center mt-[50px]">
         <hr className="w-[500px]" />
       </div>

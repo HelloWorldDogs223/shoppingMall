@@ -126,7 +126,7 @@ export default function Page({ params }: any) {
     console.log(chatRoomId);
     return axios
       .get(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/chat/messages?startChatMessageId=${messages[0].chatId}&chatRoomId=${chatRoomId}&sliceSize=${3}`,
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/chat/messages?startChatMessageId=${messages[0].chatId}&chatRoomId=${chatRoomId}&sliceSize=99`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
