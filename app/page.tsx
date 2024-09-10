@@ -37,7 +37,7 @@ export default function Home() {
   // state
   const [search, setSearch] = useState('');
 
-  // useFetch();
+  useFetch();
 
   const getProductsFirst = async () => {
     const productRes: any = await axios.get(

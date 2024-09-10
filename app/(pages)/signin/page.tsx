@@ -29,15 +29,15 @@ export default function Page() {
       );
       router.push('/');
     } catch (e) {
-      // const loginRes: any = await axios.post(
-      //   `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/login`,
-      //   { serialNumber: data.get('email'), password: data.get('password') },
-      // );
-      // if (loginRes.data) {
-      //   localStorage.setItem('manager', loginRes.data.accessToken as string);
-      //   router.push('/');
-      // }
-      // console.log(e);
+      const loginRes: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/login`,
+        { serialNumber: data.get('email'), password: data.get('password') },
+      );
+      if (loginRes.data) {
+        localStorage.setItem('manager', loginRes.data.accessToken as string);
+        router.push('/');
+      }
+      console.log(e);
     }
   };
 
