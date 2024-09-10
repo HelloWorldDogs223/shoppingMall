@@ -21,13 +21,24 @@ export default function Page() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const loginRes: any = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/login`,
-      { serialNumber: data.get('email'), password: data.get('password') },
-    );
-    if (loginRes.data) {
-      localStorage.setItem('manager', loginRes.data.accessToken as string);
+    try {
+      console.log('dasdas');
+      const loginResUser: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/login`,
+        { email: data.get('email'), password: data.get('password') },
+      );
       router.push('/');
+    } catch (e) {
+      const loginRes: any = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/login`,
+        { serialNumber: data.get('email'), password: data.get('password') },
+      );
+
+      if (loginRes.data) {
+        localStorage.setItem('manager', loginRes.data.accessToken as string);
+        router.push('/');
+      }
+      console.log(e);
     }
   };
 
