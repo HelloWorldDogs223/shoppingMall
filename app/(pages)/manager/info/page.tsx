@@ -39,6 +39,12 @@ export default function Page() {
       >
         리뷰 신고 리스트
       </Button>
+      <Button
+        variant="contained"
+        onClick={() => router.push('/manager/on-off')}
+      >
+        관리자모드 ON / OFF
+      </Button>
     </div>
   );
 }
