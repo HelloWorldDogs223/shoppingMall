@@ -12,7 +12,7 @@ export default function BasicSwitches() {
   const onOffClickHandler = (e: any) => {
     axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/root-manager/manager-mode`,
-      { isOn: e.target.value },
+      { isOn: e.target.value === 'on' ? true : false },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
