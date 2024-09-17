@@ -6,5 +6,5 @@ import { useParams } from 'next/navigation';
 export default function Page() {
   const params = useParams();
 
-  return <Chat params={params.uid} />;
+  return <Chat params={params.uid as string} />;
 }
