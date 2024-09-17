@@ -54,6 +54,7 @@ import { useRouter } from 'next/navigation';
 import useCartStore from '@/app/store/cart';
 import ReportModal from '@/app/components/ReportModal';
 import Comment from '@/app/components/Comment';
+import { useManagerFetch } from '@/app/hooks/useManagerFetch';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -91,7 +92,8 @@ export default function Page() {
 
   const params = useParams();
 
-  const { accessToken } = useFetch();
+  const { accessToken: fetchAccessToken } = useFetch();
+  const { accessToken: managerAccessToken } = useManagerFetch();
 
   const [productInfo, setProductInfo] = useState<ProductType>();
   const [memberInfo, setMemberInfo] = useState<any>({});
@@ -101,7 +103,7 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${params.uid}`,
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
         },
       },
     );
@@ -133,7 +135,11 @@ export default function Page() {
   const getBuyProducts = async () => {
     const buyProductRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases?sliceSize=99&sliceNumber=0`,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      {
+        headers: {
+          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+        },
+      },
     );
 
     buyProductRes.data.purchaseList.forEach((el: any) => {
@@ -148,14 +154,18 @@ export default function Page() {
   const getMemberInfo = async () => {
     const res: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      {
+        headers: {
+          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+        },
+      },
     );
     setMemberInfo(res.data);
   };
 
   useEffect(() => {
     getProductById();
-  }, [accessToken]);
+  }, [fetchAccessToken, managerAccessToken]);
 
   useEffect(() => {
     if (productInfo) {
@@ -211,7 +221,7 @@ export default function Page() {
       },
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
         },
       },
     );
@@ -244,7 +254,7 @@ export default function Page() {
           formData,
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
             },
           },
         );
@@ -265,7 +275,11 @@ export default function Page() {
     const res: any = await axios.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}/sale-state/on-sale`,
       {},
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      {
+        headers: {
+          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+        },
+      },
     );
     alert('판매 중으로 변경되었습니다.');
     location.reload();
@@ -275,7 +289,11 @@ export default function Page() {
     const res: any = await axios.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}/sale-state/discontinued`,
       {},
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      {
+        headers: {
+          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+        },
+      },
     );
     alert('판매 중단으로 변경되었습니다.');
     location.reload();
@@ -284,7 +302,11 @@ export default function Page() {
   const deleteProduct = async () => {
     const res: any = await axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}`,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      {
+        headers: {
+          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+        },
+      },
     );
     alert('삭제되었습니다.');
     location.reload();
@@ -295,7 +317,7 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/chatrooms?sliceNumber=0&sliceSize=100`,
       {
         headers: {
-          Authorization: 'Bearer ' + accessToken,
+          Authorization: 'Bearer ' + fetchAccessToken || managerAccessToken,
         },
       },
     );
@@ -308,7 +330,7 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/buyer/chatrooms?sliceNumber=0&sliceSize=100`,
       {
         headers: {
-          Authorization: 'Bearer ' + accessToken,
+          Authorization: 'Bearer ' + fetchAccessToken || managerAccessToken,
         },
       },
     );
@@ -339,7 +361,7 @@ export default function Page() {
         { productId },
         {
           headers: {
-            Authorization: 'Bearer ' + accessToken,
+            Authorization: 'Bearer ' + fetchAccessToken || managerAccessToken,
           },
         },
       );

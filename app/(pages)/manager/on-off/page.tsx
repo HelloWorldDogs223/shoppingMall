@@ -10,7 +10,6 @@ export default function BasicSwitches() {
   const { accessToken } = useManagerFetch();
 
   const onOffClickHandler = (e: any) => {
-    console.log('He');
     axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/root-manager/manager-mode`,
       { isOn: e.target.value },
