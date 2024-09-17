@@ -2,7 +2,6 @@
 
 import BuyList from '@/app/components/BuyList';
 import { useFetch } from '@/app/hooks/useFetch';
-import { Button } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -21,6 +20,8 @@ export default function Page() {
   useEffect(() => {
     getList();
   }, [accessToken]);
+
+  // 제품 등록 전에 이메일 등록 체크 했떤것처럼 계좌 체크
 
   return (
     <div className="flex flex-col gap-8">
