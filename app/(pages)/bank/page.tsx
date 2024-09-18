@@ -1,3 +1,5 @@
+'use client';
+
 import { useFetch } from '@/app/hooks/useFetch';
 import React, { useState, useEffect } from 'react';
 
