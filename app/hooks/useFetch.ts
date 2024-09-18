@@ -16,9 +16,6 @@ export const useFetch = () => {
         try {
           const res = await axios.get(
             'https://api.group-group.com/auth/reissue',
-            {
-              withCredentials: true,
-            },
           );
           setAccessToken(res.data.accessToken);
         } catch (error: any) {
