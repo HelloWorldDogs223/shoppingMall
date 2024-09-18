@@ -7,8 +7,11 @@ import { useFetch } from '@/app/hooks/useFetch';
 import { useRouter } from 'next/navigation';
 
 interface ChatMessage {
-  chatMessageId: string;
-  message: string;
+  chatId: string; // 채팅 메세지 ID
+  chatRoomId: number; // 채팅방 ID
+  writerId: number; // 작성자 ID
+  message: string; // 메세지 내용
+  createDate?: Date;
 }
 
 interface ChatRoomResponse {
@@ -52,7 +55,7 @@ export default function ChatRoom({ params }: { params: string }) {
           (message) => {
             const newMessage: ChatMessage = JSON.parse(message.body);
             setMessages((prevMessages) => [...prevMessages, newMessage]);
-            recordMessage(newMessage.chatMessageId);
+            recordMessage(newMessage.chatId);
           },
           {
             Authorization: `Bearer ${accessToken}`,
@@ -124,7 +127,7 @@ export default function ChatRoom({ params }: { params: string }) {
         `${API_BASE_URL}/chat/messages`,
         {
           params: {
-            startChatMessageId: messages[0].chatMessageId,
+            startChatMessageId: messages[0].chatId,
             chatRoomId: params,
             sliceSize: 99,
           },
