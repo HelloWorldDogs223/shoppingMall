@@ -1,38 +1,5 @@
 'use client';
 
-interface Block {
-  index: number; // 블록 순서
-  blockType: string;
-  contentInTextBlock: string; // 텍스트 블록을 위한
-  imgDownloadUrlInImageBlock: string;
-}
-
-interface ProductType {
-  productId: number; // 제품 Id
-  sellerId: number; // 판매자 Id
-  productTypeId: number; // 제품타입 Id
-  productImageDownloadUrlList: any[];
-  blockDataList: Block[];
-  singleOptions: // 단일옵션 리스트
-  {
-    optionName: string; // 옵션명
-    priceChangeAmount: number; // 옵션에 의한 가격변동값
-  };
-
-  multipleOptions: // 다중옵션 리스트
-  {
-    optionName: string; // 옵션명
-    priceChangeAmount: number; // 옵션에 의한 가격변동값
-  };
-
-  name: string; // 제품 이름
-  price: number; // 제품 가격
-  discountAmount: number; // 할인 양
-  discountRate: number; // 할인 퍼센테이지
-  isBan: Boolean; // 벤 여부
-  scoreAvg: number; // 제품 평점
-}
-
 import {
   Button,
   Checkbox,
@@ -48,13 +15,41 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useFetch } from '@/app/hooks/useFetch';
-import { useRouter } from 'next/navigation';
+import { useManagerFetch } from '@/app/hooks/useManagerFetch';
 import useCartStore from '@/app/store/cart';
 import ReportModal from '@/app/components/ReportModal';
 import Comment from '@/app/components/Comment';
-import { useManagerFetch } from '@/app/hooks/useManagerFetch';
+
+interface Block {
+  index: number;
+  blockType: string;
+  contentInTextBlock: string;
+  imgDownloadUrlInImageBlock: string;
+}
+
+interface ProductType {
+  productId: number;
+  sellerId: number;
+  productTypeId: number;
+  productImageDownloadUrlList: any[];
+  blockDataList: Block[];
+  singleOptions: {
+    optionName: string;
+    priceChangeAmount: number;
+  }[];
+  multipleOptions: {
+    optionName: string;
+    priceChangeAmount: number;
+  }[];
+  name: string;
+  price: number;
+  discountAmount: number;
+  discountRate: number;
+  isBan: boolean;
+  scoreAvg: number;
+}
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -69,28 +64,30 @@ const MenuProps = {
 
 export default function Page() {
   const router = useRouter();
+  const { uid } = useParams();
 
   const addItem = useCartStore((state: any) => state.addItem);
 
-  const [age, setAge] = useState<string | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedSingleOption, setSelectedSingleOption] = useState<
+    string | null
+  >(null);
+  const [selectedMultipleOptions, setSelectedMultipleOptions] = useState<
+    string[]
+  >([]);
 
-  const [single, setSingle] = useState([]);
+  const [singleOptions, setSingleOptions] = useState([]);
+  const [multipleOptions, setMultipleOptions] = useState([]);
   const [sellerRooms, setSellerRooms] = useState<any[]>([]);
   const [buyerRooms, setBuyerRooms] = useState<any[]>([]);
-  const [multi, setMulti] = useState([]);
   const [modal, setModal] = useState(false);
   const [comments, setComments] = useState([]);
 
   const [commentTitle, setCommentTitle] = useState('');
   const [commentContent, setCommentContent] = useState('');
-  const [commentImg, setCommentImg] = useState(null);
+  const [commentImg, setCommentImg] = useState<File | null>(null);
 
-  const [id, setId] = useState(0);
-
+  const [purchaseItemId, setPurchaseItemId] = useState(0);
   const [score, setScore] = useState<number | null>(0);
-
-  const params = useParams();
 
   const { accessToken: fetchAccessToken } = useFetch();
   const { accessToken: managerAccessToken } = useManagerFetch();
@@ -99,83 +96,108 @@ export default function Page() {
   const [memberInfo, setMemberInfo] = useState<any>({});
 
   const getProductById = async () => {
-    const productRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${params.uid}`,
-      {
-        headers: {
-          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${uid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+          },
         },
-      },
+      );
+      const productData = response.data;
+      setProductInfo(productData);
+      setSingleOptions(productData.singleOptions);
+      setMultipleOptions(productData.multipleOptions);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+  };
+
+  const handleMultipleOptionsChange = (
+    event: SelectChangeEvent<typeof selectedMultipleOptions>,
+  ) => {
+    const { value } = event.target;
+    setSelectedMultipleOptions(
+      typeof value === 'string' ? value.split(',') : value,
     );
-
-    setProductInfo(productRes.data);
-    setSingle(productRes.data.singleOptions);
-    setMulti(productRes.data.multipleOptions);
   };
 
-  const handleChange = (event: SelectChangeEvent<typeof selectedOptions>) => {
-    const {
-      target: { value },
-    } = event;
-
-    setSelectedOptions(typeof value === 'string' ? value.split(',') : value);
-  };
-
-  const handleChangeSingle = (event: SelectChangeEvent) => {
-    setAge((event.target.value as string) || '');
+  const handleSingleOptionChange = (event: SelectChangeEvent) => {
+    setSelectedSingleOption(event.target.value as string);
   };
 
   const getComments = async () => {
-    const commentRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/reviews?sliceNumber=0&sliceSize=99&productId=${productInfo?.productId}`,
-    );
-    setComments(commentRes.data.reviewsList);
+    if (!productInfo) return;
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/reviews?sliceNumber=0&sliceSize=99&productId=${productInfo.productId}`,
+      );
+      setComments(response.data.reviewsList);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
   };
 
-  const getBuyProducts = async () => {
-    const buyProductRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases?sliceSize=99&sliceNumber=0`,
-      {
-        headers: {
-          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+  const getPurchaseItems = async () => {
+    if (!productInfo) return;
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases?sliceSize=99&sliceNumber=0`,
+        {
+          headers: {
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+          },
         },
-      },
-    );
-
-    buyProductRes.data.purchaseList.forEach((el: any) => {
-      el.purchaseItems.forEach((item: any) => {
-        if (item.productId === productInfo?.productId) {
-          setId(item.purchaseItemId);
-        }
+      );
+      response.data.purchaseList.forEach((purchase: any) => {
+        purchase.purchaseItems.forEach((item: any) => {
+          if (item.productId === productInfo.productId) {
+            setPurchaseItemId(item.purchaseItemId);
+          }
+        });
       });
-    });
+    } catch (error) {
+      console.error('Error fetching purchase items:', error);
+    }
   };
 
   const getMemberInfo = async () => {
-    const res: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
-      {
-        headers: {
-          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
+        {
+          headers: {
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+          },
         },
-      },
-    );
-    setMemberInfo(res.data);
+      );
+      setMemberInfo(response.data);
+    } catch (error) {
+      console.error('Error fetching member info:', error);
+    }
   };
 
   useEffect(() => {
-    getProductById();
+    if (fetchAccessToken || managerAccessToken) {
+      getProductById();
+    }
   }, [fetchAccessToken, managerAccessToken]);
 
   useEffect(() => {
     if (productInfo) {
       getComments();
-      getBuyProducts();
+      getPurchaseItems();
       getMemberInfo();
     }
   }, [productInfo]);
 
-  const handleClick = () => {
+  const handleEditClick = () => {
+    if (!productInfo) {
+      console.error('Product information is undefined');
+      return;
+    }
+
     const convertToRecord = (product: ProductType): Record<string, string> => {
       return {
         productId: product.productId.toString(),
@@ -196,228 +218,218 @@ export default function Page() {
       };
     };
 
+    const query = new URLSearchParams(convertToRecord(productInfo)).toString();
+    router.push(`/product/edit?${query}`);
+  };
+
+  const addToCart = async () => {
+    if (!selectedSingleOption) {
+      alert('옵션을 골라주세요');
+      return;
+    }
     if (!productInfo) {
       console.error('Product information is undefined');
       return;
     }
+    addItem({ id: productInfo.productId, name: productInfo.name });
 
-    const query = new URLSearchParams(convertToRecord(productInfo)).toString();
-
-    router.push(`/product/edit?${query}`);
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
+        {
+          productId: productInfo.productId,
+          singleOptionId: Number(selectedSingleOption),
+          multipleOptionId: selectedMultipleOptions,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+          },
+        },
+      );
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   };
 
-  const getCart = async () => {
-    if (age === null) {
-      alert('옵션을 골라주세요');
+  const submitComment = async () => {
+    if (!commentTitle || !commentContent || !score) {
+      alert('모두 입력해주세요!');
       return;
     }
-    addItem({ id: productInfo?.productId, name });
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
-      {
-        productId: productInfo?.productId,
-        singleOptionId: Number(age),
-        multipleOptionId: selectedOptions,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
-        },
-      },
+
+    const reviewData = {
+      title: commentTitle,
+      description: commentContent,
+      score,
+      purchaseItemId,
+    };
+
+    const formData = new FormData();
+    formData.append(
+      'reviewData',
+      new Blob([JSON.stringify(reviewData)], { type: 'application/json' }),
     );
+    if (commentImg) formData.append('reviewImage', commentImg);
+
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+          },
+        },
+      );
+      getComments();
+      setCommentTitle('');
+      setCommentContent('');
+      setCommentImg(null);
+      setScore(0);
+    } catch (error) {
+      console.error('Error uploading review:', error);
+    }
   };
 
-  const commentOnSubmitHandler = async () => {
-    if (commentTitle !== '') {
-      // 리뷰 데이터 개별 필드로 추가
+  const changeProductStatus = async (status: 'on-sale' | 'discontinued') => {
+    if (!productInfo) return;
+    try {
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo.productId}/sale-state/${status}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+          },
+        },
+      );
+      alert(
+        status === 'on-sale'
+          ? '판매 중으로 변경되었습니다.'
+          : '판매 중단으로 변경되었습니다.',
+      );
+      setProductInfo({ ...productInfo, isBan: status !== 'on-sale' });
+    } catch (error) {
+      console.error('Error updating product status:', error);
+    }
+  };
 
-      const reviewData = {
-        title: commentTitle,
-        description: commentContent,
-        score,
-        purchaseItemId: id,
-      };
+  const deleteProduct = async () => {
+    if (!productInfo) return;
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo.productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+          },
+        },
+      );
+      alert('삭제되었습니다.');
+      router.push('/');
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
 
-      const formData = new FormData();
-
-      const productDataJson = new Blob([JSON.stringify(reviewData)], {
-        type: 'application/json',
-      });
-
-      formData.append('reviewData', productDataJson);
-
-      if (commentImg !== null) formData.append('reviewImage', commentImg);
-
-      try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
-          formData,
+  const getChatRooms = async () => {
+    try {
+      const [buyerRes, sellerRes] = await Promise.all([
+        axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/buyer/chatrooms?sliceNumber=0&sliceSize=100`,
           {
             headers: {
               Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
             },
           },
-        );
-
-        location.reload();
-      } catch (error: any) {
-        console.error(
-          'Error uploading review:',
-          error.response?.data || error.message,
-        );
-      }
-    } else {
-      alert('모두 입력해주세요!');
+        ),
+        axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/chatrooms?sliceNumber=0&sliceSize=100`,
+          {
+            headers: {
+              Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
+            },
+          },
+        ),
+      ]);
+      setBuyerRooms(buyerRes.data.chatRoomList);
+      setSellerRooms(sellerRes.data.chatRoomList);
+    } catch (error) {
+      console.error('Error fetching chat rooms:', error);
     }
   };
 
-  const getProductStatusOn = async () => {
-    const res: any = await axios.put(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}/sale-state/on-sale`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
-        },
-      },
-    );
-    alert('판매 중으로 변경되었습니다.');
-    location.reload();
-  };
+  const createOrNavigateToChatRoom = async (productId: number) => {
+    await getChatRooms();
 
-  const getProductStatusOff = async () => {
-    const res: any = await axios.put(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}/sale-state/discontinued`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
-        },
-      },
-    );
-    alert('판매 중단으로 변경되었습니다.');
-    location.reload();
-  };
+    const existingRoom =
+      buyerRooms.find((room: any) => room.product.productId === productId) ||
+      sellerRooms.find((room: any) => room.product.productId === productId);
 
-  const deleteProduct = async () => {
-    const res: any = await axios.delete(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo?.productId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
-        },
-      },
-    );
-    alert('삭제되었습니다.');
-    location.reload();
-  };
-
-  const getChatRoomBySeller = async () => {
-    const res: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/chatrooms?sliceNumber=0&sliceSize=100`,
-      {
-        headers: {
-          Authorization: 'Bearer ' + fetchAccessToken || managerAccessToken,
-        },
-      },
-    );
-    setSellerRooms(res.data.chatRoomList);
-  };
-
-  // 구매자 입장에서의 채팅방 조회
-  const getChatRoomByBuyer = async () => {
-    const res: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/buyer/chatrooms?sliceNumber=0&sliceSize=100`,
-      {
-        headers: {
-          Authorization: 'Bearer ' + fetchAccessToken || managerAccessToken,
-        },
-      },
-    );
-    setBuyerRooms(res.data.chatRoomList);
-  };
-
-  // 채팅방 생성
-  const makeChatRoom = async (productId: number) => {
-    getChatRoomByBuyer();
-    getChatRoomBySeller();
-
-    const room1 = buyerRooms.find((el: any) => {
-      return el.product.productId === productId;
-    });
-
-    const room2 = sellerRooms.find((el: any) => {
-      return el.product.productId === productId;
-    });
-
-    if (room1 || room2) {
-      router.push(`/chat/${room1?.id || room2?.id}`);
+    if (existingRoom) {
+      router.push(`/chat/${existingRoom.id}`);
       return;
     }
 
     try {
-      const res: any = await axios.post(
+      const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/chat`,
         { productId },
         {
           headers: {
-            Authorization: 'Bearer ' + fetchAccessToken || managerAccessToken,
+            Authorization: `Bearer ${fetchAccessToken || managerAccessToken}`,
           },
         },
       );
-      router.push(`/chat/${res.data.chatRoomId}`);
-    } catch (e) {
-      console.log(e);
+      router.push(`/chat/${response.data.chatRoomId}`);
+    } catch (error) {
+      console.error('Error creating chat room:', error);
     }
   };
 
   return (
-    <div
-      className="relative flex size-full min-h-screen flex-col bg-[#f8fafb] group/design-root overflow-x-hidden"
-      style={{ fontFamily: 'Epilogue, Noto Sans, sans-serif' }}
-    >
-      <div className="layout-container flex h-full grow flex-col">
-        <div className="gap-1 px-6 flex flex-1 justify-center py-5">
+    <div className="relative flex flex-col min-h-screen bg-[#f8fafb] overflow-x-hidden">
+      <div className="layout-container flex h-full flex-col">
+        <div className="flex flex-1 justify-center py-5 px-6">
           <div className="layout-content-container flex flex-col max-w-[920px] flex-1">
             <div className="@container">
               <div className="@[480px]:p-4">
                 <div className="relative flex min-h-[480px] rounded-lg overflow-hidden">
                   <img
-                    src={productInfo?.productImageDownloadUrlList[0] as string}
+                    src={
+                      productInfo?.productImageDownloadUrlList?.[0] as string
+                    }
                     alt="제품 이미지"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
-                  {/* 그라데이션 오버레이 */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10"></div>
-
-                  {/* 텍스트 및 버튼 컨텐츠 */}
                   <div className="relative z-10 flex flex-col gap-6 justify-end px-4 pb-10 sm:px-10">
                     <div className="flex flex-col gap-2 text-left">
                       <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] sm:text-5xl sm:leading-tight sm:tracking-[-0.033em]">
                         제품명: {productInfo?.name}
                       </h1>
                     </div>
-
                     {memberInfo?.id === productInfo?.sellerId && (
                       <div className="flex gap-4 mt-4">
                         <Button
                           variant="contained"
                           className="bg-green-500 text-white hover:bg-green-600 transition duration-300"
-                          onClick={() => getProductStatusOn()}
+                          onClick={() => changeProductStatus('on-sale')}
                         >
                           판매중으로 변경
                         </Button>
                         <Button
                           variant="contained"
                           className="bg-yellow-500 text-white hover:bg-yellow-600 transition duration-300"
-                          onClick={() => getProductStatusOff()}
+                          onClick={() => changeProductStatus('discontinued')}
                         >
                           판매중단으로 변경
                         </Button>
                         <Button
                           variant="contained"
                           className="bg-red-500 text-white hover:bg-red-600 transition duration-300"
-                          onClick={() => deleteProduct()}
+                          onClick={deleteProduct}
                         >
                           제품 삭제
                         </Button>
@@ -425,7 +437,6 @@ export default function Page() {
                     )}
                   </div>
                 </div>
-
                 <div
                   className="mt-6 text-blue-600 cursor-pointer hover:underline"
                   onClick={() =>
@@ -448,7 +459,7 @@ export default function Page() {
               <div className="flex gap-4 flex-wrap">
                 {memberInfo?.id === productInfo?.sellerId && (
                   <Button
-                    onClick={() => handleClick()}
+                    onClick={handleEditClick}
                     variant="contained"
                     className="w-full sm:w-[200px] bg-blue-500 hover:bg-blue-600 text-white transition duration-300 ease-in-out"
                   >
@@ -456,7 +467,7 @@ export default function Page() {
                   </Button>
                 )}
                 <Button
-                  onClick={() => getCart()}
+                  onClick={addToCart}
                   variant="contained"
                   className="w-full sm:w-[200px] bg-red-500 hover:bg-red-600 text-white transition duration-300 ease-in-out"
                 >
@@ -470,7 +481,9 @@ export default function Page() {
                   제품 신고하기
                 </Button>
                 <Button
-                  onClick={() => makeChatRoom(productInfo?.productId as number)}
+                  onClick={() =>
+                    createOrNavigateToChatRoom(productInfo?.productId as number)
+                  }
                   variant="contained"
                   className="w-full sm:w-[200px] bg-red-500 hover:bg-red-600 text-white transition duration-300 ease-in-out"
                 >
@@ -484,21 +497,23 @@ export default function Page() {
             </h2>
             <div className="flex items-center">
               <FormControl sx={{ m: 1, width: 300 }}>
-                <InputLabel id="demo-multiple-checkbox-label">옵션</InputLabel>
+                <InputLabel id="multiple-options-label">옵션</InputLabel>
                 <Select
-                  labelId="demo-multiple-checkbox-label"
-                  id="demo-multiple-checkbox"
+                  labelId="multiple-options-label"
+                  id="multiple-options"
                   multiple
-                  value={selectedOptions}
-                  onChange={handleChange}
-                  input={<OutlinedInput label="Tag" />}
+                  value={selectedMultipleOptions}
+                  onChange={handleMultipleOptionsChange}
+                  input={<OutlinedInput label="옵션" />}
                   renderValue={(selected) => selected.join(', ')}
                   MenuProps={MenuProps}
                 >
-                  {multi.map((option: any) => (
+                  {multipleOptions.map((option: any) => (
                     <MenuItem key={option.optionId} value={option.optionId}>
                       <Checkbox
-                        checked={selectedOptions.indexOf(option.optionId) > -1}
+                        checked={
+                          selectedMultipleOptions.indexOf(option.optionId) > -1
+                        }
                       />
                       <ListItemText
                         primary={`${option.optionName} (${option.priceChangeAmount > 0 ? '+' : ''}${option.priceChangeAmount})`}
@@ -508,21 +523,19 @@ export default function Page() {
                 </Select>
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">옵션</InputLabel>
+                <InputLabel id="single-option-label">옵션</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={age || ''}
-                  label="option"
-                  onChange={handleChangeSingle}
+                  labelId="single-option-label"
+                  id="single-option"
+                  value={selectedSingleOption || ''}
+                  label="옵션"
+                  onChange={handleSingleOptionChange}
                 >
-                  {single.map((el: any) => {
-                    return (
-                      <MenuItem key={el.optionId} value={el.optionId}>
-                        {el.optionName}
-                      </MenuItem>
-                    );
-                  })}
+                  {singleOptions.map((option: any) => (
+                    <MenuItem key={option.optionId} value={option.optionId}>
+                      {option.optionName}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </div>
@@ -532,12 +545,7 @@ export default function Page() {
                   <p className="text-[#0e141b] text-sm font-medium leading-normal">
                     Product Information
                   </p>
-                  <div
-                    className="text-[#0e141b] group-open:rotate-180"
-                    data-icon="CaretDown"
-                    data-size="20px"
-                    data-weight="regular"
-                  >
+                  <div className="text-[#0e141b] group-open:rotate-180">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20px"
@@ -551,72 +559,26 @@ export default function Page() {
                 </summary>
                 <div className="text-[#4f7396] text-sm font-normal leading-normal pb-2">
                   {productInfo?.blockDataList?.map(
-                    (item: Block, index: number) => {
-                      return (
-                        <div key={index}>
-                          {item.blockType === 'TEXT_TYPE' ? (
-                            <div>{item.contentInTextBlock}</div>
-                          ) : (
-                            <div>
-                              <img src={item.imgDownloadUrlInImageBlock} />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    },
+                    (item: Block, index: number) => (
+                      <div key={index}>
+                        {item.blockType === 'TEXT_TYPE' ? (
+                          <div>{item.contentInTextBlock}</div>
+                        ) : (
+                          <div>
+                            <img
+                              src={item.imgDownloadUrlInImageBlock}
+                              alt="Product Block"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ),
                   )}
                 </div>
               </details>
-              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
-                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
-                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
-                    Material
-                  </p>
-                  <div
-                    className="text-[#0e141b] group-open:rotate-180"
-                    data-icon="CaretDown"
-                    data-size="20px"
-                    data-weight="regular"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20px"
-                      height="20px"
-                      fill="currentColor"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-                    </svg>
-                  </div>
-                </summary>
-                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
-              </details>
-              <details className="flex flex-col rounded-xl border border-[#d0dbe6] bg-[#f8fafb] px-[15px] py-[7px] group">
-                <summary className="flex cursor-pointer items-center justify-between gap-6 py-2">
-                  <p className="text-[#0e141b] text-sm font-medium leading-normal">
-                    Shipping Information
-                  </p>
-                  <div
-                    className="text-[#0e141b] group-open:rotate-180"
-                    data-icon="CaretDown"
-                    data-size="20px"
-                    data-weight="regular"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20px"
-                      height="20px"
-                      fill="currentColor"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
-                    </svg>
-                  </div>
-                </summary>
-                <p className="text-[#4f7396] text-sm font-normal leading-normal pb-2"></p>
-              </details>
+              {/* Additional details sections can be added here */}
             </div>
-            <div className="flex  gap-x-8 gap-y-6 p-4 mt-[100px] ">
+            <div className="flex gap-x-8 gap-y-6 p-4 mt-[100px] ">
               <div className="flex flex-col gap-2">
                 <p className="text-[#0e141b] text-4xl font-black leading-tight tracking-[-0.033em]">
                   {productInfo?.scoreAvg}점
@@ -635,7 +597,10 @@ export default function Page() {
 
             <div className="flex flex-col items-center p-6 bg-[#f9f9f7]">
               <form
-                onSubmit={commentOnSubmitHandler}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitComment();
+                }}
                 className="w-full max-w-[800px] bg-white shadow-lg rounded-lg p-8"
               >
                 <Typography
@@ -647,34 +612,34 @@ export default function Page() {
                 <Rating
                   name="simple-controlled"
                   value={score}
-                  onChange={(event: any, newValue: number | null) => {
+                  onChange={(event, newValue) => {
                     setScore(newValue);
                   }}
                 />
                 <div className="flex flex-col gap-6 mt-8">
                   <label className="text-lg font-medium">타이틀</label>
                   <input
-                    className="w-full border border-solid border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 mb-6"
+                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400 mb-6"
                     value={commentTitle}
-                    onChange={(e: any) => setCommentTitle(e.target.value)}
+                    onChange={(e) => setCommentTitle(e.target.value)}
                   />
                   <label className="text-lg font-medium">내용</label>
                   <textarea
-                    className="w-full resize-none h-[200px] border border-solid border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400"
+                    className="w-full resize-none h-[200px] border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-400"
                     value={commentContent}
-                    onChange={(e: any) => setCommentContent(e.target.value)}
+                    onChange={(e) => setCommentContent(e.target.value)}
                   />
                 </div>
                 <input
                   type="file"
                   className="mt-6 mb-8"
-                  onChange={(event: any) => {
-                    setCommentImg(event.target.files[0]);
+                  onChange={(e) => {
+                    setCommentImg(e.target.files?.[0] || null);
                   }}
                 />
                 <Button
+                  type="submit"
                   className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition duration-300 ease-in-out"
-                  onClick={commentOnSubmitHandler}
                 >
                   제출하기
                 </Button>
@@ -686,16 +651,14 @@ export default function Page() {
                       <h2 className="text-[#1c190d] text-[24px] font-bold leading-tight tracking-[-0.015em] px-4 pb-4 pt-5">
                         Rating &amp; Reviews
                       </h2>
-                      {comments.map((el: any) => {
-                        return (
-                          <Comment
-                            key={el.id} // or any unique identifier
-                            el={el}
-                            setComments={setComments}
-                            comments={comments}
-                          />
-                        );
-                      })}
+                      {comments.map((comment: any) => (
+                        <Comment
+                          key={comment.id}
+                          el={comment}
+                          setComments={setComments}
+                          comments={comments}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -703,13 +666,13 @@ export default function Page() {
             </div>
           </div>
         </div>
+        {modal && (
+          <ReportModal
+            setModal={setModal}
+            productId={productInfo?.productId as number}
+          />
+        )}
       </div>
-      {modal && (
-        <ReportModal
-          setModal={setModal}
-          productId={productInfo?.productId as number}
-        />
-      )}
     </div>
   );
 }

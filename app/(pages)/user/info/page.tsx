@@ -208,6 +208,13 @@ export default function Page() {
                 <Button
                   variant="contained"
                   className="w-[480px]"
+                  onClick={() => router.push('/bank')}
+                >
+                  계좌 등록 및 조회
+                </Button>
+                <Button
+                  variant="contained"
+                  className="w-[480px]"
                   onClick={() => router.push('/chat')}
                 >
                   채팅방 확인하기
