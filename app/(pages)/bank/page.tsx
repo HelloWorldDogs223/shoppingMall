@@ -37,14 +37,17 @@ function AccountComponent() {
     setError('');
 
     try {
-      const response = await fetch('/member/account', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/account`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ accountNumber }),
         },
-        body: JSON.stringify({ accountNumber }),
-      });
+      );
 
       if (response.ok) {
         alert('계좌번호가 성공적으로 등록되었습니다.');
@@ -60,12 +63,15 @@ function AccountComponent() {
 
   const fetchAccount = async () => {
     try {
-      const response = await fetch('/member/account', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/account`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         },
-      });
+      );
 
       if (response.ok) {
         const data = await response.json();
