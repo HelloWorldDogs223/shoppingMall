@@ -1,60 +1,55 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
+
 interface Props {
   basket: any;
   basketDeleteHandler: (args: number, args2: number) => void;
 }
 
 export default function BasketProduct({ basket, basketDeleteHandler }: Props) {
-  const [count, setCount] = useState<number>(0);
-  const [price, setPrice] = useState<number>(basket.finalPrice);
-
   const router = useRouter();
 
   return (
-    <div className="flex items-center mb-[32px]">
-      <div
+    <div className="flex items-center mb-8 p-4 bg-white shadow rounded-lg transition duration-200 ease-in-out transform hover:scale-105">
+      <img
         onClick={() => router.push(`/product/${basket.product.productId}`)}
-        className="flex justify-center"
-      >
-        <img
-          src={basket.product.firstProductImgDownloadUrl}
-          className="w-[70px] h-[70px]"
-          alt="product"
-        />
-        <div className="flex flex-col ml-[16px]">
-          <div className="w-[142px] text-neutral-900 text-base font-medium font-['Work Sans'] leading-normal">
-            {basket.product.name}
-          </div>
-          <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-            {price}
-          </div>
-          <div className="w-[142px] text-slate-500 text-sm font-normal font-['Work Sans'] leading-[21px]">
-            {basket.singleOption.optionName} (
-            {basket.singleOption.priceChangeAmount})
-          </div>
-          <div>
-            {basket.multiOptions.map((el: any) => {
-              return (
-                <div>
-                  <div>{el.optionName}</div>
-                  <div>{el.priceChangeAmount}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <Button
-          variant="contained"
-          onClick={(e: any) => {
-            e.stopPropagation();
-            basketDeleteHandler(basket.product.productId, basket.basketItemId);
-          }}
+        src={basket.product.firstProductImgDownloadUrl}
+        className="w-20 h-20 object-cover cursor-pointer"
+        alt="product"
+      />
+      <div className="flex flex-col ml-4 flex-grow">
+        <div
+          onClick={() => router.push(`/product/${basket.product.productId}`)}
+          className="text-lg font-semibold text-gray-800 cursor-pointer hover:underline"
         >
-          X ( 삭제하기 )
-        </Button>
+          {basket.product.name}
+        </div>
+        <div className="text-gray-500">
+          ₩{basket.finalPrice.toLocaleString()}
+        </div>
+        <div className="text-gray-500">
+          {basket.singleOption.optionName} (+₩
+          {basket.singleOption.priceChangeAmount.toLocaleString()})
+        </div>
+        <div>
+          {basket.multiOptions.map((el: any, index: number) => (
+            <div key={index} className="text-gray-500">
+              {el.optionName} (+₩{el.priceChangeAmount.toLocaleString()})
+            </div>
+          ))}
+        </div>
       </div>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={(e: any) => {
+          e.stopPropagation();
+          basketDeleteHandler(basket.product.productId, basket.basketItemId);
+        }}
+      >
+        삭제하기
+      </Button>
     </div>
   );
 }

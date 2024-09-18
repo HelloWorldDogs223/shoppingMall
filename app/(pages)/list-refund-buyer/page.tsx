@@ -93,7 +93,7 @@ export default function Page() {
           <div className="mt-4 text-lg font-semibold">환불 정보</div>
           <div className="text-gray-700">
             <span className="font-medium">환불 여부:</span>{' '}
-            {el.isRefund ? '가능' : '불가능'}
+            {el.isRefund ? '됨' : '안됨'}
           </div>
           <div className="text-gray-700">
             <span className="font-medium">환불 상태:</span> {el.refundState}

@@ -1,127 +1,125 @@
 'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import axios from 'axios';
 import { Button } from '@mui/material';
 
-import axios from 'axios';
-import { useRouter, useParams } from 'next/navigation';
 import useAuthStore from '../store/login';
 import useCartStore from '../store/cart';
-import { useEffect, useState } from 'react';
 import useAlarmStore from '../store/alarm';
 
 export default function Home() {
-  const setAlarmMethod = useAlarmStore((state: any) => state.setAlarms);
-
   const router = useRouter();
   const params = useParams();
 
   const [img, setImg] = useState('');
-  const [managerAccessToken, setManagerAccessToken] = useState('');
-
-  const cartLength = useCartStore((state: any) => state.cart.length);
-  const setCart = useCartStore((state: any) => state.setCart);
-  const { accessToken, clearAccessToken } = useAuthStore();
-
+  const [managerAccessToken, setManagerAccessToken] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>('');
   const [alarm, setAlarm] = useState<any[]>([]);
 
-  const [keyword, setKeyword] = useState(params.keyword);
+  const { accessToken, clearAccessToken } = useAuthStore();
+  const setAlarmMethod = useAlarmStore((state) => state.setAlarms);
+  const cartLength = useCartStore((state: any) => state.cart.length);
+  const setCart = useCartStore((state: any) => state.setCart);
 
-  const onClickHandler = () => {
+  const onClickHandler = useCallback(() => {
     router.push('/');
-  };
+  }, [router]);
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      setImg(response.data?.profileImageDownLoadUrl);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [accessToken]);
+
+  const getAlarms = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/alarms?sliceSize=99&sliceNumber=0`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      );
+      setAlarm(response.data.alarmList);
+      setAlarmMethod(response.data.alarmList);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [accessToken, setAlarmMethod]);
+
+  const logout = useCallback(async () => {
+    try {
+      if (managerAccessToken) {
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/logout`,
+          {
+            headers: { Authorization: `Bearer ${managerAccessToken}` },
+          },
+        );
+        localStorage.removeItem('manager');
+      } else {
+        await axios.get('https://api.group-group.com/auth/logout', {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        clearAccessToken();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      location.reload();
+    }
+  }, [accessToken, clearAccessToken, managerAccessToken]);
+
+  const searchHandler = useCallback(() => {
+    router.push(`/search/${keyword}`);
+  }, [router, keyword]);
 
   useEffect(() => {
-    if (!params.keyword) {
-      setKeyword('');
-    } else {
-      setKeyword(params.keyword);
-    }
-    setManagerAccessToken(localStorage.getItem('manager') as string);
+    setKeyword((params.keyword as string) || '');
+    setManagerAccessToken(localStorage.getItem('manager') || '');
   }, [params]);
 
-  const fetchUser = async () => {
-    const userInfoRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    );
-    setImg(userInfoRes.data?.profileImageDownLoadUrl);
-  };
-
-  const getAlarms = async () => {
-    const alarmRes: any = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/alarms?sliceSize=99&sliceNumber=0`,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
-    );
-
-    setAlarm(alarmRes.data.alarmList);
-    setAlarmMethod(alarmRes.data.alarmList);
-  };
-
   useEffect(() => {
-    const asyncFunction = async () => {
+    const initialize = async () => {
       if (accessToken) {
         try {
-          const basketRes = await axios.get(
+          const basketResponse = await axios.get(
             `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
             {
               headers: { Authorization: `Bearer ${accessToken}` },
             },
           );
-
-          const resData = basketRes.data.basketItemDtos;
-
+          const resData = basketResponse.data.basketItemDtos;
           setCart(
-            resData.map((el: any) => {
-              return { id: el.productId, name: el.name };
-            }),
+            resData.map((item: any) => ({
+              id: item.productId,
+              name: item.name,
+            })),
           );
-        } catch (e) {
-          console.log(e);
+        } catch (error) {
+          console.error(error);
         }
         fetchUser();
         getAlarms();
       }
     };
-    asyncFunction();
-  }, [accessToken]);
-
-  async function logout() {
-    if (managerAccessToken) {
-      const res: any = axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/logout`,
-        {
-          headers: { Authorization: `Bearer ${managerAccessToken}` },
-        },
-      );
-      localStorage.removeItem('manager');
-      location.reload();
-    } else {
-      try {
-        const res: any = await axios.get(
-          'https://api.group-group.com/auth/logout',
-          {
-            withCredentials: true,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        );
-      } catch (e) {
-        console.log(e);
-      } finally {
-        clearAccessToken();
-      }
-    }
-    location.reload();
-  }
-
-  const searchHandler = () => {
-    router.push(`/search/${keyword}`);
-  };
+    initialize();
+  }, [accessToken, fetchUser, getAlarms, setCart]);
 
   return (
     <div className="pt-[65px]">

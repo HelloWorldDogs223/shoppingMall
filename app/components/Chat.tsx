@@ -22,6 +22,8 @@ export default function ChatRoom({ params }: { params: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [stompClient, setStompClient] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -62,8 +64,11 @@ export default function ChatRoom({ params }: { params: string }) {
       });
 
       setStompClient(client);
+      setIsLoading(false);
     } catch (error) {
       console.error('Failed to connect to chat room:', error);
+      setError('채팅방 연결에 실패했습니다. 다시 시도해 주세요.');
+      setIsLoading(false);
     }
   }, [accessToken, params]);
 
@@ -79,6 +84,7 @@ export default function ChatRoom({ params }: { params: string }) {
       setMessages(response.data.chatMessages.reverse());
     } catch (error) {
       console.error('Failed to fetch latest messages:', error);
+      setError('최근 메시지를 불러오는 데 실패했습니다.');
     }
   };
 
@@ -109,7 +115,7 @@ export default function ChatRoom({ params }: { params: string }) {
         console.log(e);
       }
     }
-  }, [stompClient, inputValue, params, accessToken]);
+  }, [stompClient, inputValue, params, accessToken, router]);
 
   const fetchPreviousMessages = async () => {
     if (messages.length === 0) return;
@@ -131,6 +137,7 @@ export default function ChatRoom({ params }: { params: string }) {
       ]);
     } catch (error) {
       console.error('Failed to fetch previous messages:', error);
+      setError('이전 메시지를 불러오는 데 실패했습니다.');
     }
   };
 
@@ -143,36 +150,68 @@ export default function ChatRoom({ params }: { params: string }) {
     };
   }, [connectToChatRoom]);
 
-  return (
-    <div className="max-w-lg mx-auto border rounded-lg shadow overflow-hidden">
-      <div className="p-4 bg-gray-100 flex items-center">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="flex-1 border-gray-300 p-2 rounded mr-2"
-          placeholder="메시지 입력..."
-        />
-        <button
-          onClick={sendMessage}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg shadow-md"
+          role="alert"
         >
-          보내기
-        </button>
+          <strong className="font-bold">오류 발생!</strong>
+          <span className="block mt-1">{error}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto h-screen flex flex-col bg-gray-100 shadow-xl rounded-lg overflow-hidden">
+      <div className="bg-blue-500 text-white p-4">
+        <h1 className="text-xl font-bold">채팅방</h1>
+      </div>
+      <div className="flex-grow overflow-y-auto p-4">
         <button
           onClick={fetchPreviousMessages}
-          className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+          className="mb-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
         >
-          이전 조회
+          이전 메시지 불러오기
         </button>
+        <ul className="space-y-3">
+          {messages.map((item, index) => (
+            <li
+              key={index}
+              className="bg-white rounded-lg p-3 shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+            >
+              <p className="text-gray-800">{item.message}</p>
+            </li>
+          ))}
+        </ul>
       </div>
-      <ul className="p-4 space-y-2 bg-white">
-        {messages.map((item, index) => (
-          <li key={index} className="bg-gray-200 rounded p-2">
-            {item.message}
-          </li>
-        ))}
-      </ul>
+      <div className="p-4 bg-white border-t border-gray-200">
+        <div className="flex items-center">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            className="flex-grow border border-gray-300 rounded-l-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+            placeholder="메시지를 입력하세요..."
+          />
+          <button
+            onClick={sendMessage}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-r-full transition duration-300 ease-in-out"
+          >
+            전송
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
