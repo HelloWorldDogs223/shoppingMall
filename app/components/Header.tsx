@@ -14,7 +14,9 @@ export default function Home() {
   const params = useParams();
 
   const [img, setImg] = useState('');
-  const [managerAccessToken, setManagerAccessToken] = useState<string>();
+  const [managerAccessToken, setManagerAccessToken] = useState<string | null>(
+    null,
+  );
   const [keyword, setKeyword] = useState<string>('');
   const [alarm, setAlarm] = useState<any[]>([]);
 
@@ -91,7 +93,7 @@ export default function Home() {
 
   useEffect(() => {
     setKeyword((params.keyword as string) || '');
-    setManagerAccessToken(localStorage.getItem('manager') || '');
+    setManagerAccessToken(localStorage.getItem('manager') || null);
   }, [params]);
 
   useEffect(() => {
