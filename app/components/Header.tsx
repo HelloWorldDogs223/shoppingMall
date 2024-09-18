@@ -14,7 +14,7 @@ export default function Home() {
   const params = useParams();
 
   const [img, setImg] = useState('');
-  const [managerAccessToken, setManagerAccessToken] = useState<string>('');
+  const [managerAccessToken, setManagerAccessToken] = useState<string>();
   const [keyword, setKeyword] = useState<string>('');
   const [alarm, setAlarm] = useState<any[]>([]);
 
