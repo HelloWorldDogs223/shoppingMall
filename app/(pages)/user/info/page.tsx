@@ -34,7 +34,6 @@ export default function Page() {
     const userInfoRes: any = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
       {
-        withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -70,7 +69,6 @@ export default function Page() {
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/email/registration/request`,
       { email: editEmail },
       {
-        withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -113,7 +111,6 @@ export default function Page() {
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/info`,
         { nickName: editNickname, profileImg: imgFile },
         {
-          withCredentials: true,
           headers: {
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'multipart/form-data',
