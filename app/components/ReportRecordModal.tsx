@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useManagerFetch } from '../hooks/useManagerFetch';
 import axios from 'axios';
 import { Button } from '@mui/material';
+import apiClient from '../utils/axiosSetting';
 
 interface ReportRecordType {
   // 조회된 제품신고 데이터 리스트
@@ -51,13 +52,13 @@ export default function ReportRecordModal({ sellerId, onClose, mode }: any) {
 
   const getReportRecord = async () => {
     if (mode === 'review') {
-      const reportRes: any = await axios.get(
+      const reportRes: any = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/writer/reports?sliceNumber=0&sliceSize=999&sell&reviewWriterId=${sellerId}`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       setReport(reportRes.data.reviewReportList);
     } else {
-      const reportRes: any = await axios.get(
+      const reportRes: any = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/seller/reports?sliceNumber=0&sliceSize=999&sell&productSellerId=${sellerId}`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );

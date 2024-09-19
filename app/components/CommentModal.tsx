@@ -1,6 +1,7 @@
 import { Button, Rating, Typography } from '@mui/material';
 import axios from 'axios';
 import { useFetch } from '../hooks/useFetch';
+import apiClient from '../utils/axiosSetting';
 
 interface Props {
   score: number | null;
@@ -48,7 +49,7 @@ export default function CommentModal({
 
       if (commentImg !== null) formData.append('reviewImage', commentImg);
 
-      const editRes: any = await axios.put(
+      const editRes: any = await apiClient.put(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
         formData,
         { headers: { Authorization: `Bearer ${accessToken}` } },

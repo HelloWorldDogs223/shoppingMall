@@ -1,5 +1,6 @@
 'use client';
 
+import apiClient from '@/app/utils/axiosSetting';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -12,7 +13,7 @@ export default function Page() {
   const router = useRouter();
 
   const handleSubmit = async () => {
-    await axios.post(
+    await apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/signup/request`,
       {
         email,

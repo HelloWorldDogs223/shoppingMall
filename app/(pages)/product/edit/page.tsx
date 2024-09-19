@@ -1,6 +1,7 @@
 'use client';
 
 import { useFetch } from '@/app/hooks/useFetch';
+import apiClient from '@/app/utils/axiosSetting';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
