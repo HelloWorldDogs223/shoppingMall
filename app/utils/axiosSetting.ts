@@ -7,8 +7,9 @@ const apiClient = axios.create({
 // 응답 인터셉터 설정
 apiClient.interceptors.response.use(
   (response) => {
-    console.log(response);
-    if (response) {
+    if (
+      response.request.responseURL === 'https://front.group-group.com/check'
+    ) {
       window.location.href = response.request.responseURL;
     }
     return response;
