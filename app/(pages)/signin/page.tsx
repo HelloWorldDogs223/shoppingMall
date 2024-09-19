@@ -31,12 +31,9 @@ export default function Page() {
         localStorage.setItem('manager', loginRes.data.accessToken as string);
         router.push('/');
       }
+      return;
     } catch (e) {
       console.log(e);
-    }
-
-    if (localStorage.getItem('manager')) {
-      return;
     }
 
     try {
