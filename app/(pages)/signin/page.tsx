@@ -29,7 +29,7 @@ export default function Page() {
       );
       if (loginRes.data) {
         localStorage.setItem('manager', loginRes.data.accessToken as string);
-        router.push('/');
+        router.push('/manager/info');
       }
       return;
     } catch (e) {
