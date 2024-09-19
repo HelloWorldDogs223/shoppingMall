@@ -13,7 +13,7 @@ export default function BasicSwitches() {
   const onOffClickHandler = (e: any) => {
     apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/root-manager/manager-mode`,
-      { isOn: e.target.value === 'on' ? true : false },
+      { isOn: e.target.checked },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
