@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '../store/login';
 import { useEffect, useState } from 'react';
+import apiClient from '../utils/axiosSetting';
 
 export const useFetch = () => {
   const router = useRouter();
@@ -14,7 +15,7 @@ export const useFetch = () => {
     const fetchToken = async () => {
       if (!accessToken) {
         try {
-          const res = await axios.get(
+          const res = await apiClient.get(
             'https://api.group-group.com/auth/reissue',
           );
           setAccessToken(res.data.accessToken);
