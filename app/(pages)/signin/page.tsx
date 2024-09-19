@@ -35,6 +35,10 @@ export default function Page() {
       console.log(e);
     }
 
+    if (localStorage.getItem('manager')) {
+      return;
+    }
+
     try {
       const loginResUser: any = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/login`,
