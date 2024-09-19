@@ -9,8 +9,7 @@ apiClient.interceptors.response.use(
   (response) => {
     console.log(response);
     if (response) {
-      console.log(response.request.responseURL);
-      // window.location.href = response.request.responseURL;
+      window.location.href = response.request.responseURL;
     }
     return response;
   },
