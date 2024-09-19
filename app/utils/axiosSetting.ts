@@ -9,21 +9,20 @@ const apiClient = axios.create({
 // 응답 인터셉터 설정
 apiClient.interceptors.response.use(
   (response) => {
-    // 정상적인 응답은 그대로 반환
-    return response;
-  },
-  (error) => {
-    // 에러 응답 처리
-    if (error.response) {
+    if (response) {
       console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
-      const status = error.response.status;
+      const status = response.status;
       if (status === 302 || status === 301) {
-        const redirectUrl = error.response.headers.location;
+        const redirectUrl = response.headers.location;
         if (redirectUrl) {
           Router.push(redirectUrl);
         }
       }
     }
+    return response;
+  },
+  (error) => {
+    // 에러 응답 처리
     return Promise.reject(error);
   },
 );
