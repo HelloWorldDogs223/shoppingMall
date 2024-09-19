@@ -30,6 +30,10 @@ export default function Page() {
       );
       router.push('/');
     } catch (e) {
+      console.log(e);
+    }
+
+    try {
       const loginRes: any = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/login`,
         { serialNumber: data.get('email'), password: data.get('password') },
@@ -38,6 +42,7 @@ export default function Page() {
         localStorage.setItem('manager', loginRes.data.accessToken as string);
         router.push('/');
       }
+    } catch (e) {
       console.log(e);
     }
   };
