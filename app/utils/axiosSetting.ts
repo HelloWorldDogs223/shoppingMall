@@ -1,6 +1,8 @@
 // api.js
 import axios from 'axios';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
+
+const router = useRouter();
 
 const apiClient = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}`, // API의 기본 URL 설정
@@ -15,11 +17,12 @@ apiClient.interceptors.response.use(
   (error) => {
     // 에러 응답 처리
     if (error.response) {
+      console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
       const status = error.response.status;
       if (status === 302 || status === 301) {
         const redirectUrl = error.response.headers.location;
         if (redirectUrl) {
-          Router.push(redirectUrl);
+          router.push(redirectUrl);
         }
       }
     }
