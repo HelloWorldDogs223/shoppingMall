@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button, Rating } from '@mui/material';
 import CommentModal from './CommentModal';
 import ReportModal from './ReportModal';
+import apiClient from '../utils/axiosSetting';
 
 interface Props {
   el: any;
@@ -34,7 +35,7 @@ export default function Comment({ el, setComments, comments }: Props) {
   const [reportModal, setReportModal] = useState(false);
 
   const getMemberInfo = async () => {
-    const memberRes: any = await axios.get(
+    const memberRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -52,7 +53,7 @@ export default function Comment({ el, setComments, comments }: Props) {
   }, [el.score]);
 
   const commentDeleteHandler = () => {
-    const res: any = axios.delete(
+    const res: any = apiClient.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/${el.id}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );

@@ -21,6 +21,7 @@ import { useManagerFetch } from '@/app/hooks/useManagerFetch';
 import useCartStore from '@/app/store/cart';
 import ReportModal from '@/app/components/ReportModal';
 import Comment from '@/app/components/Comment';
+import apiClient from '@/app/utils/axiosSetting';
 
 interface Block {
   index: number;
@@ -97,7 +98,7 @@ export default function Page() {
 
   const getProductById = async () => {
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${uid}`,
         {
           headers: {
@@ -130,7 +131,7 @@ export default function Page() {
   const getComments = async () => {
     if (!productInfo) return;
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/reviews?sliceNumber=0&sliceSize=99&productId=${productInfo.productId}`,
       );
       setComments(response.data.reviewsList);
@@ -142,7 +143,7 @@ export default function Page() {
   const getPurchaseItems = async () => {
     if (!productInfo) return;
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases?sliceSize=99&sliceNumber=0`,
         {
           headers: {
@@ -164,7 +165,7 @@ export default function Page() {
 
   const getMemberInfo = async () => {
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
         {
           headers: {
@@ -234,7 +235,7 @@ export default function Page() {
     addItem({ id: productInfo.productId, name: productInfo.name });
 
     try {
-      await axios.post(
+      await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
         {
           productId: productInfo.productId,
@@ -273,7 +274,7 @@ export default function Page() {
     if (commentImg) formData.append('reviewImage', commentImg);
 
     try {
-      await axios.post(
+      await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review`,
         formData,
         {
@@ -295,7 +296,7 @@ export default function Page() {
   const changeProductStatus = async (status: 'on-sale' | 'discontinued') => {
     if (!productInfo) return;
     try {
-      await axios.put(
+      await apiClient.put(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo.productId}/sale-state/${status}`,
         {},
         {
@@ -318,7 +319,7 @@ export default function Page() {
   const deleteProduct = async () => {
     if (!productInfo) return;
     try {
-      await axios.delete(
+      await apiClient.delete(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${productInfo.productId}`,
         {
           headers: {
@@ -336,7 +337,7 @@ export default function Page() {
   const getChatRooms = async () => {
     try {
       const [buyerRes, sellerRes] = await Promise.all([
-        axios.get(
+        apiClient.get(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/buyer/chatrooms?sliceNumber=0&sliceSize=100`,
           {
             headers: {
@@ -344,7 +345,7 @@ export default function Page() {
             },
           },
         ),
-        axios.get(
+        apiClient.get(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/chatrooms?sliceNumber=0&sliceSize=100`,
           {
             headers: {
@@ -373,7 +374,7 @@ export default function Page() {
     }
 
     try {
-      const response = await axios.post(
+      const response = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/chat`,
         { productId },
         {

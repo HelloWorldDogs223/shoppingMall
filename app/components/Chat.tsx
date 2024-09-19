@@ -5,6 +5,7 @@ import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import { useFetch } from '@/app/hooks/useFetch';
 import { useRouter } from 'next/navigation';
+import apiClient from '../utils/axiosSetting';
 
 interface ChatMessage {
   chatId: string; // 채팅 메세지 ID
@@ -38,7 +39,7 @@ export default function ChatRoom({ params }: { params: string }) {
 
   const connectToChatRoom = useCallback(async () => {
     try {
-      const response = await axios.post<ChatRoomResponse>(
+      const response = await apiClient.post<ChatRoomResponse>(
         `${API_BASE_URL}/chat/connect/request`,
         { chatRoomId: params },
         { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -77,7 +78,7 @@ export default function ChatRoom({ params }: { params: string }) {
 
   const fetchLatestMessages = async (chatRoomId: string) => {
     try {
-      const response = await axios.get<{ chatMessages: ChatMessage[] }>(
+      const response = await apiClient.get<{ chatMessages: ChatMessage[] }>(
         `${API_BASE_URL}/chat/messages/latest`,
         {
           params: { chatRoomId, sliceSize: 3 },
@@ -93,7 +94,7 @@ export default function ChatRoom({ params }: { params: string }) {
 
   const recordMessage = async (chatMessageId: string) => {
     try {
-      await axios.put(
+      await apiClient.put(
         `${API_BASE_URL}/chat/record`,
         { chatRoomId: params, chatMessageId },
         { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -123,7 +124,7 @@ export default function ChatRoom({ params }: { params: string }) {
   const fetchPreviousMessages = async () => {
     if (messages.length === 0) return;
     try {
-      const response = await axios.get<{ chatMessages: ChatMessage[] }>(
+      const response = await apiClient.get<{ chatMessages: ChatMessage[] }>(
         `${API_BASE_URL}/chat/messages`,
         {
           params: {

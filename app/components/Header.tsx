@@ -8,6 +8,7 @@ import { Button } from '@mui/material';
 import useAuthStore from '../store/login';
 import useCartStore from '../store/cart';
 import useAlarmStore from '../store/alarm';
+import apiClient from '../utils/axiosSetting';
 
 export default function Home() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function Home() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
         {
           withCredentials: true,
@@ -48,7 +49,7 @@ export default function Home() {
 
   const getAlarms = useCallback(async () => {
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/alarms?sliceSize=99&sliceNumber=0`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -64,7 +65,7 @@ export default function Home() {
   const logout = useCallback(async () => {
     try {
       if (managerAccessToken) {
-        await axios.get(
+        await apiClient.get(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/logout`,
           {
             headers: { Authorization: `Bearer ${managerAccessToken}` },
@@ -72,7 +73,7 @@ export default function Home() {
         );
         localStorage.removeItem('manager');
       } else {
-        await axios.get('https://api.group-group.com/auth/logout', {
+        await apiClient.get('https://api.group-group.com/auth/logout', {
           withCredentials: true,
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -100,7 +101,7 @@ export default function Home() {
     const initialize = async () => {
       if (accessToken) {
         try {
-          const basketResponse = await axios.get(
+          const basketResponse = await apiClient.get(
             `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
             {
               headers: { Authorization: `Bearer ${accessToken}` },

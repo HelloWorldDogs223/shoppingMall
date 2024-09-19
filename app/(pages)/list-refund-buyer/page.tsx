@@ -1,6 +1,7 @@
 'use client';
 
 import { useFetch } from '@/app/hooks/useFetch';
+import apiClient from '@/app/utils/axiosSetting';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -9,7 +10,7 @@ export default function Page() {
   const { accessToken } = useFetch();
 
   const getRefundData = async () => {
-    const refundRes: any = await axios.get(
+    const refundRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/purchase/refunds?sliceNumber=0&sliceSize=99`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );

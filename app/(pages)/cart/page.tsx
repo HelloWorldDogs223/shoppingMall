@@ -7,6 +7,7 @@ import BasketProduct from '@/app/components/BasketProduct';
 import PurchaseModal from '@/app/components/PurchaseModal';
 import useCartStore from '@/app/store/cart';
 import { useFetch } from '@/app/hooks/useFetch';
+import apiClient from '@/app/utils/axiosSetting';
 
 interface BasketItem {
   id: number;
@@ -33,7 +34,7 @@ export default function ShoppingCartPage() {
   useEffect(() => {
     const fetchBasketInfo = async () => {
       try {
-        const response = await axios.get<{ basketItemDtos: BasketItem[] }>(
+        const response = await apiClient.get<{ basketItemDtos: BasketItem[] }>(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket`,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -55,7 +56,7 @@ export default function ShoppingCartPage() {
 
   const handleBasketDelete = async (id: number, basketId: number) => {
     try {
-      await axios.delete(
+      await apiClient.delete(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${basketId}`,
         { headers: { authorization: `Bearer ${accessToken}` } },
       );

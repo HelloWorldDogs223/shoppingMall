@@ -6,6 +6,7 @@ import { useFetch } from './hooks/useFetch';
 import axios from 'axios';
 import Carousel from 'react-material-ui-carousel';
 import { Paper, Button } from '@mui/material';
+import apiClient from './utils/axiosSetting';
 
 interface ProductType {
   productId: number; // 제품ID
@@ -40,7 +41,7 @@ export default function Home() {
   useFetch();
 
   const getProductsFirst = async () => {
-    const productRes: any = await axios.get(
+    const productRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products/random?sliceNumber=${sliceNumber}&sliceSize=10`,
     );
 
@@ -50,7 +51,7 @@ export default function Home() {
   };
 
   const getProductsLast = async () => {
-    const productRes: any = await axios.get(
+    const productRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products/random?sliceNumber=${sliceNumber}&sliceSize=10`,
     );
 

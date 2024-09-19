@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useFetch } from '../hooks/useFetch';
 import { Button } from '@mui/material';
+import apiClient from '../utils/axiosSetting';
 
 export default function ListSell() {
   const params = useSearchParams();
@@ -15,7 +16,7 @@ export default function ListSell() {
   const { accessToken } = useFetch();
 
   const getProductStatusOn = async (id: number) => {
-    const res: any = await axios.put(
+    const res: any = await apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${id}/sale-state/on-sale`,
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -25,7 +26,7 @@ export default function ListSell() {
   };
 
   const getProductStatusOff = async (id: number) => {
-    const res: any = await axios.put(
+    const res: any = await apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${id}/sale-state/discontinued`,
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -35,7 +36,7 @@ export default function ListSell() {
   };
 
   const deleteProduct = async (id: number) => {
-    const res: any = await axios.delete(
+    const res: any = await apiClient.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/${id}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
@@ -45,7 +46,7 @@ export default function ListSell() {
 
   const getId = async () => {
     try {
-      const idRes = await axios.get(
+      const idRes = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
@@ -57,7 +58,7 @@ export default function ListSell() {
 
   const getProductList = async (sellerId: string) => {
     try {
-      const productRes = await axios.get(
+      const productRes = await apiClient.get(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/products?sliceSize=999&sliceNumber=0&sellerId=${sellerId}`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );

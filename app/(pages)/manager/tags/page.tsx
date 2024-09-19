@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Button, TextField, Typography } from '@mui/material';
 import { useManagerFetch } from '@/app/hooks/useManagerFetch';
 import Tags from '@/app/components/Tags';
+import apiClient from '@/app/utils/axiosSetting';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_DOMAIN;
 
@@ -24,7 +25,7 @@ export default function ProductTypesPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${API_BASE_URL}/product/types`);
+      const response = await apiClient.get(`${API_BASE_URL}/product/types`);
       setProductTypes(response.data.productTypeList);
     } catch (err) {
       console.error('Error fetching product types:', err);
@@ -40,7 +41,7 @@ export default function ProductTypesPage() {
     setIsLoading(true);
     setError(null);
     try {
-      await axios.post(
+      await apiClient.post(
         `${API_BASE_URL}/product/type`,
         { typeName: newTag },
         { headers: { Authorization: `Bearer ${accessToken}` } },

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useManagerFetch } from '../hooks/useManagerFetch';
 import axios from 'axios';
 import { Button } from '@mui/material';
+import apiClient from '../utils/axiosSetting';
 
 interface props {
   el: any;
@@ -15,7 +16,7 @@ export default function Tags({ el, fetchData }: props) {
   const editTags = async (tagId: number) => {
     if (edit === '') return;
     try {
-      const res: any = await axios.put(
+      const res: any = await apiClient.put(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type`,
         { typeName: edit, productTypeId: tagId },
         { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -28,7 +29,7 @@ export default function Tags({ el, fetchData }: props) {
 
   const deleteTags = async (productTypeId: number) => {
     try {
-      const res: any = await axios.delete(
+      const res: any = await apiClient.delete(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/type?productTypeId=${productTypeId}`,
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );

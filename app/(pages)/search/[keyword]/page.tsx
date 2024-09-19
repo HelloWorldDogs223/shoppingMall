@@ -1,4 +1,5 @@
 'use client';
+import apiClient from '@/app/utils/axiosSetting';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -38,7 +39,7 @@ export default function Page() {
 
   const conditionHandler = async (el: any) => {
     setSearchCondition(el);
-    const productRes: any = await axios.get(
+    const productRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=200&sliceNumber=0&filterType=${el.en}`,
     );
     if (productRes.data) {
@@ -49,14 +50,14 @@ export default function Page() {
   };
 
   const fetchData = async () => {
-    const productListRes: any = await axios.get(
+    const productListRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
     setProductTypes(productListRes.data.productTypeList);
   };
 
   const fetchProductListData = async () => {
-    const productRes: any = await axios.get(
+    const productRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products?searchWord=${params.keyword}&sliceSize=30&sliceNumber=0&filterType=${searchCondition.en}`,
     );
     if (productRes.data) {
@@ -73,7 +74,7 @@ export default function Page() {
       return;
     }
 
-    const productRes: any = await axios.get(
+    const productRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/${type}/products?sliceSize=30&sliceNumber=0&filterType=${searchCondition.en}`,
     );
     setProductList(

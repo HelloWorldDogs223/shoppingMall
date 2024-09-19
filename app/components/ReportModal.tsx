@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useFetch } from '../hooks/useFetch';
+import apiClient from '../utils/axiosSetting';
 
 interface Props {
   setModal: (args: boolean) => void;
@@ -29,7 +30,7 @@ export default function ReportModal({
   const [reportDescription, setReportDescription] = useState('');
 
   const reportHandler = () => {
-    axios.post(
+    apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/report`,
       { productId, reportTitle, reportDescription },
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -39,7 +40,7 @@ export default function ReportModal({
   };
 
   const reviewReportHandler = () => {
-    axios.post(
+    apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/report`,
       {
         reportTitle,

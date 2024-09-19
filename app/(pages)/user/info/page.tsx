@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import apiClient from '@/app/utils/axiosSetting';
 
 export default function Page() {
   const { error, accessToken } = useFetch();
@@ -31,7 +32,7 @@ export default function Page() {
   const fetchUser = async () => {
     if (!accessToken) return;
 
-    const userInfoRes: any = await axios.get(
+    const userInfoRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`,
       {
         headers: {
@@ -65,7 +66,7 @@ export default function Page() {
       alert('시간이 아직 남아있습니다.');
       return;
     }
-    const res: any = await axios.post(
+    const res: any = await apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/email/registration/request`,
       { email: editEmail },
       {
@@ -107,7 +108,7 @@ export default function Page() {
 
   const onSubmitHandler = async () => {
     try {
-      const res: any = await axios.post(
+      const res: any = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/info`,
         { nickName: editNickname, profileImg: imgFile },
         {

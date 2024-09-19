@@ -95,7 +95,7 @@ export default function Page() {
       formData.append('blockImages', file);
     });
 
-    const res = await axios.put(
+    const res = await apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
       formData,
       {

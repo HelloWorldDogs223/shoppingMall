@@ -2,6 +2,7 @@
 
 import { useFetch } from '@/app/hooks/useFetch';
 import useAlarmStore from '@/app/store/alarm';
+import apiClient from '@/app/utils/axiosSetting';
 import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -56,7 +57,7 @@ export default function AlarmPage() {
   const handleAlarmDelete = useCallback(
     async (alarmId: number) => {
       try {
-        await axios.delete(
+        await apiClient.delete(
           `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/alarm/${alarmId}`,
           { headers: { Authorization: `Bearer ${accessToken}` } },
         );

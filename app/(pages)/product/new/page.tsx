@@ -1,6 +1,7 @@
 'use client';
 
 import { useFetch } from '@/app/hooks/useFetch';
+import apiClient from '@/app/utils/axiosSetting';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -91,7 +92,7 @@ export default function Page() {
     });
 
     try {
-      const res = await axios.post(
+      const res = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product`,
         formData,
         {
@@ -109,7 +110,7 @@ export default function Page() {
   };
 
   const getTags = async () => {
-    const typeRes: any = await axios.get(
+    const typeRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
     setTags(typeRes.data.productTypeList);

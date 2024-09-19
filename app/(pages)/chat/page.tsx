@@ -38,6 +38,7 @@ import { useRouter } from 'next/navigation';
 import { useFetch } from '@/app/hooks/useFetch';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import apiClient from '@/app/utils/axiosSetting';
 
 export default function Page() {
   const { accessToken } = useFetch();
@@ -50,7 +51,7 @@ export default function Page() {
   // 판매자 입장에서의 채팅방 조회
 
   const getChatRoomBySeller = async () => {
-    const res: any = await axios.get(
+    const res: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/seller/chatrooms?sliceNumber=0&sliceSize=100`,
       {
         headers: {
@@ -63,7 +64,7 @@ export default function Page() {
 
   // 구매자 입장에서의 채팅방 조회
   const getChatRoomByBuyer = async () => {
-    const res: any = await axios.get(
+    const res: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/buyer/chatrooms?sliceNumber=0&sliceSize=100`,
       {
         headers: {

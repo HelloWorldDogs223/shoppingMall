@@ -2,6 +2,7 @@
 
 import { useFetch } from '@/app/hooks/useFetch';
 import useAuthStore from '@/app/store/login';
+import apiClient from '@/app/utils/axiosSetting';
 import { Button } from '@mui/material';
 import axios from 'axios';
 
@@ -10,7 +11,7 @@ export default function Page() {
   const { clearAccessToken } = useAuthStore();
 
   const submitHandler = () => {
-    axios.delete(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`, {
+    apiClient.delete(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     clearAccessToken();

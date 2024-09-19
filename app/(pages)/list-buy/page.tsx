@@ -2,6 +2,7 @@
 
 import BuyList from '@/app/components/BuyList';
 import { useFetch } from '@/app/hooks/useFetch';
+import apiClient from '@/app/utils/axiosSetting';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -10,7 +11,7 @@ export default function Page() {
   const [list, setList] = useState([]);
 
   const getList = async () => {
-    const listRes: any = await axios.get(
+    const listRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchases?sliceNumber=0&sliceSize=99`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );

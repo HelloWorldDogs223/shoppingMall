@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import apiClient from '@/app/utils/axiosSetting';
 
 const defaultTheme = createTheme();
 
@@ -22,14 +23,14 @@ export default function Page() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const loginResUser: any = await axios.post(
+      const loginResUser: any = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/login`,
         { email: data.get('email'), password: data.get('password') },
         { withCredentials: true },
       );
       router.push('/');
     } catch (e) {
-      const loginRes: any = await axios.post(
+      const loginRes: any = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/manager/login`,
         { serialNumber: data.get('email'), password: data.get('password') },
       );

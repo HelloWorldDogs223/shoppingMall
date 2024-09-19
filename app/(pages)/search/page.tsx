@@ -1,4 +1,5 @@
 'use client';
+import apiClient from '@/app/utils/axiosSetting';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -6,7 +7,7 @@ import { useEffect } from 'react';
 export default function Page() {
   const params = useParams();
   useEffect(() => {
-    const productRes: any = axios.get(
+    const productRes: any = apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/products/searchWord=${params.keyword}&sliceSize=10&sliceNumber=2&filterType=HIGH_PRICE`,
     );
     console.log(productRes.data);

@@ -16,6 +16,7 @@ interface ProductType {
 
 import ReportRecordModal from '@/app/components/ReportRecordModal';
 import { useManagerFetch } from '@/app/hooks/useManagerFetch';
+import apiClient from '@/app/utils/axiosSetting';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -30,7 +31,7 @@ export default function Page() {
   const { accessToken } = useManagerFetch();
 
   const fetchData = async () => {
-    const productListRes: any = await axios.get(
+    const productListRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
     setProductTypes(productListRes.data.productTypeList);
@@ -43,7 +44,7 @@ export default function Page() {
   };
 
   const getProducts = async () => {
-    const res: any = await axios.get(
+    const res: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product-type/review-report?sliceSize=99&sliceNumber=0&productTypeId=${typeId}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
@@ -51,7 +52,7 @@ export default function Page() {
   };
 
   const banClickHandler = (reviewId: number) => {
-    const res: any = axios.post(
+    const res: any = apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/ban?reviewId=${reviewId}&isBan=${true}`,
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -59,7 +60,7 @@ export default function Page() {
   };
 
   const notBanClickHandler = (reviewId: number) => {
-    const res: any = axios.post(
+    const res: any = apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/ban?reviewId=${reviewId}&isBan=${true}`,
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -67,7 +68,7 @@ export default function Page() {
   };
 
   const banClicUserkHandler = (memberId: number) => {
-    const res: any = axios.post(
+    const res: any = apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/ban?memberId=${memberId}&isBan=${true}`,
       { memberId, isBan: true },
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -75,7 +76,7 @@ export default function Page() {
   };
 
   const notBanClickUserHandler = (memberId: number) => {
-    const res: any = axios.post(
+    const res: any = apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/ban?memberId=${memberId}&isBan=${false}`,
       {},
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -91,21 +92,21 @@ export default function Page() {
   }, [typeSearch]);
 
   const banStatusChangerNo = (reviewReportId: number) => {
-    const res: any = axios.put(
+    const res: any = apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/report/state`,
       { reviewReportId, resultType: 'NO_ACTION' },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
   const banStatusChangerTarget = (reviewReportId: number) => {
-    const res: any = axios.put(
+    const res: any = apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/report/state`,
       { reviewReportId, resultType: 'TARGET_BAN' },
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   };
   const banStatusChangerUser = (reviewReportId: number) => {
-    const res: any = axios.put(
+    const res: any = apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/review/report/state`,
       { reviewReportId, resultType: 'MEMBER_BAN' },
       { headers: { Authorization: `Bearer ${accessToken}` } },

@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useFetch } from '../hooks/useFetch';
+import apiClient from '../utils/axiosSetting';
 
 interface Props {
   el: any;
@@ -13,7 +14,7 @@ export default function RefundList({ el }: Props) {
   const { accessToken } = useFetch();
 
   const getRefundRequestData = async (id: number) => {
-    const refundRequetRes: any = await axios.get(
+    const refundRequetRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/purchaseItem/refunds?purchaseItemId=${id}&sliceSize=999&sliceNumber=0`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
@@ -21,7 +22,7 @@ export default function RefundList({ el }: Props) {
   };
 
   const accept = async (id: number) => {
-    const res: any = await axios.put(
+    const res: any = await apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refund/accept`,
       { refundId: id, responseMessage: '판매자가 환불 요청을 승인하였습니다' },
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -32,7 +33,7 @@ export default function RefundList({ el }: Props) {
   };
 
   const completeAccept = async (id: number) => {
-    const res: any = await axios.put(
+    const res: any = await apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refund/complete`,
       { refundId: id },
       { headers: { Authorization: `Bearer ${accessToken}` } },
@@ -43,7 +44,7 @@ export default function RefundList({ el }: Props) {
   };
 
   const reject = async (id: number) => {
-    const res: any = await axios.put(
+    const res: any = await apiClient.put(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refund/reject`,
       {
         refundId: id,

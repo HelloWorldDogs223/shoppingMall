@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useFetch } from '../hooks/useFetch';
 import useCartStore from '../store/cart';
+import apiClient from '../utils/axiosSetting';
 
 interface Props {
   basketInfo: any[];
@@ -33,7 +34,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
       removeItem(el.basketItemId);
     });
 
-    axios.delete(
+    apiClient.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/basket?basketItemIdList=${list}`,
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
@@ -41,7 +42,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
 
   const completePurchase = (imp_uid: any, merchant_uid: any, status: any) => {
     console.log('구매완료 요청 시작');
-    axios
+    apiClient
       .post(`${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchase/payment`, {
         imp_uid: imp_uid,
         merchant_uid: merchant_uid,
@@ -97,7 +98,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
       expectedPrice: item.finalPrice,
     }));
 
-    axios
+    apiClient
       .post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/purchase`,
         {

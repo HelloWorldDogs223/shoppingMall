@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
 import { Button, TextField, Typography, Paper, Box } from '@mui/material';
 import { useFetch } from '../hooks/useFetch';
+import apiClient from '../utils/axiosSetting';
 
 interface SingleOption {
   optionName: string;
@@ -44,7 +45,7 @@ export default function BuyList({ item }: BuyListProps) {
 
   const getRefundList = async (id: number) => {
     try {
-      const response = await axios.get<{ refundList: RefundInfo[] }>(
+      const response = await apiClient.get<{ refundList: RefundInfo[] }>(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/member/purchaseItem/refunds`,
         {
           params: { sliceNumber: 0, sliceSize: 99, purchaseItemId: id },
@@ -65,7 +66,7 @@ export default function BuyList({ item }: BuyListProps) {
     }
 
     try {
-      const response = await axios.post(
+      const response = await apiClient.post(
         `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/refund`,
         {
           purchaseItemId: item.purchaseItemId,

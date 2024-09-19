@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import apiClient from '../utils/axiosSetting';
 
 export const useManagerFetch = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ export const useManagerFetch = () => {
     const fetchToken = async () => {
       if (!accessToken) {
         try {
-          const res = await axios.get(
+          const res = await apiClient.get(
             'https://api.group-group.com/manager/reissue',
             {
               withCredentials: true,

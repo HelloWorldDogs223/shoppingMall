@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useManagerFetch } from '@/app/hooks/useManagerFetch';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import apiClient from '@/app/utils/axiosSetting';
 
 const defaultTheme = createTheme();
 
@@ -24,7 +25,7 @@ export default function Page() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const makeRes: any = await axios.post(
+    const makeRes: any = await apiClient.post(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/root-manager/manager`,
       { serialNumber: data.get('email'), password: data.get('password') },
       { headers: { Authorization: `Bearer ${accessToken}` } },
