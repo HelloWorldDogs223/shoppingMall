@@ -13,7 +13,6 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useFetch } from '@/app/hooks/useFetch';
@@ -180,10 +179,8 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (fetchAccessToken || managerAccessToken) {
-      getProductById();
-    }
-  }, [fetchAccessToken, managerAccessToken]);
+    getProductById();
+  }, []);
 
   useEffect(() => {
     if (productInfo) {
