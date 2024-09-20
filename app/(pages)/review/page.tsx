@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import apiClient from '@/app/utils/axiosSetting';
 
 interface DeliveryInfo {
   senderName: string;
@@ -61,7 +62,7 @@ const MonthlyPurchasesComponent: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<PurchaseData>(
+      const response = await apiClient.get<PurchaseData>(
         '/seller/month/purchases',
         {
           headers: {

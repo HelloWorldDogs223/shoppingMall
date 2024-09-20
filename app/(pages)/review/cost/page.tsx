@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import apiClient from '@/app/utils/axiosSetting';
 
 interface SalesSummary {
   year: number;
@@ -21,7 +22,7 @@ const MonthlySalesSummaryComponent: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<SalesSummary>(
+      const response = await apiClient.get<SalesSummary>(
         '/seller/month/purchases/price',
         {
           headers: {
