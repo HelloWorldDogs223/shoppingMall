@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import apiClient from '@/app/utils/axiosSetting';
+import { useFetch } from '@/app/hooks/useFetch';
 
 interface DeliveryInfo {
   senderName: string;
@@ -56,6 +57,8 @@ const MonthlyPurchasesComponent: React.FC = () => {
   const [sliceNumber, setSliceNumber] = useState<number>(0);
   const [sliceSize, setSliceSize] = useState<number>(10);
 
+  const { accessToken } = useFetch();
+
   useEffect(() => {
     fetchData();
   }, [year, month, sliceNumber, sliceSize]);
@@ -66,7 +69,7 @@ const MonthlyPurchasesComponent: React.FC = () => {
         '/seller/month/purchases',
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           params: {
             sliceNumber,

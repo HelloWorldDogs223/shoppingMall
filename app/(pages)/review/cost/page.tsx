@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import apiClient from '@/app/utils/axiosSetting';
+import { useFetch } from '@/app/hooks/useFetch';
 
 interface SalesSummary {
   year: number;
@@ -16,6 +17,8 @@ const MonthlySalesSummaryComponent: React.FC = () => {
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
 
+  const { accessToken } = useFetch();
+
   useEffect(() => {
     fetchData();
   }, [year, month]);
@@ -26,7 +29,7 @@ const MonthlySalesSummaryComponent: React.FC = () => {
         '/seller/month/purchases/price',
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           params: {
             year,
