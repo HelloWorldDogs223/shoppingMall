@@ -3,8 +3,17 @@
 import { useFetch } from '@/app/hooks/useFetch';
 import useAlarmStore from '@/app/store/alarm';
 import apiClient from '@/app/utils/axiosSetting';
-import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
-import axios from 'axios';
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Typography,
+  IconButton,
+} from '@mui/material';
+import { Notifications, Delete } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
 
@@ -40,7 +49,7 @@ export default function AlarmPage() {
       switch (alarm.alarmType) {
         case 'MEMBER_BAN':
         case 'PRODUCT_BAN':
-          // Handle these cases if needed
+          // 필요한 경우 처리 로직 추가
           break;
         case 'REFUND_REQUEST':
           router.push('/list-refund');
@@ -64,16 +73,20 @@ export default function AlarmPage() {
         removeAlarm(alarmId);
       } catch (error) {
         console.error('Failed to delete alarm:', error);
-        // Handle error (e.g., show error message to user)
       }
     },
     [accessToken, removeAlarm],
   );
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} style={{ padding: '20px' }}>
+      <Grid item xs={12}>
+        <Typography variant="h4" align="center" gutterBottom>
+          알림 목록
+        </Typography>
+      </Grid>
       {alarms.map((alarm: AlarmType) => (
-        <Grid item xs={12} key={alarm.alarmId}>
+        <Grid item xs={12} sm={6} md={4} key={alarm.alarmId}>
           <AlarmCard
             alarm={alarm}
             onAlarmClick={goToAlarm}
@@ -96,23 +109,45 @@ const AlarmCard: React.FC<AlarmCardProps> = ({
   onAlarmClick,
   onDeleteClick,
 }) => (
-  <Card onClick={() => onAlarmClick(alarm)} style={{ cursor: 'pointer' }}>
+  <Card
+    onClick={() => onAlarmClick(alarm)}
+    style={{
+      cursor: 'pointer',
+      position: 'relative',
+      backgroundColor: alarm.isChecked ? '#f5f5f5' : '#fff',
+    }}
+    elevation={3}
+  >
     <CardContent>
-      <Typography variant="h6">알림 내용</Typography>
-      <Typography variant="body2" color="textSecondary">
-        {alarm.content}
-      </Typography>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={(e) => {
-          e.stopPropagation();
-          onDeleteClick(alarm.alarmId);
-        }}
-        style={{ marginTop: '10px' }}
-      >
-        알림 삭제하기
-      </Button>
+      <Grid container alignItems="center" spacing={2}>
+        <Grid item>
+          <Badge
+            color="secondary"
+            variant="dot"
+            invisible={alarm.isChecked}
+            overlap="circular"
+          >
+            <Avatar>
+              <Notifications />
+            </Avatar>
+          </Badge>
+        </Grid>
+        <Grid item xs>
+          <Typography variant="h6" gutterBottom>
+            {alarm.content}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteClick(alarm.alarmId);
+            }}
+          >
+            <Delete />
+          </IconButton>
+        </Grid>
+      </Grid>
     </CardContent>
   </Card>
 );
