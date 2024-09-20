@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '../store/login';
 import { useEffect, useState } from 'react';
@@ -17,6 +16,7 @@ export const useFetch = () => {
         try {
           const res = await apiClient.get(
             'https://api.group-group.com/auth/reissue',
+            { withCredentials: true },
           );
           setAccessToken(res.data.accessToken);
         } catch (error: any) {
