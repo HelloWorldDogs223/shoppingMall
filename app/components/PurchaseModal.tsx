@@ -66,7 +66,7 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
     window.IMP.init('imp84236287');
     window.IMP.request_pay(
       {
-        pg: 'kakaopay',
+        pg: 'html5_inicis',
         pay_method: 'card',
         merchant_uid: responseData.purchaseUid,
         name: responseData.purchaseTitle,
