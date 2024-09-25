@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useManagerFetch } from '../hooks/useManagerFetch';
-import axios from 'axios';
 import { Button } from '@mui/material';
 import apiClient from '../utils/axiosSetting';
 

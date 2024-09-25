@@ -53,7 +53,11 @@ export default function Page() {
     const productListRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
-    setProductTypes(productListRes.data.productTypeList);
+    setProductTypes(
+      productListRes.data.productTypeList.map((el: any) => {
+        return { ...el, typeName: el.typeName.replace('$', '_') };
+      }),
+    );
   };
 
   const fetchProductListData = async () => {
@@ -174,7 +178,7 @@ export default function Page() {
                         상품명 : {el.name}
                       </p>
                       <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
-                        타입 : {el.typeName}
+                        타입 : {el.typeName.replace('$', '_')}
                       </p>
                       <p className="text-[#636388] text-sm font-normal leading-normal line-clamp-2">
                         가격 : {el.finalPrice}

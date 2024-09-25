@@ -113,7 +113,11 @@ export default function Page() {
     const typeRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
-    setTags(typeRes.data.productTypeList);
+    setTags(
+      typeRes.data.productTypeList.map((el: any) => {
+        return { ...el, typeName: el.typeName.replace('$', '_') };
+      }),
+    );
 
     console.log('asdsdsd');
     console.log(typeRes.data.productTypeList);

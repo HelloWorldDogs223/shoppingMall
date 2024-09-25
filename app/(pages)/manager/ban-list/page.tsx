@@ -34,7 +34,11 @@ export default function Page() {
     const productListRes: any = await apiClient.get(
       `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/product/types`,
     );
-    setProductTypes(productListRes.data.productTypeList);
+    setProductTypes(
+      productListRes.data.productTypeList.map((el: any) => {
+        return { ...el, typeName: el.typeName.replace('$', '_') };
+      }),
+    );
     setTypeSearch(productListRes.data.productTypeList[0]);
   };
 

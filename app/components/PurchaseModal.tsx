@@ -63,9 +63,8 @@ export default function PurchaseModal({ basketInfo, setModal }: Props) {
 
   const requestPay = (responseData: any) => {
     console.log('결제 시작');
-    const IMP = window.IMP;
-    IMP.init('imp84236287');
-    IMP.request_pay(
+    window.IMP.init('imp84236287');
+    window.IMP.request_pay(
       {
         pg: 'kakaopay',
         pay_method: 'card',

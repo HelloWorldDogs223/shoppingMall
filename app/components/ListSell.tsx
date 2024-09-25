@@ -2,13 +2,15 @@
 
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useFetch } from '../hooks/useFetch';
 import { Button } from '@mui/material';
 import apiClient from '../utils/axiosSetting';
 
 export default function ListSell() {
   const params = useSearchParams();
+
+  const router = useRouter();
 
   const [userId, setUserId] = useState('');
   const [products, setProducts] = useState([]);
@@ -41,6 +43,7 @@ export default function ListSell() {
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     alert('삭제되었습니다.');
+    router.push('/user/info');
     location.reload();
   };
 
